@@ -1,20 +1,86 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <main
+    class="flex min-h-full items-center justify-center bg-app-background p-6"
+  >
+    <section
+      class="w-full max-w-sm rounded-gamarra-xl bg-app-surface p-8 text-center shadow-gamarra-lg"
+    >
+      <div
+        class="mx-auto mb-5 flex size-16 items-center justify-center rounded-gamarra-md bg-brand-600 text-2xl font-bold text-white"
+      >
+        G
+      </div>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-  </div>
+      <span
+        class="inline-flex rounded-full bg-brand-100 px-4 py-2 text-sm font-semibold text-brand-700"
+      >
+        Tu moda, más cerca
+      </span>
+
+      <h1
+        class="mt-5 text-3xl font-bold tracking-tight text-app-text"
+      >
+        Descubre Gamarra
+      </h1>
+
+      <p
+        class="mt-3 text-base leading-7 text-app-text-muted"
+      >
+        Encuentra prendas similares usando una fotografía o
+        explora productos de diferentes tiendas.
+      </p>
+
+      <button
+        type="button"
+        class="group mt-7 flex min-h-14 w-full items-center justify-center gap-3 rounded-2xl bg-gradient-to-r from-brand-600 to-brand-500 px-6 text-base font-bold text-white shadow-gamarra-md transition duration-200 active:scale-[0.98]"
+      >
+        <span>Explorar productos</span>
+
+        <ion-icon
+          name="arrow-forward-outline"
+          class="text-xl transition group-active:translate-x-1"
+          aria-hidden="true"
+        ></ion-icon>
+      </button>
+
+      <button
+  type="button"
+  class="group mt-4 flex min-h-20 w-full items-center gap-3 rounded-2xl bg-gradient-to-r from-brand-50 to-accent-100/70 px-4 py-3 text-left shadow-gamarra-sm transition duration-200 active:scale-[0.98]"
+>
+  <span
+    class="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-accent-500 text-white shadow-md shadow-red-200/60"
+  >
+    <ion-icon
+      name="camera-outline"
+      class="text-xl"
+      aria-hidden="true"
+    ></ion-icon>
+  </span>
+
+  <span class="min-w-0 flex-1">
+    <span
+      class="block text-base font-bold leading-5 text-app-text"
+    >
+      Buscar con una foto
+    </span>
+
+    <span
+      class="mt-1 block text-sm leading-5 text-app-text-muted"
+    >
+      Encuentra prendas similares
+    </span>
+  </span>
+
+  <ion-icon
+    name="arrow-forward-outline"
+    class="shrink-0 text-xl text-brand-600 transition-transform duration-200 group-active:translate-x-1"
+    aria-hidden="true"
+  ></ion-icon>
+</button>
+
+      
+    </section>
+  </main>
 </ion-content>
+
+

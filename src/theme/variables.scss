@@ -1,2 +1,78 @@
-// For information on how to create your own theme, please refer to:
-// https://ionicframework.com/docs/theming/
+:root {
+  /* Marca principal */
+  --gamarra-brand-800:*#3f238f;
+  --gamarra-brand-700: #4c2cb3;
+  --gamarra-brand-600: #6941c6;
+  --gamarra-brand-500: #7c3aed;
+  --gamarra-brand-400: #8b5cf6;
+  --gamarra-brand-100: #ede9fe;
+  --gamarra-brand-50: #f7f5ff;
+
+  /* Color de acento */
+  --gamarra-accent-600: #d94f3d;
+  --gamarra-accent-500: #f26452;
+  --gamarra-accent-100: #fde8e4;
+
+  /* Superficies y textos */
+  --gamarra-background: #f8f7fc;
+  --gamarra-surface: #ffffff;
+  --gamarra-surface-muted: #f1eff5;
+  --gamarra-text-primary: #24202c;
+  --gamarra-text-secondary: #6f687a;
+  --gamarra-border: #e9e5f0;
+
+  /* Estados */
+  --gamarra-success: #21845b;
+  --gamarra-warning: #c77a13;
+  --gamarra-danger: #c63e45;
+  --gamarra-info: #3676d8;
+
+  /* Radios */
+  --gamarra-radius-sm: 12px;
+  --gamarra-radius-md: 18px;
+  --gamarra-radius-lg: 24px;
+  --gamarra-radius-xl: 32px;
+
+  /* Sombras */
+  --gamarra-shadow-sm:
+    0 2px 10px rgba(36, 32, 44, 0.06);
+
+  --gamarra-shadow-md:
+    0 8px 24px rgba(76, 44, 179, 0.1);
+
+  --gamarra-shadow-lg:
+    0 16px 40px rgba(76, 44, 179, 0.14);
+
+  /* Ionic */
+  --ion-color-primary: #6941c6;
+  --ion-color-primary-rgb: 105, 65, 198;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #5c39ae;
+  --ion-color-primary-tint: #7854cc;
+
+  --ion-color-secondary: #f26452;
+  --ion-color-secondary-rgb: 242, 100, 82;
+  --ion-color-secondary-contrast: #ffffff;
+  --ion-color-secondary-contrast-rgb: 255, 255, 255;
+  --ion-color-secondary-shade: #d55848;
+  --ion-color-secondary-tint: #f37463;
+
+  --ion-color-success: #21845b;
+  --ion-color-warning: #c77a13;
+  --ion-color-danger: #c63e45;
+
+  --ion-background-color: #f8f7fc;
+  --ion-background-color-rgb: 248, 247, 252;
+
+  --ion-text-color: #24202c;
+  --ion-text-color-rgb: 36, 32, 44;
+
+  --ion-font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
