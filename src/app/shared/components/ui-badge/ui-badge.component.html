@@ -1,0 +1,13 @@
+<span class="ui-badge ui-badge--{{ variant }} ui-badge--{{ size }}">
+  @if (showDot) {
+  <span class="ui-badge__dot" aria-hidden="true"></span>
+  }
+
+  @if (icon) {
+  <ion-icon [name]="icon" class="ui-badge__icon" aria-hidden="true"></ion-icon>
+  }
+
+  <span class="ui-badge__label">
+    {{ label }}
+  </span>
+</span>

@@ -1,0 +1,46 @@
+@if (variant === 'product-card') {
+  <article
+    class="ui-skeleton-product"
+    aria-hidden="true"
+  >
+    <div class="ui-skeleton-product__image"></div>
+
+    <div class="ui-skeleton-product__content">
+      <div class="ui-skeleton-product__store"></div>
+      <div class="ui-skeleton-product__title"></div>
+      <div class="ui-skeleton-product__title-short"></div>
+      <div class="ui-skeleton-product__price"></div>
+      <div class="ui-skeleton-product__badge"></div>
+    </div>
+  </article>
+} @else if (variant === 'text') {
+  <div
+    class="ui-skeleton-lines"
+    aria-hidden="true"
+  >
+    @for (
+      line of normalizedLines;
+      track line
+    ) {
+      <span
+        class="ui-skeleton ui-skeleton--text"
+        [style.width]="
+          line === normalizedLines.length - 1 &&
+          normalizedLines.length > 1
+            ? '72%'
+            : width
+        "
+        [style.height]="resolvedHeight"
+      ></span>
+    }
+  </div>
+} @else {
+  <span
+    class="ui-skeleton"
+    [class.ui-skeleton--circle]="variant === 'circle'"
+    [class.ui-skeleton--rectangle]="variant === 'rectangle'"
+    [style.width]="width"
+    [style.height]="resolvedHeight"
+    aria-hidden="true"
+  ></span>
+}

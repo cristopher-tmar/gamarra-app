@@ -1,0 +1,28 @@
+<section class="ui-error-state ui-error-state--{{ variant }}" [class.ui-error-state--compact]="compact" role="alert">
+  <span class="ui-error-state__icon" aria-hidden="true">
+    <ion-icon [name]="icon"></ion-icon>
+  </span>
+
+  <h3 class="ui-error-state__title">
+    {{ title }}
+  </h3>
+
+  @if (description) {
+  <p class="ui-error-state__description">
+    {{ description }}
+  </p>
+  }
+
+  @if (showAction) {
+  <div class="ui-error-state__action">
+    <app-ui-button variant="outline" size="medium" [fullWidth]="false" [loading]="loading" [disabled]="loading"
+      (click)="handleRetry()">
+      @if (!loading) {
+      <ion-icon name="refresh-outline" aria-hidden="true"></ion-icon>
+      }
+
+      {{ actionLabel }}
+    </app-ui-button>
+  </div>
+  }
+</section>

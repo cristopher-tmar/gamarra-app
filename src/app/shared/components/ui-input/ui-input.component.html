@@ -1,0 +1,55 @@
+<label class="ui-input">
+  @if (label) {
+  <span class="ui-input__label">
+    {{ label }}
+
+    @if (required) {
+    <span class="ui-input__required" aria-hidden="true">
+      *
+    </span>
+    }
+  </span>
+  }
+
+  <span class="ui-input__control" [class.ui-input__control--error]="hasError"
+    [class.ui-input__control--disabled]="disabled">
+    @if (icon) {
+    <ion-icon [name]="icon" class="ui-input__leading-icon" aria-hidden="true"></ion-icon>
+    }
+
+    <input class="ui-input__field" [type]="resolvedType" [name]="name" [placeholder]="placeholder"
+      [autocomplete]="autocomplete" [attr.inputmode]="inputMode" [attr.min]="min" [attr.max]="max" [attr.step]="step"
+      [attr.maxlength]="maxLength" [required]="required" [readOnly]="readonly" [disabled]="disabled" [value]="value"
+      [attr.aria-invalid]="hasError" [attr.aria-describedby]="
+        hasError
+          ? 'input-error'
+          : helpText
+            ? 'input-help'
+            : null
+      " (input)="handleInput($event)" (blur)="handleBlur()" />
+
+    @if (type === 'password') {
+    <button type="button" class="ui-input__password-toggle" [disabled]="disabled || readonly" [attr.aria-label]="
+          passwordVisible
+            ? 'Ocultar contraseña'
+            : 'Mostrar contraseña'
+        " (click)="togglePasswordVisibility()">
+      <ion-icon [name]="
+            passwordVisible
+              ? 'eye-off-outline'
+              : 'eye-outline'
+          " aria-hidden="true"></ion-icon>
+    </button>
+    }
+  </span>
+
+  @if (hasError) {
+  <span id="input-error" class="ui-input__message ui-input__message--error" role="alert">
+    {{ errorMessage }}
+  </span>
+  } @else if (helpText) {
+  <span id="input-help" class="ui-input__message">
+    {{ helpText }}
+  </span>
+  }
+</label>

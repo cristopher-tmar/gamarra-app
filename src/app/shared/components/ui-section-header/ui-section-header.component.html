@@ -1,0 +1,23 @@
+<header class="ui-section-header" [class.ui-section-header--compact]="compact">
+  <div class="ui-section-header__content">
+    <h2 class="ui-section-header__title">
+      {{ title }}
+    </h2>
+
+    @if (description) {
+    <p class="ui-section-header__description">
+      {{ description }}
+    </p>
+    }
+  </div>
+
+  @if (showAction && actionLabel) {
+  <button type="button" class="ui-section-header__action" (click)="handleAction()">
+    <span>
+      {{ actionLabel }}
+    </span>
+
+    <ion-icon [name]="actionIcon" aria-hidden="true"></ion-icon>
+  </button>
+  }
+</header>

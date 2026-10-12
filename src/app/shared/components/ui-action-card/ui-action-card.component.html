@@ -1,0 +1,35 @@
+<button
+  type="button"
+  class="ui-action-card ui-action-card--{{ variant }}"
+  [disabled]="disabled"
+  [attr.aria-label]="ariaLabel || title"
+>
+  @if (icon) {
+    <span class="ui-action-card__icon">
+      <ion-icon
+        [name]="icon"
+        aria-hidden="true"
+      ></ion-icon>
+    </span>
+  }
+
+  <span class="ui-action-card__content">
+    <span class="ui-action-card__title">
+      {{ title }}
+    </span>
+
+    @if (description) {
+      <span class="ui-action-card__description">
+        {{ description }}
+      </span>
+    }
+  </span>
+
+  @if (showArrow) {
+    <ion-icon
+      name="arrow-forward-outline"
+      class="ui-action-card__arrow"
+      aria-hidden="true"
+    ></ion-icon>
+  }
+</button>

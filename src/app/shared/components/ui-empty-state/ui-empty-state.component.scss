@@ -1,0 +1,90 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.ui-empty-state {
+  display: flex;
+  width: 100%;
+  min-height: 280px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 2rem;
+
+  text-align: center;
+  background: var(--gamarra-surface);
+  border: 1px solid var(--gamarra-border);
+  border-radius: var(--gamarra-radius-xl);
+  box-shadow: var(--gamarra-shadow-sm);
+}
+
+.ui-empty-state--compact {
+  min-height: 220px;
+  padding: 1.5rem;
+}
+
+.ui-empty-state__icon {
+  display: flex;
+  width: 72px;
+  height: 72px;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--gamarra-brand-700);
+  background: var(--gamarra-brand-100);
+  border-radius: var(--gamarra-radius-lg);
+
+  font-size: 2rem;
+}
+
+.ui-empty-state--compact .ui-empty-state__icon {
+  width: 60px;
+  height: 60px;
+  font-size: 1.75rem;
+}
+
+.ui-empty-state__title {
+  margin: 1.25rem 0 0;
+
+  color: var(--gamarra-text-primary);
+
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.75rem;
+}
+
+.ui-empty-state__description {
+  max-width: 28rem;
+  margin: 0.5rem 0 0;
+
+  color: var(--gamarra-text-secondary);
+
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+.ui-empty-state__action {
+  margin-top: 1.5rem;
+}
+
+.ui-empty-state--brand .ui-empty-state__icon {
+  color: #ffffff;
+  background: linear-gradient(
+    135deg,
+    var(--gamarra-brand-600),
+    var(--gamarra-brand-500)
+  );
+  box-shadow: 0 8px 22px rgba(105, 65, 198, 0.2);
+}
+
+.ui-empty-state--accent .ui-empty-state__icon {
+  color: #ffffff;
+  background: linear-gradient(
+    135deg,
+    var(--gamarra-accent-500),
+    var(--gamarra-accent-600)
+  );
+  box-shadow: 0 8px 22px rgba(217, 79, 61, 0.2);
+}
+

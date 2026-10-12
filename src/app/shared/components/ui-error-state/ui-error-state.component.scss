@@ -1,0 +1,80 @@
+:host {
+    display: block;
+    width: 100%;
+}
+
+.ui-error-state {
+    display: flex;
+    width: 100%;
+    min-height: 280px;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 2rem;
+
+    text-align: center;
+    background: var(--gamarra-surface);
+    border: 1px solid var(--gamarra-border);
+    border-radius: var(--gamarra-radius-xl);
+    box-shadow: var(--gamarra-shadow-sm);
+}
+
+.ui-error-state--compact {
+    min-height: 220px;
+    padding: 1.5rem;
+}
+
+.ui-error-state__icon {
+    display: flex;
+    width: 72px;
+    height: 72px;
+    align-items: center;
+    justify-content: center;
+
+    color: var(--gamarra-danger);
+    background: rgba(198, 62, 69, 0.1);
+    border-radius: var(--gamarra-radius-lg);
+
+    font-size: 2rem;
+}
+
+.ui-error-state--compact .ui-error-state__icon {
+    width: 60px;
+    height: 60px;
+    font-size: 1.75rem;
+}
+
+.ui-error-state__title {
+  margin: 1.25rem 0 0;
+
+  color: var(--gamarra-text-primary);
+
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.75rem;
+}
+
+.ui-error-state__description {
+  max-width: 28rem;
+  margin: 0.5rem 0 0;
+
+  color: var(--gamarra-text-secondary);
+
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+.ui-error-state__action {
+  margin-top: 1.5rem;
+}
+
+.ui-error-state--warning .ui-error-state__icon {
+  color: var(--gamarra-warning);
+  background: rgba(199, 122, 19, 0.1);
+}
+
+.ui-error-state--offline .ui-error-state__icon {
+  color: var(--gamarra-info);
+  background: rgba(54, 118, 216, 0.1);
+}
+

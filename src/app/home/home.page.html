@@ -1,86 +1,426 @@
 <ion-content [fullscreen]="true">
-  <main
-    class="flex min-h-full items-center justify-center bg-app-background p-6"
-  >
-    <section
-      class="w-full max-w-sm rounded-gamarra-xl bg-app-surface p-8 text-center shadow-gamarra-lg"
-    >
-      <div
-        class="mx-auto mb-5 flex size-16 items-center justify-center rounded-gamarra-md bg-brand-600 text-2xl font-bold text-white"
-      >
-        G
+  <main class="min-h-full bg-app-background px-6 py-10">
+    <section class="mx-auto w-full max-w-md">
+      <header class="mb-8">
+        <span class="inline-flex rounded-full bg-brand-100 px-4 py-2 text-small font-semibold text-brand-700">
+          Sistema de diseño
+        </span>
+
+        <h1 class="mt-4 text-title-lg font-bold text-app-text">
+          Botones de Gamarra
+        </h1>
+
+        <p class="mt-2 text-body text-app-text-muted">
+          Variantes y estados definidos para toda la aplicación.
+        </p>
+      </header>
+
+      <div class="space-y-4 rounded-gamarra-xl bg-app-surface p-6 shadow-gamarra-sm">
+        <app-ui-button variant="primary">
+          Explorar productos
+        </app-ui-button>
+
+        <app-ui-button variant="secondary">
+          Ver categorías
+        </app-ui-button>
+
+        <app-ui-button variant="accent">
+          <ion-icon name="camera-outline" aria-hidden="true"></ion-icon>
+
+          Buscar con una foto
+        </app-ui-button>
+
+        <app-ui-button variant="outline">
+          Cancelar
+        </app-ui-button>
+
+        <app-ui-button variant="ghost">
+          Omitir por ahora
+        </app-ui-button>
+
+        <app-ui-button variant="danger">
+          Eliminar producto
+        </app-ui-button>
       </div>
 
-      <span
-        class="inline-flex rounded-full bg-brand-100 px-4 py-2 text-sm font-semibold text-brand-700"
-      >
-        Tu moda, más cerca
-      </span>
+      <section class="mt-6 rounded-gamarra-xl bg-app-surface p-6 shadow-gamarra-sm">
+        <h2 class="text-title-sm font-bold text-app-text">
+          Tamaños y estados
+        </h2>
 
-      <h1
-        class="mt-5 text-3xl font-bold tracking-tight text-app-text"
-      >
-        Descubre Gamarra
-      </h1>
+        <div class="mt-4 space-y-4">
+          <app-ui-button variant="primary" size="small">
+            Botón pequeño
+          </app-ui-button>
 
-      <p
-        class="mt-3 text-base leading-7 text-app-text-muted"
-      >
-        Encuentra prendas similares usando una fotografía o
-        explora productos de diferentes tiendas.
-      </p>
+          <app-ui-button variant="primary" size="medium">
+            Botón mediano
+          </app-ui-button>
 
-      <button
-        type="button"
-        class="group mt-7 flex min-h-14 w-full items-center justify-center gap-3 rounded-2xl bg-gradient-to-r from-brand-600 to-brand-500 px-6 text-base font-bold text-white shadow-gamarra-md transition duration-200 active:scale-[0.98]"
-      >
-        <span>Explorar productos</span>
+          <app-ui-button variant="primary" size="large">
+            Botón grande
+          </app-ui-button>
 
-        <ion-icon
-          name="arrow-forward-outline"
-          class="text-xl transition group-active:translate-x-1"
-          aria-hidden="true"
-        ></ion-icon>
-      </button>
+          <app-ui-button variant="primary" [loading]="true">
+            Guardar producto
+          </app-ui-button>
 
-      <button
-  type="button"
-  class="group mt-4 flex min-h-20 w-full items-center gap-3 rounded-2xl bg-gradient-to-r from-brand-50 to-accent-100/70 px-4 py-3 text-left shadow-gamarra-sm transition duration-200 active:scale-[0.98]"
->
-  <span
-    class="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-accent-500 text-white shadow-md shadow-red-200/60"
-  >
-    <ion-icon
-      name="camera-outline"
-      class="text-xl"
-      aria-hidden="true"
-    ></ion-icon>
-  </span>
+          <app-ui-button variant="primary" [disabled]="true">
+            Acción no disponible
+          </app-ui-button>
+        </div>
+      </section>
 
-  <span class="min-w-0 flex-1">
-    <span
-      class="block text-base font-bold leading-5 text-app-text"
-    >
-      Buscar con una foto
-    </span>
+      <section class="mt-6 rounded-gamarra-xl bg-app-surface p-6 shadow-gamarra-sm">
+        <h2 class="text-title-sm font-bold text-app-text">
+          Ancho automático
+        </h2>
 
-    <span
-      class="mt-1 block text-sm leading-5 text-app-text-muted"
-    >
-      Encuentra prendas similares
-    </span>
-  </span>
+        <div class="mt-4 flex flex-wrap gap-3">
+          <app-ui-button variant="outline" size="small" [fullWidth]="false">
+            Cancelar
+          </app-ui-button>
 
-  <ion-icon
-    name="arrow-forward-outline"
-    class="shrink-0 text-xl text-brand-600 transition-transform duration-200 group-active:translate-x-1"
-    aria-hidden="true"
-  ></ion-icon>
-</button>
+          <app-ui-button variant="primary" size="small" [fullWidth]="false">
+            Aceptar
+          </app-ui-button>
+        </div>
+      </section>
 
-      
+      <section class="mt-6 rounded-gamarra-xl bg-app-surface p-6 shadow-gamarra-sm">
+        <h2 class="text-title-sm font-bold text-app-text">
+          Tarjetas de acción
+        </h2>
+
+        <p class="mt-2 text-body text-app-text-muted">
+          Acciones destacadas para clientes y comerciantes.
+        </p>
+
+        <div class="mt-5 space-y-4">
+          <app-ui-action-card title="Explorar productos" description="Descubre prendas de diferentes tiendas"
+            icon="bag-handle-outline" variant="brand" />
+
+          <app-ui-action-card title="Buscar con una foto" description="Encuentra prendas visualmente similares"
+            icon="camera-outline" variant="accent" />
+
+          <app-ui-action-card title="Administrar mis productos" description="Actualiza precios, stock e imágenes"
+            icon="grid-outline" variant="neutral" />
+
+          <app-ui-action-card title="Importar productos" description="Esta función estará disponible próximamente"
+            icon="cloud-upload-outline" variant="neutral" [disabled]="true" />
+        </div>
+      </section>
+
+      <section class="mt-6 rounded-gamarra-xl bg-app-surface p-6 shadow-gamarra-sm">
+        <h2 class="text-title-sm font-bold text-app-text">
+          Campos de formulario
+        </h2>
+
+        <p class="mt-2 text-body text-app-text-muted">
+          Variantes para autenticación y administración.
+        </p>
+
+        <div class="mt-5 space-y-5">
+          <app-ui-input label="Correo electrónico" type="email" placeholder="correo@ejemplo.com" autocomplete="email"
+            icon="mail-outline" helpText="Utiliza el correo registrado en tu cuenta" required />
+
+          <app-ui-input label="Contraseña" type="password" placeholder="Ingresa tu contraseña"
+            autocomplete="current-password" icon="lock-closed-outline" required />
+
+          <app-ui-input label="Precio" type="text" placeholder="0.00" inputMode="decimal" icon="cash-outline"
+            helpText="Ingresa el precio, por ejemplo: 55.90" />
+
+          <app-ui-input label="Código del producto" type="text" placeholder="POL-001" icon="barcode-outline"
+            errorMessage="Este código ya está siendo utilizado" required />
+
+          <app-ui-input label="Campo deshabilitado" type="text" placeholder="No disponible" [disabled]="true" />
+        </div>
+      </section>
+
+      <section class="mt-6 rounded-gamarra-xl bg-app-surface p-6 shadow-gamarra-sm">
+        <h2 class="text-title-sm font-bold text-app-text">
+          Barras de búsqueda
+        </h2>
+
+        <p class="mt-2 text-body text-app-text-muted">
+          Buscadores para el catálogo y el panel administrativo.
+        </p>
+
+        <div class="mt-5 space-y-5">
+          <app-ui-search-bar placeholder="Buscar polos, casacas..." ariaLabel="Buscar productos en el catálogo" />
+
+          <app-ui-search-bar placeholder="¿Qué prenda estás buscando?"
+            ariaLabel="Buscar productos o usar una fotografía" [showCamera]="true" />
+
+          <app-ui-search-bar value="Polo oversize" placeholder="Buscar productos" ariaLabel="Buscar productos" />
+
+          <app-ui-search-bar placeholder="Búsqueda no disponible" ariaLabel="Búsqueda no disponible" [showCamera]="true"
+            [disabled]="true" />
+        </div>
+      </section>
+
+      <section class="mt-6 rounded-gamarra-xl bg-app-surface p-6 shadow-gamarra-sm">
+        <h2 class="text-title-sm font-bold text-app-text">
+          Chips y filtros
+        </h2>
+
+        <p class="mt-2 text-body text-app-text-muted">
+          Categorías, filtros y estados compactos.
+        </p>
+
+        <div class="mt-5 flex flex-wrap gap-3">
+          <app-ui-chip label="Todos" variant="brand" [selected]="true" />
+
+          <app-ui-chip label="Polos" icon="shirt-outline" variant="brand" />
+
+          <app-ui-chip label="Casacas" variant="accent" />
+
+          <app-ui-chip label="Pantalones" variant="neutral" />
+        </div>
+
+        <h3 class="mt-6 text-body font-semibold text-app-text">
+          Estados
+        </h3>
+
+        <div class="mt-3 flex flex-wrap gap-3">
+          <app-ui-chip label="Disponible" variant="success" size="small" [interactive]="false" />
+
+          <app-ui-chip label="Stock bajo" variant="warning" size="small" [interactive]="false" />
+
+          <app-ui-chip label="Agotado" variant="danger" size="small" [interactive]="false" />
+
+          <app-ui-chip label="No disponible" variant="neutral" size="small" [disabled]="true" />
+        </div>
+      </section>
+
+      <section class="mt-6 rounded-gamarra-xl bg-app-surface p-6 shadow-gamarra-sm">
+        <h2 class="text-title-sm font-bold text-app-text">
+          Tarjetas de producto
+        </h2>
+
+        <p class="mt-2 text-body text-app-text-muted">
+          Productos del catálogo y resultados de búsqueda visual.
+        </p>
+
+        <div class="mt-5 grid grid-cols-2 gap-4">
+          <app-ui-product-card [productId]="1" name="Polo Basement cuello camisero beige" [price]="59.9"
+            imageUrl="https://qegspgcihjbzgbvgsumz.supabase.co/storage/v1/object/public/productos/1/f287117b-1c8e-46ad-beef-0b8b953a9214.webp"
+            storeName="Moda Urbana Gamarra" category="Polos" [stock]="18" [priorityImage]="true" />
+
+          <app-ui-product-card [productId]="2" name="Polo Bearcliff marrón estampado" [price]="54.9"
+            imageUrl="https://qegspgcihjbzgbvgsumz.supabase.co/storage/v1/object/public/productos/2/4b0a39de-0b46-4130-8a68-4b9b542d3d41.webp"
+            storeName="Moda Urbana Gamarra" category="Polos" [stock]="16" [favorite]="true" />
+
+          <app-ui-product-card [productId]="3" name="Producto sin imagen disponible" [price]="79.9" [imageUrl]="null"
+            storeName="Estilo Moderno" category="Poleras" [stock]="0" />
+
+          <app-ui-product-card [productId]="4" name="Resultado visual similar" [price]="49.9"
+            imageUrl="https://qegspgcihjbzgbvgsumz.supabase.co/storage/v1/object/public/productos/4/6969c237-3be0-46fe-88c3-8f601cba0b3b.webp"
+            storeName="Moda Urbana Gamarra" category="Polos" [stock]="20" [similarityPercentage]="94" />
+        </div>
+      </section>
+
+      <section class="mt-6 rounded-gamarra-xl bg-app-surface p-6 shadow-gamarra-sm">
+        <h2 class="text-title-sm font-bold text-app-text">
+          Badges de estado
+        </h2>
+
+        <p class="mt-2 text-body text-app-text-muted">
+          Estados informativos para productos, imágenes y procesos.
+        </p>
+
+        <div class="mt-5 flex flex-wrap gap-3">
+          <app-ui-badge label="Procesada" variant="success" [showDot]="true" />
+
+          <app-ui-badge label="Pendiente" variant="warning" [showDot]="true" />
+
+          <app-ui-badge label="Error" variant="danger" [showDot]="true" />
+
+          <app-ui-badge label="Principal" variant="brand" size="medium" />
+
+          <app-ui-badge label="Búsqueda visual" variant="accent" size="medium" />
+
+          <app-ui-badge label="Información" variant="info" />
+
+          <app-ui-badge label="Inactivo" variant="neutral" />
+        </div>
+      </section>
+
+      <section class="mt-6 rounded-gamarra-xl bg-app-surface p-6 shadow-gamarra-sm">
+        <h2 class="text-title-sm font-bold text-app-text">
+          Estados de carga
+        </h2>
+
+        <p class="mt-2 text-body text-app-text-muted">
+          Skeletons para mostrar contenido mientras se cargan los datos.
+        </p>
+
+        <div class="mt-5 space-y-6">
+          <div>
+            <h3 class="mb-3 text-body font-semibold text-app-text">
+              Texto
+            </h3>
+
+            <app-ui-skeleton variant="text" [lines]="3" />
+          </div>
+
+          <div>
+            <h3 class="mb-3 text-body font-semibold text-app-text">
+              Avatar y texto
+            </h3>
+
+            <div class="flex items-center gap-4">
+              <app-ui-skeleton variant="circle" width="56px" />
+
+              <div class="min-w-0 flex-1">
+                <app-ui-skeleton variant="text" [lines]="2" />
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="mb-3 text-body font-semibold text-app-text">
+              Contenido destacado
+            </h3>
+
+            <app-ui-skeleton variant="rectangle" height="160px" />
+          </div>
+
+          <div>
+            <h3 class="mb-3 text-body font-semibold text-app-text">
+              Productos
+            </h3>
+
+            <div class="grid grid-cols-2 gap-4">
+              <app-ui-skeleton variant="product-card" />
+              <app-ui-skeleton variant="product-card" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="mt-6 rounded-gamarra-xl bg-app-surface p-6 shadow-gamarra-sm">
+        <h2 class="text-title-sm font-bold text-app-text">
+          Estados vacíos
+        </h2>
+
+        <p class="mt-2 text-body text-app-text-muted">
+          Mensajes para pantallas que todavía no tienen contenido.
+        </p>
+
+        <div class="mt-5 space-y-5">
+          <app-ui-empty-state title="No encontramos productos"
+            description="Prueba con otro término o cambia los filtros de búsqueda." icon="search-outline"
+            variant="neutral" [compact]="true" />
+
+          <app-ui-empty-state title="Aún no tienes productos"
+            description="Registra tu primer producto para comenzar a mostrarlo en el catálogo."
+            icon="bag-handle-outline" variant="brand" actionLabel="Agregar producto" actionIcon="add-outline"
+            [compact]="true" />
+
+          <app-ui-empty-state title="No tienes favoritos"
+            description="Guarda las prendas que te gusten para encontrarlas fácilmente después." icon="heart-outline"
+            variant="accent" actionLabel="Explorar productos" [compact]="true" />
+        </div>
+      </section>
+
+      <section class="mt-6 rounded-gamarra-xl bg-app-surface p-6 shadow-gamarra-sm">
+        <h2 class="text-title-sm font-bold text-app-text">
+          Estados de error
+        </h2>
+
+        <p class="mt-2 text-body text-app-text-muted">
+          Mensajes para errores, advertencias y problemas de conexión.
+        </p>
+
+        <div class="mt-5 space-y-5">
+          <app-ui-error-state title="No pudimos cargar los productos"
+            description="Ocurrió un problema al consultar el catálogo. Inténtalo nuevamente." variant="error"
+            [compact]="true" />
+
+          <app-ui-error-state title="La imagen no pudo procesarse"
+            description="Prueba con otra fotografía más clara o vuelve a intentarlo." variant="warning"
+            actionLabel="Reprocesar imagen" [compact]="true" />
+
+          <app-ui-error-state title="Sin conexión" description="Verifica tu conexión a internet e intenta nuevamente."
+            variant="offline" actionLabel="Volver a intentar" [compact]="true" />
+
+          <app-ui-error-state title="Actualizando información" description="Estamos intentando recuperar los datos."
+            variant="offline" [loading]="true" [compact]="true" />
+        </div>
+      </section>
+
+      <section class="mt-6 rounded-gamarra-xl bg-app-surface p-6 shadow-gamarra-sm">
+        <h2 class="text-title-sm font-bold text-app-text">
+          Encabezados de sección
+        </h2>
+
+        <p class="mt-2 text-body text-app-text-muted">
+          Títulos reutilizables para el catálogo y el panel administrativo.
+        </p>
+
+        <div class="mt-6 space-y-8">
+          <app-ui-section-header title="Productos destacados" description="Prendas seleccionadas para ti"
+            actionLabel="Ver todos" [showAction]="true" />
+
+          <app-ui-section-header title="Mis productos" description="Administra precios, stock e imágenes"
+            actionLabel="Nuevo producto" actionIcon="add-outline" [showAction]="true" />
+
+          <app-ui-section-header title="Categorías" actionLabel="Explorar" [showAction]="true" [compact]="true" />
+
+          <app-ui-section-header title="Información de la tienda" description="Datos visibles para los clientes"
+            [compact]="true" />
+        </div>
+      </section>
+
+      <section class="mt-6 rounded-gamarra-xl bg-app-surface p-6 shadow-gamarra-sm">
+        <h2 class="text-title-sm font-bold text-app-text">
+          Mensajes de confirmación
+        </h2>
+
+        <p class="mt-2 text-body text-app-text-muted">
+          Notificaciones para informar el resultado de una acción.
+        </p>
+
+        <div class="mt-5 grid grid-cols-2 gap-3">
+          <app-ui-button variant="outline" size="small" (click)="showSuccessToast()">
+            Mostrar éxito
+          </app-ui-button>
+
+          <app-ui-button variant="outline" size="small" (click)="showErrorToast()">
+            Mostrar error
+          </app-ui-button>
+
+          <app-ui-button variant="outline" size="small" (click)="showWarningToast()">
+            Mostrar advertencia
+          </app-ui-button>
+
+          <app-ui-button variant="outline" size="small" (click)="showInfoToast()">
+            Mostrar información
+          </app-ui-button>
+        </div>
+      </section>
+
+      <section class="mt-6 rounded-gamarra-xl bg-app-surface p-6 shadow-gamarra-sm">
+        <h2 class="text-title-sm font-bold text-app-text">
+          Modales de confirmación
+        </h2>
+
+        <p class="mt-2 text-body text-app-text-muted">
+          Confirmaciones para acciones importantes o destructivas.
+        </p>
+
+        <div class="mt-5 grid grid-cols-2 gap-3">
+          <app-ui-button variant="primary" size="small" (click)="showConfirmModal()">
+            Guardar cambios
+          </app-ui-button>
+
+          <app-ui-button variant="danger" size="small" (click)="showDeleteModal()">
+            Eliminar producto
+          </app-ui-button>
+        </div>
+      </section>
+
     </section>
   </main>
 </ion-content>
-
-

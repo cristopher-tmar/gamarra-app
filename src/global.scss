@@ -200,3 +200,190 @@ textarea:disabled {
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 /* @import '@ionic/angular/css/palettes/dark.system.css'; */
+
+ion-toast.gamarra-toast {
+    --background: #ffffff;
+    --color: var(--gamarra-text-primary);
+    --border-radius: 18px;
+    --box-shadow:
+        0 14px 38px rgba(36, 32, 44, 0.16);
+    --button-color: var(--gamarra-text-secondary);
+    --max-width: 30rem;
+
+    font-family: "Inter", sans-serif;
+    font-size: 0.9375rem;
+    font-weight: 600;
+}
+
+ion-toast.gamarra-toast::part(container) {
+    min-height: 64px;
+    padding-inline: 0.35rem;
+    border-radius: 18px;
+}
+
+ion-toast.gamarra-toast::part(icon) {
+    font-size: 1.65rem;
+}
+
+ion-toast.gamarra-toast::part(button) {
+    margin-right: 0.25rem;
+    border-radius: 9999px;
+}
+
+ion-toast.gamarra-toast--success {
+    --box-shadow:
+        inset 5px 0 0 #00c875,
+        0 14px 38px rgba(0, 200, 117, 0.2);
+}
+
+ion-toast.gamarra-toast--success::part(icon) {
+    color: #00c875;
+}
+
+ion-toast.gamarra-toast--error {
+    --box-shadow:
+        inset 5px 0 0 #ff365f,
+        0 14px 38px rgba(255, 54, 95, 0.2);
+}
+
+ion-toast.gamarra-toast--error::part(icon) {
+    color: #ff365f;
+}
+
+ion-toast.gamarra-toast--warning {
+    --box-shadow:
+        inset 5px 0 0 #ffad0d,
+        0 14px 38px rgba(255, 173, 13, 0.22);
+}
+
+ion-toast.gamarra-toast--warning::part(icon) {
+    color: #ffad0d;
+}
+
+ion-toast.gamarra-toast--info {
+    --box-shadow:
+        inset 5px 0 0 #7c3aed,
+        0 14px 38px rgba(124, 58, 237, 0.22);
+}
+
+ion-toast.gamarra-toast--info::part(icon) {
+    color: #7c3aed;
+}
+
+ion-alert.gamarra-confirm {
+    --background: #ffffff;
+    --backdrop-opacity: 0.45;
+    --max-width: 24rem;
+    --width: calc(100% - 2rem);
+
+    font-family: "Inter", sans-serif;
+}
+
+ion-alert.gamarra-confirm .alert-wrapper {
+    overflow: hidden;
+
+    border: 1px solid var(--gamarra-border);
+    border-radius: var(--gamarra-radius-lg);
+    box-shadow: var(--gamarra-shadow-lg);
+}
+
+ion-alert.gamarra-confirm .alert-head {
+    padding: 1.5rem 1.5rem 0.625rem;
+}
+
+ion-alert.gamarra-confirm .alert-title {
+    color: var(--gamarra-text-primary);
+
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.75rem;
+}
+
+ion-alert.gamarra-confirm .alert-message {
+    padding: 0 1.5rem 1.25rem;
+
+    color: var(--gamarra-text-secondary);
+
+    font-size: 1rem;
+    line-height: 1.5rem;
+}
+
+ion-alert.gamarra-confirm .alert-button-group {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 1.5rem 1.5rem;
+}
+
+ion-alert.gamarra-confirm .alert-button {
+    flex: 1 1 0;
+    width: auto;
+    height: 48px;
+    min-height: 48px;
+    padding: 0 1rem;
+    margin: 0;
+
+    border-radius: 14px;
+
+    font-family: inherit;
+    font-size: 0.9375rem;
+    font-weight: 700;
+    line-height: 1;
+    text-transform: none;
+}
+
+ion-alert.gamarra-confirm .gamarra-confirm__cancel {
+    color: var(--gamarra-text-secondary);
+    background: var(--gamarra-surface-muted);
+}
+
+ion-alert.gamarra-confirm .gamarra-confirm__accept {
+    color: #ffffff;
+    background: linear-gradient(135deg,
+            var(--gamarra-brand-600),
+            var(--gamarra-brand-500));
+    box-shadow: 0 8px 20px rgba(105, 65, 198, 0.2);
+}
+
+ion-alert.gamarra-confirm .gamarra-confirm__danger {
+    color: #ffffff;
+    background: linear-gradient(135deg,
+            #ff365f,
+            var(--gamarra-danger));
+    box-shadow: 0 8px 20px rgba(255, 54, 95, 0.2);
+}
+
+ion-alert.gamarra-confirm .alert-button:active {
+    transform: scale(0.97);
+}
+
+@media (max-width: 360px) {
+    ion-alert.gamarra-confirm .alert-button-group {
+        flex-direction: column-reverse;
+    }
+
+    ion-alert.gamarra-confirm .alert-button {
+        width: 100%;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    ion-alert.gamarra-confirm .alert-button {
+        transition: none;
+    }
+}
+
+ion-alert.gamarra-confirm .alert-button {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+}
+
+ion-alert.gamarra-confirm .alert-button .alert-button-inner {
+  display: flex !important;
+  width: 100% !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+}

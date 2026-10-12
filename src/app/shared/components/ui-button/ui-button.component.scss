@@ -1,0 +1,228 @@
+:host {
+  display: inline-block;
+  max-width: 100%;
+}
+
+:host:has(.ui-button--full) {
+  display: block;
+  width: 100%;
+}
+
+.ui-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+
+  border: 1px solid transparent;
+  border-radius: var(--gamarra-radius-md);
+  margin: 0;
+
+  font-family: inherit;
+  font-weight: 600;
+  line-height: 1;
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+
+  transition:
+    background-color 180ms ease,
+    border-color 180ms ease,
+    color 180ms ease,
+    box-shadow 180ms ease,
+    transform 120ms ease;
+}
+
+/* Tamaños */
+
+.ui-button--small {
+  min-height: 44px;
+  padding: 0.625rem 1rem;
+  font-size: 0.875rem;
+}
+
+.ui-button--medium {
+  min-height: 48px;
+  padding: 0.75rem 1.25rem;
+  font-size: 1rem;
+}
+
+.ui-button--large {
+  min-height: 56px;
+  padding: 0.875rem 1.5rem;
+  font-size: 1rem;
+}
+
+/* Ancho */
+
+.ui-button--full {
+  width: 100%;
+}
+
+/* Variante principal */
+
+.ui-button--primary {
+  color: #ffffff;
+  background:
+    linear-gradient(
+      135deg,
+      var(--gamarra-brand-600),
+      var(--gamarra-brand-500)
+    );
+  box-shadow: var(--gamarra-shadow-md);
+}
+
+.ui-button--primary:hover:not(:disabled) {
+  box-shadow: var(--gamarra-shadow-lg);
+  transform: translateY(-1px);
+}
+
+/* Variante secundaria */
+
+.ui-button--secondary {
+  color: var(--gamarra-brand-700);
+  background: var(--gamarra-brand-100);
+}
+
+.ui-button--secondary:hover:not(:disabled) {
+  color: var(--gamarra-brand-800);
+  background: #e4ddfd;
+}
+
+/* Variante coral */
+
+.ui-button--accent {
+  color: #ffffff;
+  background:
+    linear-gradient(
+      135deg,
+      var(--gamarra-accent-500),
+      var(--gamarra-accent-600)
+    );
+  box-shadow:
+    0 8px 22px rgba(217, 79, 61, 0.18);
+}
+
+.ui-button--accent:hover:not(:disabled) {
+  box-shadow:
+    0 12px 28px rgba(217, 79, 61, 0.24);
+  transform: translateY(-1px);
+}
+
+/* Variante con borde */
+
+.ui-button--outline {
+  color: var(--gamarra-brand-700);
+  background: var(--gamarra-surface);
+  border-color: var(--gamarra-brand-100);
+}
+
+.ui-button--outline:hover:not(:disabled) {
+  background: var(--gamarra-brand-50);
+  border-color: var(--gamarra-brand-400);
+}
+
+/* Variante discreta */
+
+.ui-button--ghost {
+  color: var(--gamarra-brand-700);
+  background: transparent;
+}
+
+.ui-button--ghost:hover:not(:disabled) {
+  background: var(--gamarra-brand-50);
+}
+
+/* Variante destructiva */
+
+.ui-button--danger {
+  color: #ffffff;
+  background: var(--gamarra-danger);
+  box-shadow:
+    0 8px 22px rgba(198, 62, 69, 0.16);
+}
+
+.ui-button--danger:hover:not(:disabled) {
+  background: #ac3038;
+  box-shadow:
+    0 12px 28px rgba(198, 62, 69, 0.22);
+  transform: translateY(-1px);
+}
+
+/* Estados */
+
+.ui-button:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.ui-button:focus-visible {
+  outline: 3px solid var(--gamarra-brand-400);
+  outline-offset: 3px;
+}
+
+.ui-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+  box-shadow: none;
+  transform: none;
+}
+
+/* Contenido */
+
+.ui-button__content {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+}
+
+/* Indicador de carga */
+
+.ui-button__spinner {
+  width: 1.25rem;
+  height: 1.25rem;
+
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 9999px;
+
+  animation: ui-button-spin 700ms linear infinite;
+}
+
+/* Texto disponible solo para lectores de pantalla */
+
+.sr-only {
+  position: absolute;
+
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+
+  border: 0;
+}
+
+@keyframes ui-button-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-button,
+  .ui-button__spinner {
+    transition: none;
+  }
+
+  .ui-button__spinner {
+    animation-duration: 1.4s;
+  }
+}

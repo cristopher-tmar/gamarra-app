@@ -1,0 +1,22 @@
+<button
+  type="button"
+  class="ui-chip ui-chip--{{ variant }} ui-chip--{{ size }}"
+  [class.ui-chip--selected]="selected"
+  [class.ui-chip--informative]="!interactive"
+  [disabled]="disabled"
+  [attr.aria-pressed]="interactive ? selected : null"
+  [attr.aria-label]="label"
+  (click)="handleClick()"
+>
+  @if (icon) {
+    <ion-icon
+      [name]="icon"
+      class="ui-chip__icon"
+      aria-hidden="true"
+    ></ion-icon>
+  }
+
+  <span class="ui-chip__label">
+    {{ label }}
+  </span>
+</button>

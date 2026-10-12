@@ -1,0 +1,171 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.ui-input {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+}
+
+.ui-input__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-bottom: 0.5rem;
+
+  color: var(--gamarra-text-primary);
+
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.25rem;
+}
+
+.ui-input__required {
+  color: var(--gamarra-danger);
+}
+
+.ui-input__control {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 52px;
+
+  padding: 0 1rem;
+
+  background: var(--gamarra-surface);
+  border: 1px solid var(--gamarra-border);
+  border-radius: var(--gamarra-radius-md);
+
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    background-color 180ms ease;
+}
+
+.ui-input__control:focus-within {
+  border-color: var(--gamarra-brand-500);
+  box-shadow:
+    0 0 0 4px rgba(124, 58, 237, 0.12);
+}
+
+.ui-input__leading-icon {
+  flex: 0 0 auto;
+  margin-right: 0.75rem;
+
+  color: var(--gamarra-text-secondary);
+  font-size: 1.25rem;
+
+  transition: color 180ms ease;
+}
+
+.ui-input__control:focus-within .ui-input__leading-icon {
+  color: var(--gamarra-brand-600);
+}
+
+.ui-input__field {
+  flex: 1;
+  min-width: 0;
+  min-height: 50px;
+  padding: 0;
+
+  color: var(--gamarra-text-primary);
+  background: transparent;
+  border: 0;
+  outline: 0;
+
+  font-family: inherit;
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+.ui-input__field::placeholder {
+  color: var(--gamarra-text-secondary);
+  opacity: 0.75;
+}
+
+.ui-input__password-toggle {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+
+  width: 44px;
+  height: 44px;
+  margin-right: -0.625rem;
+
+  appearance: none;
+  color: var(--gamarra-text-secondary);
+  background: transparent;
+  border: 0;
+  border-radius: 9999px;
+
+  font-size: 1.25rem;
+  cursor: pointer;
+
+  transition:
+    color 180ms ease,
+    background-color 180ms ease;
+}
+
+.ui-input__password-toggle:hover:not(:disabled) {
+  color: var(--gamarra-brand-700);
+  background: var(--gamarra-brand-50);
+}
+
+.ui-input__password-toggle:focus-visible {
+  outline: 3px solid var(--gamarra-brand-400);
+  outline-offset: 2px;
+}
+
+.ui-input__password-toggle:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.ui-input__message {
+  margin-top: 0.5rem;
+
+  color: var(--gamarra-text-secondary);
+
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.ui-input__message--error {
+  color: var(--gamarra-danger);
+  font-weight: 500;
+}
+
+.ui-input__control--error {
+  border-color: var(--gamarra-danger);
+  box-shadow:
+    0 0 0 4px rgba(198, 62, 69, 0.1);
+}
+
+.ui-input__control--error .ui-input__leading-icon {
+  color: var(--gamarra-danger);
+}
+
+.ui-input__control--disabled {
+  cursor: not-allowed;
+  background: var(--gamarra-surface-muted);
+  opacity: 0.65;
+}
+
+.ui-input__field:disabled {
+  cursor: not-allowed;
+}
+
+.ui-input__field:read-only {
+  cursor: default;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-input__control,
+  .ui-input__leading-icon,
+  .ui-input__password-toggle {
+    transition: none;
+  }
+}

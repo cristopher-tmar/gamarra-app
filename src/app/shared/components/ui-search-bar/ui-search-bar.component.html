@@ -1,0 +1,21 @@
+<form class="ui-search-bar" role="search" (submit)="handleSubmit($event)">
+  <span class="ui-search-bar__search-icon">
+    <ion-icon name="search-outline" aria-hidden="true"></ion-icon>
+  </span>
+
+  <input type="search" class="ui-search-bar__input" [value]="value" [placeholder]="placeholder" [disabled]="disabled"
+    [attr.aria-label]="ariaLabel" autocomplete="off" enterkeyhint="search" (input)="handleInput($event)" />
+
+  @if (value && !disabled) {
+  <button type="button" class="ui-search-bar__action" aria-label="Limpiar búsqueda" (click)="clearSearch()">
+    <ion-icon name="close-circle-outline" aria-hidden="true"></ion-icon>
+  </button>
+  }
+
+  @if (showCamera) {
+  <button type="button" class="ui-search-bar__action ui-search-bar__action--camera"
+    aria-label="Buscar mediante una fotografía" [disabled]="disabled" (click)="openCamera()">
+    <ion-icon name="camera-outline" aria-hidden="true"></ion-icon>
+  </button>
+  }
+</form>

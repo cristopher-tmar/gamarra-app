@@ -1,0 +1,61 @@
+<article class="product-card" [class.product-card--disabled]="disabled" (click)="openProduct()"
+  (keydown.enter)="openProduct()" (keydown.space)="openProduct()" [attr.tabindex]="disabled ? -1 : 0"
+  [attr.aria-disabled]="disabled" [attr.aria-label]="'Ver producto ' + name">
+  <div class="product-card__image-container">
+    @if (imageUrl) {
+    <img class="product-card__image" [ngSrc]="imageUrl" [alt]="name" width="600" height="750"
+      [priority]="priorityImage" />
+    } @else {
+    <div class="product-card__image-placeholder">
+      <ion-icon name="image-outline" aria-hidden="true"></ion-icon>
+
+      <span>Sin imagen</span>
+    </div>
+    }
+
+    <button type="button" class="product-card__favorite" [class.product-card__favorite--active]="favorite"
+      [disabled]="disabled" [attr.aria-label]="
+        favorite
+          ? 'Quitar de favoritos'
+          : 'Agregar a favoritos'
+      " (click)="toggleFavorite($event)">
+      <ion-icon [name]="favorite ? 'heart' : 'heart-outline'" aria-hidden="true"></ion-icon>
+    </button>
+
+    @if (category) {
+    <span class="product-card__category">
+      {{ category }}
+    </span>
+    }
+
+    @if (similarityPercentage !== undefined) {
+    <span class="product-card__similarity">
+      Similitud {{ similarityPercentage }}%
+    </span>
+    }
+  </div>
+
+  <div class="product-card__content">
+    @if (storeName) {
+    <div class="product-card__store">
+      <ion-icon name="storefront-outline" aria-hidden="true"></ion-icon>
+
+      <span>{{ storeName }}</span>
+    </div>
+    }
+
+    <h3 class="product-card__name">
+      {{ name }}
+    </h3>
+
+    <div class="product-card__footer">
+      <span class="product-card__price">
+        S/ {{ price | number:'1.2-2' }}
+      </span>
+
+      <span class="product-card__availability" [class.product-card__availability--unavailable]="!available">
+        {{ available ? 'Disponible' : 'Agotado' }}
+      </span>
+    </div>
+  </div>
+</article>
