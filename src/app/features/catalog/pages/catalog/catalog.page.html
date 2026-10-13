@@ -1,7 +1,65 @@
 <ion-content [fullscreen]="true">
-  <main class="min-h-full bg-app-background p-6">
-    <h1 class="text-title-lg font-bold text-app-text">
-      Catálogo
-    </h1>
+  <main class="catalog-page">
+    <div class="catalog-page__container">
+
+      <header class="catalog-header">
+        <div class="catalog-header__brand">
+          <span class="catalog-header__logo" aria-hidden="true">
+            G
+          </span>
+
+          <span class="catalog-header__name">
+            Gamarra
+          </span>
+        </div>
+      </header>
+
+      <section class="catalog-page__search">
+
+        <app-ui-search-bar placeholder="Buscar polos, casacas..." ariaLabel="Buscar productos en el catálogo"
+          [showCamera]="true" />
+      </section>
+
+      <section class="catalog-page__categories">
+        <app-ui-section-header title="Categorías" [compact]="true" />
+
+        <div class="catalog-categories">
+          <app-ui-chip label="Todos" variant="brand" [selected]="true" />
+
+          <app-ui-chip label="Polos" icon="shirt-outline" variant="brand" />
+
+          <app-ui-chip label="Casacas" variant="accent" />
+
+          <app-ui-chip label="Pantalones" variant="neutral" />
+        </div>
+      </section>
+
+      <section class="catalog-page__products">
+        <app-ui-section-header title="Productos" />
+
+        <div class="catalog-products">
+          <app-ui-product-card [productId]="1" name="Polo Basement cuello camisero beige" [price]="59.9"
+            imageUrl="https://qegspgcihjbzgbvgsumz.supabase.co/storage/v1/object/public/productos/1/f287117b-1c8e-46ad-beef-0b8b953a9214.webp"
+            storeName="Moda Urbana Gamarra" category="Polos" [stock]="18" [priorityImage]="true" />
+
+          <app-ui-product-card [productId]="2" name="Polo Bearcliff marrón estampado" [price]="54.9"
+            imageUrl="https://qegspgcihjbzgbvgsumz.supabase.co/storage/v1/object/public/productos/2/4b0a39de-0b46-4130-8a68-4b9b542d3d41.webp"
+            storeName="Moda Urbana Gamarra" category="Polos" [stock]="16" />
+
+          <app-ui-product-card [productId]="4" name="Polo Index marrón clásico" [price]="49.9"
+            imageUrl="https://qegspgcihjbzgbvgsumz.supabase.co/storage/v1/object/public/productos/4/6969c237-3be0-46fe-88c3-8f601cba0b3b.webp"
+            storeName="Moda Urbana Gamarra" category="Polos" [stock]="20" />
+
+          <app-ui-product-card [productId]="9" name="Polo Topitop oversize marrón" [price]="49.9"
+            imageUrl="https://qegspgcihjbzgbvgsumz.supabase.co/storage/v1/object/public/productos/9/6c73bfcc-50da-4c6c-8aae-5eb2f902fa65.webp"
+            storeName="Estilo Moderno" category="Polos" [stock]="20" />
+        </div>
+      </section>
+    </div>
   </main>
+
+  <app-ui-coachmark title="Busca usando una fotografía"
+    description="Toca el botón de cámara para encontrar prendas visualmente similares." icon="camera-outline"
+    actionLabel="Entendido" position="bottom" [visible]="showVisualSearchTutorial"
+    (dismissed)="dismissVisualSearchTutorial()" />
 </ion-content>

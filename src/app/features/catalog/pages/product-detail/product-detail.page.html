@@ -1,7 +1,194 @@
 <ion-content [fullscreen]="true">
-  <main class="min-h-full bg-app-background p-6">
-    <h1 class="text-title-lg font-bold text-app-text">
-      Detalle del producto
-    </h1>
+  <main class="product-detail">
+    <div class="product-detail__container">
+      <header class="product-detail__header">
+        <button type="button" class="product-detail__back" aria-label="Volver al catálogo">
+          <ion-icon name="arrow-back-outline" aria-hidden="true"></ion-icon>
+        </button>
+
+        <span class="product-detail__header-title">
+          Detalle del producto
+        </span>
+      </header>
+
+      <div class="product-detail__layout">
+        <section class="product-gallery" aria-label="Imágenes del producto">
+          <div class="product-gallery__main">
+            <img
+              src="https://qegspgcihjbzgbvgsumz.supabase.co/storage/v1/object/public/productos/1/f287117b-1c8e-46ad-beef-0b8b953a9214.webp"
+              alt="Polo Basement cuello camisero beige" class="product-gallery__main-image" />
+
+            <span class="product-gallery__category">
+              Polos
+            </span>
+          </div>
+
+          <div class="product-gallery__thumbnails">
+            <button type="button" class="product-gallery__thumbnail product-gallery__thumbnail--active"
+              aria-label="Ver imagen principal">
+              <img
+                src="https://qegspgcihjbzgbvgsumz.supabase.co/storage/v1/object/public/productos/1/f287117b-1c8e-46ad-beef-0b8b953a9214.webp"
+                alt="" />
+            </button>
+
+            <button type="button" class="product-gallery__thumbnail" aria-label="Ver segunda imagen">
+              <img
+                src="https://qegspgcihjbzgbvgsumz.supabase.co/storage/v1/object/public/productos/1/25ac4c82-5ada-470f-9f78-907afbe02f5b.webp"
+                alt="" />
+            </button>
+          </div>
+        </section>
+        <section class="product-info">
+          <div class="product-info__status">
+            <span class="product-info__available">
+              <ion-icon name="checkmark-circle-outline" aria-hidden="true"></ion-icon>
+
+              Disponible
+            </span>
+
+            <span class="product-info__stock">
+              18 unidades
+            </span>
+          </div>
+
+          <h1 class="product-info__name">
+            Polo Basement cuello camisero beige
+          </h1>
+
+          <p class="product-info__price">
+            S/ 59.90
+          </p>
+
+          <section class="product-info__section product-info__section--variant">
+            <h2 class="product-info__section-title">
+              Color
+            </h2>
+
+            <div class="product-colors">
+              <button type="button" class="product-colors__item product-colors__item--selected" aria-pressed="true">
+                <span class="product-colors__sample product-colors__sample--beige" aria-hidden="true"></span>
+
+                Beige
+              </button>
+            </div>
+          </section>
+
+          <section class="product-info__section product-info__section--variant">
+            <h2 class="product-info__section-title">
+              Talla
+            </h2>
+
+            <div class="product-sizes">
+              <button type="button" class="product-sizes__item" aria-pressed="false">
+                S
+              </button>
+
+              <button type="button" class="product-sizes__item product-sizes__item--selected" aria-pressed="true">
+                M
+              </button>
+
+              <button type="button" class="product-sizes__item" aria-pressed="false">
+                L
+              </button>
+            </div>
+          </section>
+
+          <section class="product-info__section">
+            <h2 class="product-info__section-title">
+              Descripción
+            </h2>
+
+            <p class="product-info__description">
+              Polo beige de manga corta con cuello camisero y estilo
+              casual. Confeccionado en algodón para brindar comodidad
+              durante todo el día.
+            </p>
+          </section>
+
+          <section class="product-info__section">
+            <h2 class="product-info__section-title">
+              Características
+            </h2>
+
+            <dl class="product-attributes">
+              <div class="product-attributes__item">
+                <dt>Marca</dt>
+                <dd>Basement</dd>
+              </div>
+
+              <div class="product-attributes__item">
+                <dt>Estilo</dt>
+                <dd>Casual</dd>
+              </div>
+
+              <div class="product-attributes__item">
+                <dt>Material</dt>
+                <dd>Algodón</dd>
+              </div>
+
+              <div class="product-attributes__item">
+                <dt>Cuello</dt>
+                <dd>Camisero</dd>
+              </div>
+
+              <div class="product-attributes__item">
+                <dt>Manga</dt>
+                <dd>Corta</dd>
+              </div>
+
+              <div class="product-attributes__item">
+                <dt>Color</dt>
+                <dd>Beige</dd>
+              </div>
+            </dl>
+          </section>
+
+          <section class="product-info__section">
+            <h2 class="product-info__section-title">
+              Información de la tienda
+            </h2>
+
+            <article class="store-card">
+              <div class="store-card__header">
+                <span class="store-card__icon" aria-hidden="true">
+                  <ion-icon name="storefront-outline"></ion-icon>
+                </span>
+
+                <div class="store-card__content">
+                  <h3 class="store-card__name">
+                    Moda Urbana Gamarra
+                  </h3>
+
+                  <p class="store-card__location">
+                    <ion-icon name="location-outline" aria-hidden="true"></ion-icon>
+
+                    Galería Azul, piso 2, local 205
+                  </p>
+                </div>
+              </div>
+
+            </article>
+          </section>
+        </section>
+      </div>
+    </div>
+
+    <div class="product-detail__contact-bar">
+      <div class="product-detail__contact-content">
+        <div class="product-detail__contact-summary">
+          <span>Precio</span>
+          <strong>S/ 59.90</strong>
+        </div>
+
+        <a class="product-detail__whatsapp" [href]="whatsappUrl" target="_blank" rel="noopener noreferrer">
+          <ion-icon name="logo-whatsapp" aria-hidden="true"></ion-icon>
+
+          <span>
+            Consultar por WhatsApp
+          </span>
+        </a>
+      </div>
+    </div>
+
   </main>
 </ion-content>

@@ -1,0 +1,32 @@
+@if (visible) {
+<div class="ui-coachmark" role="presentation" (click)="handleBackdropClick()">
+  <section class="ui-coachmark__card ui-coachmark__card--{{ position }}" role="dialog" aria-modal="true"
+    [attr.aria-label]="title" (click)="handleCardClick($event)">
+    @if (showClose) {
+    <button type="button" class="ui-coachmark__close" aria-label="Cerrar tutorial" (click)="dismiss()">
+      <ion-icon name="close-outline" aria-hidden="true"></ion-icon>
+    </button>
+    }
+
+    <span class="ui-coachmark__icon" aria-hidden="true">
+      <ion-icon [name]="icon"></ion-icon>
+    </span>
+
+    <h2 class="ui-coachmark__title">
+      {{ title }}
+    </h2>
+
+    @if (description) {
+    <p class="ui-coachmark__description">
+      {{ description }}
+    </p>
+    }
+
+    <div class="ui-coachmark__action">
+      <app-ui-button variant="primary" size="medium" (click)="dismiss()">
+        {{ actionLabel }}
+      </app-ui-button>
+    </div>
+  </section>
+</div>
+}

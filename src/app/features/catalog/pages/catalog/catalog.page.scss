@@ -1,0 +1,147 @@
+:host {
+  display: block;
+  width: 100%;
+  min-height: 100%;
+}
+
+ion-content {
+  --background: var(--gamarra-background);
+}
+
+.catalog-page {
+  width: 100%;
+  min-height: 100%;
+  padding:
+    max(1.25rem, env(safe-area-inset-top))
+    1rem
+    calc(3rem + env(safe-area-inset-bottom));
+}
+
+.catalog-page__container {
+  width: 100%;
+  max-width: 80rem;
+  margin: 0 auto;
+}
+
+.catalog-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem 0 1rem;
+}
+
+.catalog-header__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.catalog-header__logo {
+  display: flex;
+  width: 36px;
+  height: 36px;
+  align-items: center;
+  justify-content: center;
+
+  color: #ffffff;
+  background: linear-gradient(
+    135deg,
+    var(--gamarra-brand-600),
+    var(--gamarra-brand-500)
+  );
+  border-radius: 12px;
+  box-shadow: var(--gamarra-shadow-sm);
+
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.catalog-header__name {
+  color: var(--gamarra-brand-700);
+
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.5rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.catalog-page__search {
+  margin-top: 0;
+}
+
+.catalog-page__categories {
+  margin-top: 1.5rem;
+}
+
+.catalog-categories {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+  padding: 0.25rem 1rem 0.25rem 0;
+  overflow-x: auto;
+
+  background: transparent;
+
+  scrollbar-width: none;
+  scroll-snap-type: x proximity;
+}
+
+.catalog-categories::-webkit-scrollbar {
+  display: none;
+}
+
+.catalog-categories app-ui-chip {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+}
+
+.catalog-page__products {
+  margin-top: 1.75rem;
+}
+
+.catalog-products {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 0.875rem;
+}
+
+@media (min-width: 48rem) {
+  .catalog-page {
+    padding-right: 1.5rem;
+    padding-left: 1.5rem;
+  }
+
+  .catalog-header {
+    padding-bottom: 1.25rem;
+  }
+
+  .catalog-products {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+}
+
+@media (min-width: 64rem) {
+  .catalog-page {
+    padding:
+      2rem
+      2rem
+      4rem;
+  }
+
+  .catalog-header__logo {
+    width: 40px;
+    height: 40px;
+  }
+
+  .catalog-header__name {
+    font-size: 1.375rem;
+  }
+
+  .catalog-products {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.5rem;
+  }
+}

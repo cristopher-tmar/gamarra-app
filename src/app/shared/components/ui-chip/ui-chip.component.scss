@@ -95,11 +95,10 @@
   color: #ffffff;
   background: var(--gamarra-brand-600);
   border-color: var(--gamarra-brand-600);
-  box-shadow: 0 5px 14px rgba(105, 65, 198, 0.2);
+  box-shadow: none;
 }
 
 .ui-chip:hover:not(:disabled):not(.ui-chip--informative) {
-  border-color: var(--gamarra-brand-400);
   transform: translateY(-1px);
 }
 
