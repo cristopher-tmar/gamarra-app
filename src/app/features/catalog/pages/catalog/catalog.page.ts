@@ -1,15 +1,27 @@
-import { Component } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+} from '@angular/core';
+import { Router } from '@angular/router';
+import { finalize } from 'rxjs';
 import { IonContent } from '@ionic/angular';
 import { addIcons } from 'ionicons';
 import {
   cameraOutline,
   shirtOutline,
 } from 'ionicons/icons';
+
+import { CatalogProduct } from '@features/catalog/models/catalog.models';
+import { CatalogService } from '@features/catalog/services/catalog';
 import { UiChipComponent } from '@shared/components/ui-chip/ui-chip.component';
 import { UiCoachmarkComponent } from '@shared/components/ui-coachmark/ui-coachmark.component';
+import { UiEmptyStateComponent } from '@shared/components/ui-empty-state/ui-empty-state.component';
+import { UiErrorStateComponent } from '@shared/components/ui-error-state/ui-error-state.component';
 import { UiProductCardComponent } from '@shared/components/ui-product-card/ui-product-card.component';
 import { UiSearchBarComponent } from '@shared/components/ui-search-bar/ui-search-bar.component';
 import { UiSectionHeaderComponent } from '@shared/components/ui-section-header/ui-section-header.component';
+import { UiSkeletonComponent } from '@shared/components/ui-skeleton/ui-skeleton.component';
 
 @Component({
   selector: 'app-catalog',
@@ -18,24 +30,115 @@ import { UiSectionHeaderComponent } from '@shared/components/ui-section-header/u
   imports: [
     IonContent,
     UiChipComponent,
+    UiCoachmarkComponent,
+    UiEmptyStateComponent,
+    UiErrorStateComponent,
     UiProductCardComponent,
     UiSearchBarComponent,
     UiSectionHeaderComponent,
-    UiCoachmarkComponent,
+    UiSkeletonComponent,
   ],
 })
-export class CatalogPage {
+export class CatalogPage implements OnInit {
+  products: CatalogProduct[] = [];
+
+  loading = true;
+  hasError = false;
+
+  searchTerm = '';
+  selectedCategory?: string;
+
+  readonly categories = [
+    'Todos',
+    'Polos',
+    'Casacas',
+    'Pantalones',
+  ];
 
   showVisualSearchTutorial =
     localStorage.getItem(
       'visual-search-tutorial-seen',
     ) !== 'true';
 
-  constructor() {
+  constructor(
+    private readonly catalogService: CatalogService,
+    private readonly router: Router,
+    private readonly changeDetectorRef: ChangeDetectorRef,
+  ) {
     addIcons({
       cameraOutline,
       shirtOutline,
     });
+  }
+
+  ngOnInit(): void {
+    this.loadProducts();
+  }
+
+  loadProducts(): void {
+    this.loading = true;
+    this.hasError = false;
+
+    this.catalogService
+      .getCatalog({
+        pagina: 1,
+        limite: 12,
+        buscar:
+          this.searchTerm.trim() ||
+          undefined,
+        categoria:
+          this.selectedCategory ||
+          undefined,
+      })
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.changeDetectorRef.markForCheck();
+        }),
+      )
+      .subscribe({
+        next: (response) => {
+          this.products =
+            response.productos;
+        },
+        error: () => {
+          this.products = [];
+          this.hasError = true;
+        },
+      });
+  }
+
+  searchProducts(
+    value: string,
+  ): void {
+    this.searchTerm = value;
+    this.loadProducts();
+  }
+
+  selectCategory(
+    category: string,
+  ): void {
+    this.selectedCategory =
+      category === 'Todos'
+        ? undefined
+        : category;
+
+    this.loadProducts();
+  }
+
+  openProduct(
+    productId: number,
+  ): void {
+    void this.router.navigate([
+      '/catalogo',
+      productId,
+    ]);
+  }
+
+  openVisualSearch(): void {
+    void this.router.navigate([
+      '/busqueda-visual',
+    ]);
   }
 
   dismissVisualSearchTutorial(): void {

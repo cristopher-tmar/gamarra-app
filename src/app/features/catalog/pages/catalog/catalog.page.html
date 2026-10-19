@@ -17,43 +17,60 @@
       <section class="catalog-page__search">
 
         <app-ui-search-bar placeholder="Buscar polos, casacas..." ariaLabel="Buscar productos en el catálogo"
-          [showCamera]="true" />
+          [showCamera]="true" [value]="searchTerm" (valueChange)="searchTerm = $event" (search)="searchProducts($event)"
+          (cameraClick)="openVisualSearch()" />
+
       </section>
 
       <section class="catalog-page__categories">
         <app-ui-section-header title="Categorías" [compact]="true" />
 
         <div class="catalog-categories">
-          <app-ui-chip label="Todos" variant="brand" [selected]="true" />
+          <app-ui-chip label="Todos" variant="brand" [selected]="selectedCategory === undefined"
+            (chipClick)="selectCategory('Todos')" />
 
-          <app-ui-chip label="Polos" icon="shirt-outline" variant="brand" />
+          <app-ui-chip label="Polos" icon="shirt-outline" variant="brand" [selected]="selectedCategory === 'Polos'"
+            (chipClick)="selectCategory('Polos')" />
 
-          <app-ui-chip label="Casacas" variant="accent" />
+          <app-ui-chip label="Casacas" variant="accent" [selected]="selectedCategory === 'Casacas'"
+            (chipClick)="selectCategory('Casacas')" />
 
-          <app-ui-chip label="Pantalones" variant="neutral" />
+          <app-ui-chip label="Pantalones" variant="neutral" [selected]="selectedCategory === 'Pantalones'"
+            (chipClick)="selectCategory('Pantalones')" />
         </div>
       </section>
 
       <section class="catalog-page__products">
         <app-ui-section-header title="Productos" />
 
+        @if (loading) {
         <div class="catalog-products">
-          <app-ui-product-card [productId]="1" name="Polo Basement cuello camisero beige" [price]="59.9"
-            imageUrl="https://qegspgcihjbzgbvgsumz.supabase.co/storage/v1/object/public/productos/1/f287117b-1c8e-46ad-beef-0b8b953a9214.webp"
-            storeName="Moda Urbana Gamarra" category="Polos" [stock]="18" [priorityImage]="true" />
-
-          <app-ui-product-card [productId]="2" name="Polo Bearcliff marrón estampado" [price]="54.9"
-            imageUrl="https://qegspgcihjbzgbvgsumz.supabase.co/storage/v1/object/public/productos/2/4b0a39de-0b46-4130-8a68-4b9b542d3d41.webp"
-            storeName="Moda Urbana Gamarra" category="Polos" [stock]="16" />
-
-          <app-ui-product-card [productId]="4" name="Polo Index marrón clásico" [price]="49.9"
-            imageUrl="https://qegspgcihjbzgbvgsumz.supabase.co/storage/v1/object/public/productos/4/6969c237-3be0-46fe-88c3-8f601cba0b3b.webp"
-            storeName="Moda Urbana Gamarra" category="Polos" [stock]="20" />
-
-          <app-ui-product-card [productId]="9" name="Polo Topitop oversize marrón" [price]="49.9"
-            imageUrl="https://qegspgcihjbzgbvgsumz.supabase.co/storage/v1/object/public/productos/9/6c73bfcc-50da-4c6c-8aae-5eb2f902fa65.webp"
-            storeName="Estilo Moderno" category="Polos" [stock]="20" />
+          @for (item of [1, 2, 3, 4]; track item) {
+          <app-ui-skeleton variant="product-card" />
+          }
         </div>
+        } @else if (hasError) {
+        <app-ui-error-state title="No pudimos cargar los productos"
+          description="Revisa que el API esté disponible e intenta nuevamente." variant="error"
+          actionLabel="Volver a intentar" [compact]="true" (retry)="loadProducts()" />
+        } @else if (products.length === 0) {
+        <app-ui-empty-state title="No encontramos productos"
+          description="Prueba con otra búsqueda o selecciona una categoría diferente." icon="search-outline"
+          variant="neutral" [compact]="true" />
+        } @else {
+        <div class="catalog-products">
+          @for (
+          product of products;
+          track product.id;
+          let first = $first
+          ) {
+          <app-ui-product-card [productId]="product.id" [name]="product.nombre" [price]="product.precio"
+            [imageUrl]="product.imagenPrincipal?.url" [storeName]="product.tienda.nombre" [category]="product.categoria"
+            [stock]="product.stock" [priorityImage]="first" (productClick)="openProduct($event)" />
+          }
+        </div>
+        }
+
       </section>
     </div>
   </main>

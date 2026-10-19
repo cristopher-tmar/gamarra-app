@@ -1,0 +1,132 @@
+:host {
+  display: contents;
+}
+
+.ui-bottom-nav {
+  position: fixed;
+  z-index: 1000;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  padding:
+    0.5rem
+    0.75rem
+    max(0.5rem, env(safe-area-inset-bottom));
+
+  background: rgba(255, 255, 255, 0.94);
+  border-top: 1px solid var(--gamarra-border);
+  box-shadow:
+    0 -8px 28px rgba(36, 32, 44, 0.08);
+
+  backdrop-filter: blur(16px);
+}
+
+.ui-bottom-nav__content {
+  display: grid;
+  width: 100%;
+  max-width: 32rem;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: end;
+  margin: 0 auto;
+}
+
+.ui-bottom-nav__item {
+  display: flex;
+  min-width: 0;
+  min-height: 54px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.375rem 0.25rem;
+
+  color: var(--gamarra-text-secondary);
+  border-radius: var(--gamarra-radius-sm);
+
+  font-size: 0.6875rem;
+  font-weight: 600;
+  line-height: 1rem;
+  text-align: center;
+  text-decoration: none;
+
+  -webkit-tap-highlight-color: transparent;
+
+  transition:
+    color 180ms ease,
+    background-color 180ms ease,
+    transform 120ms ease;
+}
+
+.ui-bottom-nav__item > ion-icon {
+  font-size: 1.375rem;
+}
+
+.ui-bottom-nav__item > span:last-child {
+  max-width: 100%;
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ui-bottom-nav__item:hover {
+  color: var(--gamarra-brand-700);
+  background: var(--gamarra-brand-50);
+}
+
+.ui-bottom-nav__item:active {
+  transform: scale(0.94);
+}
+
+.ui-bottom-nav__item:focus-visible {
+  outline: 3px solid var(--gamarra-brand-400);
+  outline-offset: 2px;
+}
+
+.ui-bottom-nav__item--active {
+  color: var(--gamarra-brand-700);
+}
+
+.ui-bottom-nav__item--active:not(
+  .ui-bottom-nav__item--camera
+) {
+  background: var(--gamarra-brand-50);
+}
+
+.ui-bottom-nav__item--camera:hover {
+  background: transparent;
+}
+
+.ui-bottom-nav__item--camera:hover
+  .ui-bottom-nav__camera-icon {
+  box-shadow:
+    0 12px 26px rgba(217, 79, 61, 0.32);
+}
+
+.ui-bottom-nav__item--camera:active {
+  transform: none;
+}
+
+.ui-bottom-nav__item--camera:active
+  .ui-bottom-nav__camera-icon {
+  transform: scale(0.92);
+}
+
+.ui-bottom-nav__item--camera.ui-bottom-nav__item--active {
+  color: var(--gamarra-accent-600);
+}
+
+@media (min-width: 64rem) {
+  .ui-bottom-nav {
+    padding-right: 1rem;
+    padding-left: 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-bottom-nav__item,
+  .ui-bottom-nav__camera-icon {
+    transition: none;
+  }
+}

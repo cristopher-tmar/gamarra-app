@@ -2,7 +2,7 @@
   <main class="product-detail">
     <div class="product-detail__container">
       <header class="product-detail__header">
-        <button type="button" class="product-detail__back" aria-label="Volver al catálogo">
+        <button type="button" class="product-detail__back" aria-label="Volver al catálogo" (click)="goBack()">
           <ion-icon name="arrow-back-outline" aria-hidden="true"></ion-icon>
         </button>
 
@@ -11,99 +11,142 @@
         </span>
       </header>
 
+      @if (loading) {
+      <div class="product-detail__layout">
+        <app-ui-skeleton variant="rectangle" height="520px" />
+
+        <div>
+          <app-ui-skeleton variant="text" [lines]="6" />
+        </div>
+      </div>
+      } @else if (hasError) {
+      <app-ui-error-state title="No pudimos cargar el producto"
+        description="Verifica que el producto exista e intenta nuevamente." variant="error"
+        actionLabel="Volver a intentar" [compact]="true" (retry)="loadProduct()" />
+      } @else if (!product) {
+      <app-ui-empty-state title="Producto no encontrado"
+        description="El producto solicitado no se encuentra disponible." icon="search-outline" variant="neutral"
+        actionLabel="Volver al catálogo" [compact]="true" (actionClick)="goBack()" />
+      } @else {
       <div class="product-detail__layout">
         <section class="product-gallery" aria-label="Imágenes del producto">
           <div class="product-gallery__main">
-            <img
-              src="https://qegspgcihjbzgbvgsumz.supabase.co/storage/v1/object/public/productos/1/f287117b-1c8e-46ad-beef-0b8b953a9214.webp"
-              alt="Polo Basement cuello camisero beige" class="product-gallery__main-image" />
+            @if (selectedImageUrl) {
+            <img [src]="selectedImageUrl" [alt]="product.nombre" class="product-gallery__main-image" />
+            } @else {
+            <div class="product-gallery__empty">
+              Producto sin imagen
+            </div>
+            }
 
             <span class="product-gallery__category">
-              Polos
+              {{ product.categoria }}
             </span>
           </div>
 
+          @if (product.imagenes.length > 0) {
           <div class="product-gallery__thumbnails">
-            <button type="button" class="product-gallery__thumbnail product-gallery__thumbnail--active"
-              aria-label="Ver imagen principal">
-              <img
-                src="https://qegspgcihjbzgbvgsumz.supabase.co/storage/v1/object/public/productos/1/f287117b-1c8e-46ad-beef-0b8b953a9214.webp"
-                alt="" />
+            @for (
+            image of product.imagenes;
+            track image.id
+            ) {
+            <button type="button" class="product-gallery__thumbnail" [class.product-gallery__thumbnail--active]="
+                      selectedImageUrl === image.url
+                    " [attr.aria-label]="
+                      'Ver imagen ' + image.orden
+                    " (click)="selectImage(image.url)">
+              <img [src]="image.url" [alt]="product.nombre" />
             </button>
-
-            <button type="button" class="product-gallery__thumbnail" aria-label="Ver segunda imagen">
-              <img
-                src="https://qegspgcihjbzgbvgsumz.supabase.co/storage/v1/object/public/productos/1/25ac4c82-5ada-470f-9f78-907afbe02f5b.webp"
-                alt="" />
-            </button>
+            }
           </div>
+          }
         </section>
+
         <section class="product-info">
           <div class="product-info__status">
             <span class="product-info__available">
               <ion-icon name="checkmark-circle-outline" aria-hidden="true"></ion-icon>
 
-              Disponible
+              {{
+              product.disponible
+              ? 'Disponible'
+              : 'Agotado'
+              }}
             </span>
 
             <span class="product-info__stock">
-              18 unidades
+              {{ product.stock }}
+              {{
+              product.stock === 1
+              ? 'unidad'
+              : 'unidades'
+              }}
             </span>
           </div>
 
           <h1 class="product-info__name">
-            Polo Basement cuello camisero beige
+            {{ product.nombre }}
           </h1>
 
           <p class="product-info__price">
-            S/ 59.90
+            S/ {{ product.precio.toFixed(2) }}
           </p>
 
+          @if (colors.length > 0) {
           <section class="product-info__section product-info__section--variant">
             <h2 class="product-info__section-title">
               Color
             </h2>
 
             <div class="product-colors">
-              <button type="button" class="product-colors__item product-colors__item--selected" aria-pressed="true">
-                <span class="product-colors__sample product-colors__sample--beige" aria-hidden="true"></span>
+              @for (
+              color of colors;
+              track color;
+              let first = $first
+              ) {
+              <button type="button" class="product-colors__item" [class.product-colors__item--selected]="first"
+                [attr.aria-pressed]="first">
+                <span class="product-colors__sample" aria-hidden="true"></span>
 
-                Beige
+                {{ color }}
               </button>
+              }
             </div>
           </section>
+          }
 
+          @if (sizes.length > 0) {
           <section class="product-info__section product-info__section--variant">
             <h2 class="product-info__section-title">
               Talla
             </h2>
 
             <div class="product-sizes">
-              <button type="button" class="product-sizes__item" aria-pressed="false">
-                S
+              @for (
+              size of sizes;
+              track size;
+              let first = $first
+              ) {
+              <button type="button" class="product-sizes__item" [class.product-sizes__item--selected]="first"
+                [attr.aria-pressed]="first">
+                {{ size }}
               </button>
-
-              <button type="button" class="product-sizes__item product-sizes__item--selected" aria-pressed="true">
-                M
-              </button>
-
-              <button type="button" class="product-sizes__item" aria-pressed="false">
-                L
-              </button>
+              }
             </div>
           </section>
+          }
 
+          @if (product.descripcion) {
           <section class="product-info__section">
             <h2 class="product-info__section-title">
               Descripción
             </h2>
 
             <p class="product-info__description">
-              Polo beige de manga corta con cuello camisero y estilo
-              casual. Confeccionado en algodón para brindar comodidad
-              durante todo el día.
+              {{ product.descripcion }}
             </p>
           </section>
+          }
 
           <section class="product-info__section">
             <h2 class="product-info__section-title">
@@ -113,32 +156,32 @@
             <dl class="product-attributes">
               <div class="product-attributes__item">
                 <dt>Marca</dt>
-                <dd>Basement</dd>
+                <dd>{{ getAttribute('marca') }}</dd>
               </div>
 
               <div class="product-attributes__item">
                 <dt>Estilo</dt>
-                <dd>Casual</dd>
+                <dd>{{ getAttribute('estilo') }}</dd>
               </div>
 
               <div class="product-attributes__item">
                 <dt>Material</dt>
-                <dd>Algodón</dd>
+                <dd>{{ getAttribute('material') }}</dd>
               </div>
 
               <div class="product-attributes__item">
                 <dt>Cuello</dt>
-                <dd>Camisero</dd>
+                <dd>{{ getAttribute('tipoCuello') }}</dd>
               </div>
 
               <div class="product-attributes__item">
                 <dt>Manga</dt>
-                <dd>Corta</dd>
+                <dd>{{ getAttribute('tipoManga') }}</dd>
               </div>
 
               <div class="product-attributes__item">
-                <dt>Color</dt>
-                <dd>Beige</dd>
+                <dt>Código</dt>
+                <dd>{{ product.codigo }}</dd>
               </div>
             </dl>
           </section>
@@ -156,39 +199,61 @@
 
                 <div class="store-card__content">
                   <h3 class="store-card__name">
-                    Moda Urbana Gamarra
+                    {{ product.tienda.nombre }}
                   </h3>
 
                   <p class="store-card__location">
                     <ion-icon name="location-outline" aria-hidden="true"></ion-icon>
 
-                    Galería Azul, piso 2, local 205
+                    {{ product.tienda.galeria }},
+                    @if (product.tienda.piso) {
+                    piso {{ product.tienda.piso }},
+                    }
+                    local {{ product.tienda.numeroLocal }}
                   </p>
                 </div>
               </div>
-
             </article>
           </section>
         </section>
       </div>
-    </div>
-
-    <div class="product-detail__contact-bar">
-      <div class="product-detail__contact-content">
-        <div class="product-detail__contact-summary">
-          <span>Precio</span>
-          <strong>S/ 59.90</strong>
-        </div>
-
-        <a class="product-detail__whatsapp" [href]="whatsappUrl" target="_blank" rel="noopener noreferrer">
-          <ion-icon name="logo-whatsapp" aria-hidden="true"></ion-icon>
-
-          <span>
-            Consultar por WhatsApp
-          </span>
-        </a>
-      </div>
+      }
     </div>
 
   </main>
-</ion-content>
+
+  @if (product) {
+  <div class="product-detail__contact-bar">
+    <div class="product-detail__contact-content">
+      <div class="product-detail__contact-summary">
+        <span>Precio</span>
+
+        <strong>
+          S/ {{ product.precio.toFixed(2) }}
+        </strong>
+      </div>
+
+      <a
+        class="product-detail__whatsapp"
+        [class.product-detail__whatsapp--disabled]="!whatsappUrl"
+        [href]="whatsappUrl || null"
+        [attr.target]="whatsappUrl ? '_blank' : null"
+        [attr.aria-disabled]="!whatsappUrl"
+        rel="noopener noreferrer"
+      >
+        <ion-icon
+          name="logo-whatsapp"
+          aria-hidden="true"
+        ></ion-icon>
+
+        <span>
+          {{
+            whatsappUrl
+              ? 'Consultar por WhatsApp'
+              : 'WhatsApp no disponible'
+          }}
+        </span>
+      </a>
+    </div>
+  </div>
+}

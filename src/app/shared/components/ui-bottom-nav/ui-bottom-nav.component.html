@@ -1,0 +1,30 @@
+@if (visible) {
+<nav class="ui-bottom-nav" aria-label="Navegación principal">
+  <div class="ui-bottom-nav__content">
+    <a class="ui-bottom-nav__item" routerLink="/catalogo" routerLinkActive="ui-bottom-nav__item--active"
+      [routerLinkActiveOptions]="{ exact: true }">
+      <ion-icon name="home-outline" aria-hidden="true"></ion-icon>
+
+      <span>Inicio</span>
+    </a>
+
+    <a class="ui-bottom-nav__item" routerLink="/busqueda-visual" routerLinkActive="ui-bottom-nav__item--active">
+      <ion-icon name="camera-outline" aria-hidden="true"></ion-icon>
+
+      <span>Buscar</span>
+    </a>
+
+    <a class="ui-bottom-nav__item" routerLink="/favoritos" routerLinkActive="ui-bottom-nav__item--active">
+      <ion-icon name="heart-outline" aria-hidden="true"></ion-icon>
+
+      <span>Favoritos</span>
+    </a>
+
+    <a class="ui-bottom-nav__item" routerLink="/mi-cuenta" routerLinkActive="ui-bottom-nav__item--active">
+      <ion-icon name="person-outline" aria-hidden="true"></ion-icon>
+
+      <span>Mi cuenta</span>
+    </a>
+  </div>
+</nav>
+}

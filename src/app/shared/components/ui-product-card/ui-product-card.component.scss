@@ -175,12 +175,23 @@
 }
 
 .product-card__similarity {
-  top: 1.3rem;
+  top: 1rem;
+  left: 0.75rem;
+
+  width: auto;
+  min-height: 28px;
   max-width: calc(100% - 4.75rem);
+  padding: 0.3rem 0.625rem;
 
   color: #ffffff;
-  background: rgba(105, 65, 198, 0.92);
+  background: rgba(105, 65, 198, 0.94);
+  border-radius: 9999px;
   box-shadow: 0 5px 14px rgba(76, 44, 179, 0.2);
+
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1rem;
+  white-space: nowrap;
 }
 
 .product-card__category {

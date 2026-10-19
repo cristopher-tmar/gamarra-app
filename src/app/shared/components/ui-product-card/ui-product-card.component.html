@@ -30,7 +30,7 @@
 
     @if (similarityPercentage !== undefined) {
     <span class="product-card__similarity">
-      Similitud {{ similarityPercentage }}%
+      {{ similarityPercentage | number:'1.0-0' }}%
     </span>
     }
   </div>

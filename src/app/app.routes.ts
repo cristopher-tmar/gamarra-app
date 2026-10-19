@@ -42,4 +42,12 @@ export const routes: Routes = [
     path: '**',
     redirectTo: 'catalogo',
   },
+  {
+    path: 'favorites',
+    loadComponent: () => import('./features/favorites/pages/favorites/favorites.page').then( m => m.FavoritesPage)
+  },
+  {
+    path: 'account',
+    loadComponent: () => import('./features/account/pages/account/account.page').then( m => m.AccountPage)
+  },
 ];

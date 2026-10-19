@@ -1,7 +1,87 @@
 <ion-content [fullscreen]="true">
-  <main class="min-h-full bg-app-background p-6">
-    <h1 class="text-title-lg font-bold text-app-text">
-      Búsqueda visual
-    </h1>
+  <main class="visual-search">
+    <div class="visual-search__container">
+      <header class="visual-search__header">
+        <span class="visual-search__brand">
+          Gamarra
+        </span>
+
+        <h1 class="visual-search__title">
+          Busca con una foto
+        </h1>
+
+        <p class="visual-search__description">
+          Selecciona una imagen de la prenda que buscas y
+          encontraremos productos visualmente similares.
+        </p>
+      </header>
+
+      <input #fileInput type="file" accept="image/jpeg,image/png,image/webp" class="visual-search__file-input"
+        (change)="handleFileSelection($event)" />
+
+      @if (!selectedImageUrl) {
+      <button type="button" class="visual-search__upload" (click)="selectImage(fileInput)">
+        <span class="visual-search__upload-icon">
+          <ion-icon name="cloud-upload-outline" aria-hidden="true"></ion-icon>
+        </span>
+
+        <span class="visual-search__upload-title">
+          Seleccionar una imagen
+        </span>
+
+        <span class="visual-search__upload-description">
+          Formatos JPG, PNG o WebP
+        </span>
+
+        <span class="visual-search__upload-limit">
+          Tamaño máximo: 10 MB
+        </span>
+      </button>
+      } @else {
+      <section class="visual-search__preview">
+        <img [src]="selectedImageUrl" alt="Vista previa de la imagen seleccionada"
+          class="visual-search__preview-image" />
+
+        <button type="button" class="visual-search__remove" aria-label="Eliminar imagen seleccionada"
+          (click)="removeImage(fileInput)">
+          <ion-icon name="close-outline" aria-hidden="true"></ion-icon>
+        </button>
+
+        <div class="visual-search__preview-actions">
+          <app-ui-button variant="outline" size="medium" (click)="selectImage(fileInput)">
+            <ion-icon name="image-outline" aria-hidden="true"></ion-icon>
+
+            Cambiar imagen
+          </app-ui-button>
+
+          <app-ui-button variant="accent" size="large" [loading]="loading" [disabled]="loading"
+            (click)="searchSimilarProducts()">
+            @if (!loading) {
+            <ion-icon name="camera-outline" aria-hidden="true"></ion-icon>
+            }
+
+            {{
+            loading
+            ? 'Buscando prendas...'
+            : 'Buscar prendas similares'
+            }}
+          </app-ui-button>
+          
+        </div>
+      </section>
+      }
+
+      <section class="visual-search__tips">
+        <h2 class="visual-search__tips-title">
+          Para obtener mejores resultados
+        </h2>
+
+        <ul class="visual-search__tips-list">
+          <li>Usa una imagen clara y bien iluminada.</li>
+          <li>Procura que la prenda sea el elemento principal.</li>
+          <li>Evita fotografías borrosas o muy lejanas.</li>
+        </ul>
+      </section>
+    </div>
   </main>
 </ion-content>
