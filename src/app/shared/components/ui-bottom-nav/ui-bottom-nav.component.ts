@@ -71,7 +71,12 @@ export class UiBottomNavComponent {
     const isProductDetail =
       /^\/catalogo\/\d+$/.test(path);
 
-    this.visible = !isProductDetail;
+    const isAuthPage =
+      path === '/login';
+
+    this.visible =
+      !isProductDetail &&
+      !isAuthPage;
 
     this.changeDetectorRef.markForCheck();
   }

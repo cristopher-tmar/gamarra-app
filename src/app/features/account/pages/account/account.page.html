@@ -12,35 +12,51 @@
       </header>
 
       <section class="account-profile">
-        <span
-          class="account-profile__avatar"
-          aria-hidden="true"
-        >
-          <ion-icon
-            name="person-circle-outline"
-          ></ion-icon>
+        <span class="account-profile__avatar" aria-hidden="true">
+          <ion-icon name="person-circle-outline"></ion-icon>
         </span>
 
         <div class="account-profile__content">
+          @if (isAuthenticated() && user()) {
+          <strong>
+            {{ user()!.nombres }}
+            {{ user()!.apellidos }}
+          </strong>
+
+          <span>
+            {{ user()!.correo }}
+          </span>
+
+          <small class="account-profile__role">
+            {{ getRoleLabel() }}
+          </small>
+          } @else {
           <strong>Explora Gamarra</strong>
 
           <span>
-            Inicia sesión para guardar y administrar tu perfil
+            Inicia sesión para administrar tu perfil
           </span>
+          }
         </div>
 
-        <button
-          type="button"
-          class="account-profile__login"
-          (click)="showComingSoon('El inicio de sesión')"
-        >
-          <ion-icon
-            name="log-in-outline"
-            aria-hidden="true"
-          ></ion-icon>
+        @if (isAuthenticated()) {
+        <button type="button" class="account-profile__login account-profile__login--logout" [disabled]="loggingOut"
+          (click)="logout()">
+          <ion-icon name="log-out-outline" aria-hidden="true"></ion-icon>
+
+          {{
+          loggingOut
+          ? 'Saliendo...'
+          : 'Salir'
+          }}
+        </button>
+        } @else {
+        <button type="button" class="account-profile__login" (click)="goToLogin()">
+          <ion-icon name="log-in-outline" aria-hidden="true"></ion-icon>
 
           Ingresar
         </button>
+        }
       </section>
 
       <section class="account-section">
@@ -49,16 +65,9 @@
         </h2>
 
         <div class="account-options">
-          <button
-            type="button"
-            class="account-options__item"
-            (click)="showComingSoon('Las notificaciones')"
-          >
+          <button type="button" class="account-options__item" (click)="showComingSoon('Las notificaciones')">
             <span class="account-options__icon">
-              <ion-icon
-                name="notifications-outline"
-                aria-hidden="true"
-              ></ion-icon>
+              <ion-icon name="notifications-outline" aria-hidden="true"></ion-icon>
             </span>
 
             <span class="account-options__content">
@@ -69,16 +78,9 @@
             </span>
           </button>
 
-          <button
-            type="button"
-            class="account-options__item"
-            (click)="showComingSoon('La configuración')"
-          >
+          <button type="button" class="account-options__item" (click)="showComingSoon('La configuración')">
             <span class="account-options__icon">
-              <ion-icon
-                name="settings-outline"
-                aria-hidden="true"
-              ></ion-icon>
+              <ion-icon name="settings-outline" aria-hidden="true"></ion-icon>
             </span>
 
             <span class="account-options__content">
@@ -97,16 +99,9 @@
         </h2>
 
         <div class="account-options">
-          <button
-            type="button"
-            class="account-options__item"
-            (click)="showVisualSearchTutorial()"
-          >
+          <button type="button" class="account-options__item" (click)="showVisualSearchTutorial()">
             <span class="account-options__icon">
-              <ion-icon
-                name="refresh-outline"
-                aria-hidden="true"
-              ></ion-icon>
+              <ion-icon name="refresh-outline" aria-hidden="true"></ion-icon>
             </span>
 
             <span class="account-options__content">
@@ -117,16 +112,9 @@
             </span>
           </button>
 
-          <button
-            type="button"
-            class="account-options__item"
-            (click)="showComingSoon('El centro de ayuda')"
-          >
+          <button type="button" class="account-options__item" (click)="showComingSoon('El centro de ayuda')">
             <span class="account-options__icon">
-              <ion-icon
-                name="help-circle-outline"
-                aria-hidden="true"
-              ></ion-icon>
+              <ion-icon name="help-circle-outline" aria-hidden="true"></ion-icon>
             </span>
 
             <span class="account-options__content">

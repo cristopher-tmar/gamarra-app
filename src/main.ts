@@ -1,4 +1,7 @@
-import { provideHttpClient } from '@angular/common/http';
+import {
+  provideHttpClient,
+  withInterceptors,
+} from '@angular/common/http';
 import { bootstrapApplication } from '@angular/platform-browser';
 import {
   PreloadAllModules,
@@ -14,6 +17,7 @@ import {
 
 import { AppComponent } from './app/app.component';
 import { routes } from './app/app.routes';
+import { authInterceptor } from './app/features/auth/interceptors/auth.interceptor';
 
 bootstrapApplication(AppComponent, {
   providers: [
@@ -27,6 +31,10 @@ bootstrapApplication(AppComponent, {
       withPreloading(PreloadAllModules),
       withComponentInputBinding(),
     ),
-    provideHttpClient(),
+    provideHttpClient(
+      withInterceptors([
+        authInterceptor,
+      ]),
+    ),
   ],
 });

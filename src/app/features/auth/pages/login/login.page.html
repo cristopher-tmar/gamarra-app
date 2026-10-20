@@ -1,0 +1,51 @@
+<ion-content [fullscreen]="true">
+  <main class="login-page">
+    <div class="login-page__container">
+      <header class="login-header">
+        <button type="button" class="login-header__back" aria-label="Volver a Mi cuenta" (click)="goBack()">
+          <ion-icon name="arrow-back-outline" aria-hidden="true"></ion-icon>
+        </button>
+
+        <div class="login-header__brand">
+          <span class="login-header__logo" aria-hidden="true">
+            G
+          </span>
+
+          <span>Gamarra</span>
+        </div>
+      </header>
+
+      <section class="login-card">
+        <div class="login-card__heading">
+          <h1>Bienvenido</h1>
+        </div>
+
+        <form class="login-form" [formGroup]="loginForm" (ngSubmit)="submit()">
+          <app-ui-input label="Correo electrónico" type="email" placeholder="correo@ejemplo.com" autocomplete="email"
+            icon="mail-outline" formControlName="correo" [errorMessage]="correoError" />
+
+          <app-ui-input label="Contraseña" [type]="showPassword ? 'text' : 'password'"
+            placeholder="Ingresa tu contraseña" autocomplete="current-password" icon="lock-closed-outline"
+            formControlName="password" [errorMessage]="passwordError" />
+
+          <app-ui-button type="submit" variant="primary" size="large" [fullWidth]="true" [loading]="loading"
+            [disabled]="loading">
+            {{
+            loading
+            ? 'Ingresando...'
+            : 'Ingresar'
+            }}
+          </app-ui-button>
+        </form>
+
+        <p class="login-card__register">
+          ¿Todavía no tienes una cuenta?
+
+          <button type="button" (click)="showRegisterComingSoon()">
+            Crear cuenta
+          </button>
+        </p>
+      </section>
+    </div>
+  </main>
+</ion-content>
