@@ -1,0 +1,275 @@
+:host {
+  display: block;
+  width: 100%;
+  min-height: 100%;
+}
+
+ion-content {
+  --background: var(--gamarra-background);
+}
+
+.account-page {
+  width: 100%;
+  min-height: 100%;
+  padding:
+    max(1.25rem, env(safe-area-inset-top))
+    1rem
+    calc(6.5rem + env(safe-area-inset-bottom));
+}
+
+.account-page__container {
+  width: 100%;
+  max-width: 42rem;
+  margin: 0 auto;
+}
+
+.account-page__header {
+  margin-bottom: 1.25rem;
+}
+
+.account-page__brand {
+  display: block;
+
+  color: var(--gamarra-brand-600);
+
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.account-page__title {
+  margin: 0.25rem 0 0;
+
+  color: var(--gamarra-text-primary);
+
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 2.25rem;
+  letter-spacing: -0.03em;
+}
+
+.account-profile {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  padding: 1rem;
+
+  background: var(--gamarra-surface);
+  border: 1px solid var(--gamarra-border);
+  border-radius: var(--gamarra-radius-lg);
+  box-shadow: var(--gamarra-shadow-sm);
+}
+
+.account-profile__avatar {
+  display: flex;
+  width: 52px;
+  height: 52px;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--gamarra-brand-700);
+  background: var(--gamarra-brand-100);
+  border-radius: 9999px;
+
+  font-size: 2rem;
+}
+
+.account-profile__content {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+}
+
+.account-profile__content strong {
+  color: var(--gamarra-text-primary);
+
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.5rem;
+}
+
+.account-profile__content span {
+  margin-top: 0.125rem;
+
+  color: var(--gamarra-text-secondary);
+
+  font-size: 0.8125rem;
+  line-height: 1.125rem;
+}
+
+.account-profile__login {
+  display: inline-flex;
+  min-height: 42px;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  padding: 0.5rem 0.75rem;
+
+  appearance: none;
+  color: var(--gamarra-brand-700);
+  background: var(--gamarra-brand-50);
+  border: 1px solid var(--gamarra-brand-100);
+  border-radius: var(--gamarra-radius-md);
+
+  font-family: inherit;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  cursor: pointer;
+
+  transition:
+    background-color 180ms ease,
+    transform 120ms ease;
+}
+
+.account-profile__login ion-icon {
+  font-size: 1.125rem;
+}
+
+.account-profile__login:hover {
+  background: var(--gamarra-brand-100);
+}
+
+.account-profile__login:active {
+  transform: scale(0.96);
+}
+
+.account-profile__login:focus-visible {
+  outline: 3px solid var(--gamarra-brand-400);
+  outline-offset: 2px;
+}
+
+.account-section {
+  margin-top: 1.75rem;
+}
+
+.account-section__title {
+  margin: 0 0 0.75rem;
+
+  color: var(--gamarra-text-primary);
+
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.5rem;
+}
+
+.account-options {
+  overflow: hidden;
+
+  background: var(--gamarra-surface);
+  border: 1px solid var(--gamarra-border);
+  border-radius: var(--gamarra-radius-lg);
+}
+
+.account-options__item {
+  display: flex;
+  width: 100%;
+  min-height: 70px;
+  align-items: center;
+  gap: 0.875rem;
+  padding: 0.875rem 1rem;
+
+  appearance: none;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--gamarra-border);
+
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+
+  transition:
+    background-color 180ms ease,
+    transform 120ms ease;
+}
+
+.account-options__item:last-child {
+  border-bottom: 0;
+}
+
+.account-options__item:hover {
+  background: var(--gamarra-brand-50);
+}
+
+.account-options__item:active {
+  transform: scale(0.99);
+}
+
+.account-options__item:focus-visible {
+  position: relative;
+  z-index: 1;
+
+  outline: 3px solid var(--gamarra-brand-400);
+  outline-offset: -3px;
+}
+
+.account-options__icon {
+  display: flex;
+  width: 42px;
+  height: 42px;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--gamarra-brand-700);
+  background: var(--gamarra-brand-100);
+  border-radius: var(--gamarra-radius-md);
+
+  font-size: 1.25rem;
+}
+
+.account-options__content {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+}
+
+.account-options__content strong {
+  color: var(--gamarra-text-primary);
+
+  font-size: 0.9375rem;
+  font-weight: 700;
+  line-height: 1.25rem;
+}
+
+.account-options__content small {
+  margin-top: 0.25rem;
+
+  color: var(--gamarra-text-secondary);
+
+  font-size: 0.8125rem;
+  line-height: 1.125rem;
+}
+
+@media (max-width: 24rem) {
+  .account-profile {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .account-profile__login {
+    width: 100%;
+  }
+}
+
+@media (min-width: 48rem) {
+  .account-page {
+    padding:
+      1.5rem
+      1.5rem
+      calc(6.5rem + env(safe-area-inset-bottom));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .account-profile__login,
+  .account-options__item {
+    transition: none;
+  }
+}

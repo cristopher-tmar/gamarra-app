@@ -22,6 +22,7 @@ import { UiProductCardComponent } from '@shared/components/ui-product-card/ui-pr
 import { UiSearchBarComponent } from '@shared/components/ui-search-bar/ui-search-bar.component';
 import { UiSectionHeaderComponent } from '@shared/components/ui-section-header/ui-section-header.component';
 import { UiSkeletonComponent } from '@shared/components/ui-skeleton/ui-skeleton.component';
+import { FavoritesService } from '@features/favorites/services/favorites';
 
 @Component({
   selector: 'app-catalog',
@@ -62,6 +63,7 @@ export class CatalogPage implements OnInit {
 
   constructor(
     private readonly catalogService: CatalogService,
+    private readonly favoritesService: FavoritesService,
     private readonly router: Router,
     private readonly changeDetectorRef: ChangeDetectorRef,
   ) {
@@ -73,6 +75,15 @@ export class CatalogPage implements OnInit {
 
   ngOnInit(): void {
     this.loadProducts();
+  }
+
+  ionViewWillEnter(): void {
+    this.showVisualSearchTutorial =
+      localStorage.getItem(
+        'visual-search-tutorial-seen',
+      ) !== 'true';
+
+    this.changeDetectorRef.markForCheck();
   }
 
   loadProducts(): void {
@@ -149,4 +160,19 @@ export class CatalogPage implements OnInit {
       'true',
     );
   }
+
+  isFavorite(
+    productId: number,
+  ): boolean {
+    return this.favoritesService.isFavorite(
+      productId,
+    );
+  }
+
+  toggleFavorite(
+    product: CatalogProduct,
+  ): void {
+    this.favoritesService.toggle(product);
+  }
+
 }

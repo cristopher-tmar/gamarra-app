@@ -1,13 +1,58 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>favorites</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">favorites</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <main class="favorites-page">
+    <div class="favorites-page__container">
+      <header class="favorites-page__header">
+        <span class="favorites-page__brand">
+          Gamarra
+        </span>
+
+        <h1 class="favorites-page__title">
+          Favoritos
+        </h1>
+      </header>
+
+      @if (favorites().length === 0) {
+        <app-ui-empty-state
+          title="Todavía no tienes favoritos"
+          description="Guarda las prendas que te gusten para encontrarlas fácilmente."
+          icon="heart-outline"
+          variant="accent"
+          actionLabel="Explorar productos"
+          [compact]="true"
+          (actionClick)="goToCatalog()"
+        />
+      } @else {
+        <p class="favorites-page__count">
+          {{ favorites().length }}
+          {{
+            favorites().length === 1
+              ? 'producto guardado'
+              : 'productos guardados'
+          }}
+        </p>
+
+        <div class="favorites-page__grid">
+          @for (
+            product of favorites();
+            track product.id;
+            let first = $first
+          ) {
+            <app-ui-product-card
+              [productId]="product.id"
+              [name]="product.nombre"
+              [price]="product.precio"
+              [imageUrl]="product.imagenPrincipal?.url"
+              [storeName]="product.tienda.nombre"
+              [category]="product.categoria"
+              [stock]="product.stock"
+              [favorite]="true"
+              [priorityImage]="first"
+              (favoriteChange)="removeFavorite(product.id)"
+              (productClick)="openProduct($event)"
+            />
+          }
+        </div>
+      }
+    </div>
+  </main>
 </ion-content>

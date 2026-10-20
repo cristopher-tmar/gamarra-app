@@ -4,32 +4,72 @@ export const routes: Routes = [
   {
     path: '',
     loadComponent: () =>
-      import('./layouts/public-layout/public-layout.component')
-        .then((m) => m.PublicLayoutComponent),
+      import(
+        './layouts/public-layout/public-layout.component'
+      ).then(
+        (module) =>
+          module.PublicLayoutComponent,
+      ),
     children: [
       {
         path: 'catalogo',
         loadComponent: () =>
-          import('./features/catalog/pages/catalog/catalog.page')
-            .then((m) => m.CatalogPage),
+          import(
+            './features/catalog/pages/catalog/catalog.page'
+          ).then(
+            (module) =>
+              module.CatalogPage,
+          ),
       },
       {
         path: 'catalogo/:productoId',
         loadComponent: () =>
-          import('./features/catalog/pages/product-detail/product-detail.page')
-            .then((m) => m.ProductDetailPage),
+          import(
+            './features/catalog/pages/product-detail/product-detail.page'
+          ).then(
+            (module) =>
+              module.ProductDetailPage,
+          ),
       },
       {
         path: 'busqueda-visual',
         loadComponent: () =>
-          import('./features/visual-search/pages/visual-search/visual-search.page')
-            .then((m) => m.VisualSearchPage),
+          import(
+            './features/visual-search/pages/visual-search/visual-search.page'
+          ).then(
+            (module) =>
+              module.VisualSearchPage,
+          ),
       },
       {
         path: 'busqueda-visual/resultados',
         loadComponent: () =>
-          import('./features/visual-search/pages/visual-search-results/visual-search-results.page')
-            .then((m) => m.VisualSearchResultsPage),
+          import(
+            './features/visual-search/pages/visual-search-results/visual-search-results.page'
+          ).then(
+            (module) =>
+              module.VisualSearchResultsPage,
+          ),
+      },
+      {
+        path: 'favoritos',
+        loadComponent: () =>
+          import(
+            './features/favorites/pages/favorites/favorites.page'
+          ).then(
+            (module) =>
+              module.FavoritesPage,
+          ),
+      },
+      {
+        path: 'mi-cuenta',
+        loadComponent: () =>
+          import(
+            './features/account/pages/account/account.page'
+          ).then(
+            (module) =>
+              module.AccountPage,
+          ),
       },
       {
         path: '',
@@ -41,13 +81,5 @@ export const routes: Routes = [
   {
     path: '**',
     redirectTo: 'catalogo',
-  },
-  {
-    path: 'favorites',
-    loadComponent: () => import('./features/favorites/pages/favorites/favorites.page').then( m => m.FavoritesPage)
-  },
-  {
-    path: 'account',
-    loadComponent: () => import('./features/account/pages/account/account.page').then( m => m.AccountPage)
   },
 ];

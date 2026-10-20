@@ -1,13 +1,143 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>account</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">account</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <main class="account-page">
+    <div class="account-page__container">
+      <header class="account-page__header">
+        <span class="account-page__brand">
+          Gamarra
+        </span>
+
+        <h1 class="account-page__title">
+          Mi cuenta
+        </h1>
+      </header>
+
+      <section class="account-profile">
+        <span
+          class="account-profile__avatar"
+          aria-hidden="true"
+        >
+          <ion-icon
+            name="person-circle-outline"
+          ></ion-icon>
+        </span>
+
+        <div class="account-profile__content">
+          <strong>Explora Gamarra</strong>
+
+          <span>
+            Inicia sesión para guardar y administrar tu perfil
+          </span>
+        </div>
+
+        <button
+          type="button"
+          class="account-profile__login"
+          (click)="showComingSoon('El inicio de sesión')"
+        >
+          <ion-icon
+            name="log-in-outline"
+            aria-hidden="true"
+          ></ion-icon>
+
+          Ingresar
+        </button>
+      </section>
+
+      <section class="account-section">
+        <h2 class="account-section__title">
+          Preferencias
+        </h2>
+
+        <div class="account-options">
+          <button
+            type="button"
+            class="account-options__item"
+            (click)="showComingSoon('Las notificaciones')"
+          >
+            <span class="account-options__icon">
+              <ion-icon
+                name="notifications-outline"
+                aria-hidden="true"
+              ></ion-icon>
+            </span>
+
+            <span class="account-options__content">
+              <strong>Notificaciones</strong>
+              <small>
+                Configura avisos y novedades
+              </small>
+            </span>
+          </button>
+
+          <button
+            type="button"
+            class="account-options__item"
+            (click)="showComingSoon('La configuración')"
+          >
+            <span class="account-options__icon">
+              <ion-icon
+                name="settings-outline"
+                aria-hidden="true"
+              ></ion-icon>
+            </span>
+
+            <span class="account-options__content">
+              <strong>Configuración</strong>
+              <small>
+                Ajusta las preferencias de la aplicación
+              </small>
+            </span>
+          </button>
+        </div>
+      </section>
+
+      <section class="account-section">
+        <h2 class="account-section__title">
+          Ayuda
+        </h2>
+
+        <div class="account-options">
+          <button
+            type="button"
+            class="account-options__item"
+            (click)="showVisualSearchTutorial()"
+          >
+            <span class="account-options__icon">
+              <ion-icon
+                name="refresh-outline"
+                aria-hidden="true"
+              ></ion-icon>
+            </span>
+
+            <span class="account-options__content">
+              <strong>Ver tutorial nuevamente</strong>
+              <small>
+                Aprende a buscar prendas mediante una foto
+              </small>
+            </span>
+          </button>
+
+          <button
+            type="button"
+            class="account-options__item"
+            (click)="showComingSoon('El centro de ayuda')"
+          >
+            <span class="account-options__icon">
+              <ion-icon
+                name="help-circle-outline"
+                aria-hidden="true"
+              ></ion-icon>
+            </span>
+
+            <span class="account-options__content">
+              <strong>Centro de ayuda</strong>
+              <small>
+                Encuentra respuestas y soporte
+              </small>
+            </span>
+          </button>
+        </div>
+      </section>
+    </div>
+  </main>
 </ion-content>
