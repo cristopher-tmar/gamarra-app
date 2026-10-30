@@ -1,5 +1,7 @@
 import { Routes } from '@angular/router';
 
+import { authGuard } from './features/auth/guards/auth.guard';
+
 export const routes: Routes = [
   {
     path: '',
@@ -7,8 +9,7 @@ export const routes: Routes = [
       import(
         './layouts/public-layout/public-layout.component'
       ).then(
-        (module) =>
-          module.PublicLayoutComponent,
+        (module) => module.PublicLayoutComponent
       ),
     children: [
       {
@@ -17,7 +18,7 @@ export const routes: Routes = [
           import(
             './features/auth/pages/login/login.page'
           ).then(
-            (module) => module.LoginPage,
+            (module) => module.LoginPage
           ),
       },
       {
@@ -26,8 +27,7 @@ export const routes: Routes = [
           import(
             './features/catalog/pages/catalog/catalog.page'
           ).then(
-            (module) =>
-              module.CatalogPage,
+            (module) => module.CatalogPage
           ),
       },
       {
@@ -36,8 +36,7 @@ export const routes: Routes = [
           import(
             './features/catalog/pages/product-detail/product-detail.page'
           ).then(
-            (module) =>
-              module.ProductDetailPage,
+            (module) => module.ProductDetailPage
           ),
       },
       {
@@ -46,8 +45,7 @@ export const routes: Routes = [
           import(
             './features/visual-search/pages/visual-search/visual-search.page'
           ).then(
-            (module) =>
-              module.VisualSearchPage,
+            (module) => module.VisualSearchPage
           ),
       },
       {
@@ -56,28 +54,27 @@ export const routes: Routes = [
           import(
             './features/visual-search/pages/visual-search-results/visual-search-results.page'
           ).then(
-            (module) =>
-              module.VisualSearchResultsPage,
+            (module) => module.VisualSearchResultsPage
           ),
       },
       {
         path: 'favoritos',
+        canActivate: [authGuard],
         loadComponent: () =>
           import(
             './features/favorites/pages/favorites/favorites.page'
           ).then(
-            (module) =>
-              module.FavoritesPage,
+            (module) => module.FavoritesPage
           ),
       },
       {
         path: 'mi-cuenta',
+        canActivate: [authGuard],
         loadComponent: () =>
           import(
             './features/account/pages/account/account.page'
           ).then(
-            (module) =>
-              module.AccountPage,
+            (module) => module.AccountPage
           ),
       },
       {
@@ -90,9 +87,5 @@ export const routes: Routes = [
   {
     path: '**',
     redirectTo: 'catalogo',
-  },
-  {
-    path: 'login',
-    loadComponent: () => import('./features/auth/pages/login/login.page').then(m => m.LoginPage)
   },
 ];

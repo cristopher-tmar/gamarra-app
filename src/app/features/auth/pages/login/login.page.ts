@@ -8,7 +8,10 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { Router } from '@angular/router';
+import {
+  ActivatedRoute,
+  Router,
+} from '@angular/router';
 import {
   IonContent,
   IonIcon,
@@ -78,6 +81,7 @@ export class LoginPage {
   constructor(
     private readonly authService: AuthService,
     private readonly router: Router,
+    private readonly activatedRoute: ActivatedRoute,
     private readonly uiToast: UiToastService,
     private readonly changeDetectorRef:
       ChangeDetectorRef,
@@ -134,7 +138,7 @@ export class LoginPage {
 
   goBack(): void {
     void this.router.navigate([
-      '/mi-cuenta',
+      '/catalogo',
     ]);
   }
 
@@ -165,9 +169,12 @@ export class LoginPage {
             `Bienvenido, ${response.usuario.nombres}`,
           );
 
-          void this.router.navigate([
-            '/mi-cuenta',
-          ]);
+          const returnUrl =
+            this.getSafeReturnUrl();
+
+          void this.router.navigateByUrl(
+            returnUrl,
+          );
         },
         error: (error) => {
           const message =
@@ -177,7 +184,7 @@ export class LoginPage {
             Array.isArray(message)
               ? message[0]
               : message ??
-              'No pudimos iniciar sesión',
+                'No pudimos iniciar sesión',
           );
         },
       });
@@ -188,5 +195,20 @@ export class LoginPage {
       'El registro estará disponible próximamente',
     );
   }
-  
+
+  private getSafeReturnUrl(): string {
+    const returnUrl =
+      this.activatedRoute.snapshot
+        .queryParamMap
+        .get('returnUrl');
+
+    if (
+      returnUrl === '/mi-cuenta' ||
+      returnUrl === '/favoritos'
+    ) {
+      return returnUrl;
+    }
+
+    return '/mi-cuenta';
+  }
 }
