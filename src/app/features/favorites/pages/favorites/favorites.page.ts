@@ -1,31 +1,59 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-import { IonContent } from '@ionic/angular';
+import {
+  Component,
+  OnInit,
+} from '@angular/core';
+import {
+  Router,
+} from '@angular/router';
+import {
+  IonContent,
+} from '@ionic/angular';
 
-import { CatalogProduct } from '@features/catalog/models/catalog.models';
-import { FavoritesService } from '@features/favorites/services/favorites';
-import { UiEmptyStateComponent } from '@shared/components/ui-empty-state/ui-empty-state.component';
-import { UiProductCardComponent } from '@shared/components/ui-product-card/ui-product-card.component';
+import {
+  CatalogProduct,
+} from '@features/catalog/models/catalog.models';
+import {
+  FavoritesService,
+} from '@features/favorites/services/favorites';
+import {
+  UiEmptyStateComponent,
+} from '@shared/components/ui-empty-state/ui-empty-state.component';
+import {
+  UiProductCardComponent,
+} from '@shared/components/ui-product-card/ui-product-card.component';
 
 @Component({
   selector: 'app-favorites',
-  templateUrl: './favorites.page.html',
-  styleUrls: ['./favorites.page.scss'],
+  templateUrl:
+    './favorites.page.html',
+  styleUrls: [
+    './favorites.page.scss',
+  ],
   imports: [
     IonContent,
     UiEmptyStateComponent,
     UiProductCardComponent,
   ],
 })
-export class FavoritesPage {
+export class FavoritesPage
+  implements OnInit {
   readonly favorites =
     this.favoritesService.favorites;
 
   constructor(
     private readonly favoritesService:
       FavoritesService,
-    private readonly router: Router,
+    private readonly router:
+      Router,
   ) {}
+
+  ngOnInit(): void {
+    this.favoritesService.load();
+  }
+
+  ionViewWillEnter(): void {
+    this.favoritesService.load();
+  }
 
   removeFavorite(
     productId: number,

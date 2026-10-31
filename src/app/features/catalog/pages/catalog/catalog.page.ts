@@ -3,26 +3,59 @@ import {
   Component,
   OnInit,
 } from '@angular/core';
-import { Router } from '@angular/router';
-import { finalize } from 'rxjs';
-import { IonContent } from '@ionic/angular';
-import { addIcons } from 'ionicons';
+import {
+  Router,
+} from '@angular/router';
+import {
+  finalize,
+} from 'rxjs';
+import {
+  IonContent,
+} from '@ionic/angular';
+import {
+  addIcons,
+} from 'ionicons';
 import {
   cameraOutline,
   shirtOutline,
 } from 'ionicons/icons';
 
-import { CatalogProduct } from '@features/catalog/models/catalog.models';
-import { CatalogService } from '@features/catalog/services/catalog';
-import { UiChipComponent } from '@shared/components/ui-chip/ui-chip.component';
-import { UiCoachmarkComponent } from '@shared/components/ui-coachmark/ui-coachmark.component';
-import { UiEmptyStateComponent } from '@shared/components/ui-empty-state/ui-empty-state.component';
-import { UiErrorStateComponent } from '@shared/components/ui-error-state/ui-error-state.component';
-import { UiProductCardComponent } from '@shared/components/ui-product-card/ui-product-card.component';
-import { UiSearchBarComponent } from '@shared/components/ui-search-bar/ui-search-bar.component';
-import { UiSectionHeaderComponent } from '@shared/components/ui-section-header/ui-section-header.component';
-import { UiSkeletonComponent } from '@shared/components/ui-skeleton/ui-skeleton.component';
-import { FavoritesService } from '@features/favorites/services/favorites';
+import {
+  CatalogProduct,
+} from '@features/catalog/models/catalog.models';
+import {
+  CatalogService,
+} from '@features/catalog/services/catalog';
+import {
+  AuthService,
+} from '@features/auth/services/auth';
+import {
+  FavoritesService,
+} from '@features/favorites/services/favorites';
+import {
+  UiChipComponent,
+} from '@shared/components/ui-chip/ui-chip.component';
+import {
+  UiCoachmarkComponent,
+} from '@shared/components/ui-coachmark/ui-coachmark.component';
+import {
+  UiEmptyStateComponent,
+} from '@shared/components/ui-empty-state/ui-empty-state.component';
+import {
+  UiErrorStateComponent,
+} from '@shared/components/ui-error-state/ui-error-state.component';
+import {
+  UiProductCardComponent,
+} from '@shared/components/ui-product-card/ui-product-card.component';
+import {
+  UiSearchBarComponent,
+} from '@shared/components/ui-search-bar/ui-search-bar.component';
+import {
+  UiSectionHeaderComponent,
+} from '@shared/components/ui-section-header/ui-section-header.component';
+import {
+  UiSkeletonComponent,
+} from '@shared/components/ui-skeleton/ui-skeleton.component';
 
 @Component({
   selector: 'app-catalog',
@@ -40,7 +73,8 @@ import { FavoritesService } from '@features/favorites/services/favorites';
     UiSkeletonComponent,
   ],
 })
-export class CatalogPage implements OnInit {
+export class CatalogPage
+  implements OnInit {
   products: CatalogProduct[] = [];
 
   loading = true;
@@ -62,10 +96,16 @@ export class CatalogPage implements OnInit {
     ) !== 'true';
 
   constructor(
-    private readonly catalogService: CatalogService,
-    private readonly favoritesService: FavoritesService,
-    private readonly router: Router,
-    private readonly changeDetectorRef: ChangeDetectorRef,
+    private readonly catalogService:
+      CatalogService,
+    private readonly favoritesService:
+      FavoritesService,
+    private readonly authService:
+      AuthService,
+    private readonly router:
+      Router,
+    private readonly changeDetectorRef:
+      ChangeDetectorRef,
   ) {
     addIcons({
       cameraOutline,
@@ -75,6 +115,7 @@ export class CatalogPage implements OnInit {
 
   ngOnInit(): void {
     this.loadProducts();
+    this.loadFavorites();
   }
 
   ionViewWillEnter(): void {
@@ -83,7 +124,10 @@ export class CatalogPage implements OnInit {
         'visual-search-tutorial-seen',
       ) !== 'true';
 
-    this.changeDetectorRef.markForCheck();
+    this.loadFavorites();
+
+    this.changeDetectorRef
+      .markForCheck();
   }
 
   loadProducts(): void {
@@ -104,7 +148,9 @@ export class CatalogPage implements OnInit {
       .pipe(
         finalize(() => {
           this.loading = false;
-          this.changeDetectorRef.markForCheck();
+
+          this.changeDetectorRef
+            .markForCheck();
         }),
       )
       .subscribe({
@@ -164,15 +210,42 @@ export class CatalogPage implements OnInit {
   isFavorite(
     productId: number,
   ): boolean {
-    return this.favoritesService.isFavorite(
-      productId,
-    );
+    return this.favoritesService
+      .isFavorite(productId);
   }
 
   toggleFavorite(
     product: CatalogProduct,
   ): void {
-    this.favoritesService.toggle(product);
+    if (
+      !this.authService
+        .isAuthenticated()
+    ) {
+      void this.router.navigate(
+        ['/login'],
+        {
+          queryParams: {
+            returnUrl: '/catalogo',
+          },
+        },
+      );
+
+      return;
+    }
+
+    this.favoritesService
+      .toggle(product);
   }
 
+  private loadFavorites(): void {
+    if (
+      !this.authService
+        .isAuthenticated()
+    ) {
+      this.favoritesService.clear();
+      return;
+    }
+
+    this.favoritesService.load();
+  }
 }

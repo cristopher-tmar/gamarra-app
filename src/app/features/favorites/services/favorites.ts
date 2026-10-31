@@ -2,25 +2,82 @@ import {
   Injectable,
   signal,
 } from '@angular/core';
+import {
+  HttpClient,
+} from '@angular/common/http';
+import {
+  finalize,
+} from 'rxjs';
 
+import {
+  environment,
+} from '@environments/environment';
 import {
   CatalogProduct,
 } from '@features/catalog/models/catalog.models';
+import {
+  AddFavoriteResponse,
+  FavoritesResponse,
+  RemoveFavoriteResponse,
+} from '@features/favorites/models/favorites.models';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FavoritesService {
-  private readonly storageKey =
-    'gamarra-favorite-products';
+  private readonly apiUrl =
+    `${environment.apiUrl}/favoritos`;
 
   private readonly favoritesSignal =
-    signal<CatalogProduct[]>(
-      this.loadFavorites(),
-    );
+    signal<CatalogProduct[]>([]);
+
+  private readonly loadingSignal =
+    signal(false);
+
+  private readonly pendingProductIds =
+    new Set<number>();
 
   readonly favorites =
     this.favoritesSignal.asReadonly();
+
+  readonly loading =
+    this.loadingSignal.asReadonly();
+
+  constructor(
+    private readonly http:
+      HttpClient,
+  ) {}
+
+  load(): void {
+    if (this.loadingSignal()) {
+      return;
+    }
+
+    this.loadingSignal.set(true);
+
+    this.http
+      .get<FavoritesResponse>(
+        this.apiUrl,
+      )
+      .pipe(
+        finalize(() => {
+          this.loadingSignal.set(false);
+        }),
+      )
+      .subscribe({
+        next: (response) => {
+          this.favoritesSignal.set(
+            response.favoritos.map(
+              (favorite) =>
+                favorite.producto,
+            ),
+          );
+        },
+        error: () => {
+          this.favoritesSignal.set([]);
+        },
+      });
+  }
 
   isFavorite(
     productId: number,
@@ -34,86 +91,110 @@ export class FavoritesService {
 
   toggle(
     product: CatalogProduct,
-  ): boolean {
+  ): void {
+    if (
+      this.pendingProductIds.has(
+        product.id,
+      )
+    ) {
+      return;
+    }
+
     if (this.isFavorite(product.id)) {
       this.remove(product.id);
-      return false;
+      return;
     }
 
     this.add(product);
-    return true;
   }
 
   add(
     product: CatalogProduct,
   ): void {
-    if (this.isFavorite(product.id)) {
+    if (
+      this.isFavorite(product.id) ||
+      this.pendingProductIds.has(
+        product.id,
+      )
+    ) {
       return;
     }
 
-    const updatedFavorites = [
-      product,
-      ...this.favoritesSignal(),
-    ];
-
-    this.updateFavorites(
-      updatedFavorites,
+    this.pendingProductIds.add(
+      product.id,
     );
+
+    this.http
+      .post<AddFavoriteResponse>(
+        `${this.apiUrl}/${product.id}`,
+        {},
+      )
+      .pipe(
+        finalize(() => {
+          this.pendingProductIds.delete(
+            product.id,
+          );
+        }),
+      )
+      .subscribe({
+        next: () => {
+          if (
+            this.isFavorite(product.id)
+          ) {
+            return;
+          }
+
+          this.favoritesSignal.update(
+            (favorites) => [
+              product,
+              ...favorites,
+            ],
+          );
+        },
+      });
   }
 
   remove(
     productId: number,
   ): void {
-    const updatedFavorites =
-      this.favoritesSignal().filter(
-        (product) =>
-          product.id !== productId,
-      );
+    if (
+      this.pendingProductIds.has(
+        productId,
+      )
+    ) {
+      return;
+    }
 
-    this.updateFavorites(
-      updatedFavorites,
+    this.pendingProductIds.add(
+      productId,
     );
+
+    this.http
+      .delete<RemoveFavoriteResponse>(
+        `${this.apiUrl}/${productId}`,
+      )
+      .pipe(
+        finalize(() => {
+          this.pendingProductIds.delete(
+            productId,
+          );
+        }),
+      )
+      .subscribe({
+        next: () => {
+          this.favoritesSignal.update(
+            (favorites) =>
+              favorites.filter(
+                (product) =>
+                  product.id !==
+                  productId,
+              ),
+          );
+        },
+      });
   }
 
   clear(): void {
-    this.updateFavorites([]);
-  }
-
-  private updateFavorites(
-    favorites: CatalogProduct[],
-  ): void {
-    this.favoritesSignal.set(
-      favorites,
-    );
-
-    localStorage.setItem(
-      this.storageKey,
-      JSON.stringify(favorites),
-    );
-  }
-
-  private loadFavorites():
-    CatalogProduct[] {
-    try {
-      const storedFavorites =
-        localStorage.getItem(
-          this.storageKey,
-        );
-
-      if (!storedFavorites) {
-        return [];
-      }
-
-      const parsedFavorites =
-        JSON.parse(storedFavorites);
-
-      return Array.isArray(
-        parsedFavorites,
-      )
-        ? parsedFavorites
-        : [];
-    } catch {
-      return [];
-    }
+    this.favoritesSignal.set([]);
   }
 }
