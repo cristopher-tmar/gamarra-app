@@ -17,7 +17,7 @@
       <section class="catalog-page__search">
 
         <app-ui-search-bar placeholder="Buscar polos, casacas..." ariaLabel="Buscar productos en el catálogo"
-          [showCamera]="true" [value]="searchTerm" (valueChange)="searchTerm = $event" (search)="searchProducts($event)"
+          [showCamera]="true" [value]="searchTerm" (valueChange)="searchTerm = $event" (searchSubmit)="searchProducts($event)"
           (cameraClick)="openVisualSearch()" />
 
       </section>

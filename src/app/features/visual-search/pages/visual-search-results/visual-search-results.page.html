@@ -2,16 +2,8 @@
   <main class="visual-results">
     <div class="visual-results__container">
       <header class="visual-results__header">
-        <button
-          type="button"
-          class="visual-results__back"
-          aria-label="Volver a búsqueda visual"
-          (click)="goBack()"
-        >
-          <ion-icon
-            name="arrow-back-outline"
-            aria-hidden="true"
-          ></ion-icon>
+        <button type="button" class="visual-results__back" aria-label="Volver a búsqueda visual" (click)="goBack()">
+          <ion-icon name="arrow-back-outline" aria-hidden="true"></ion-icon>
         </button>
 
         <h1 class="visual-results__title">
@@ -20,98 +12,70 @@
       </header>
 
       @if (!state) {
-        <app-ui-empty-state
-          title="No hay una búsqueda activa"
-          description="Selecciona una imagen para encontrar prendas similares."
-          icon="camera-outline"
-          variant="neutral"
-          actionLabel="Seleccionar imagen"
-          [compact]="true"
-          (actionClick)="goBack()"
-        />
+      <app-ui-empty-state title="No hay una búsqueda activa"
+        description="Selecciona una imagen para encontrar prendas similares." icon="camera-outline" variant="neutral"
+        actionLabel="Seleccionar imagen" [compact]="true" (actionClick)="goBack()" />
       } @else {
-        <section class="visual-results__query">
-          <div class="visual-results__query-image">
-            <img
-              [src]="queryImageUrl"
-              alt="Imagen utilizada en la búsqueda"
-            />
-          </div>
+      <section class="visual-results__query">
+        <div class="visual-results__query-image">
+          <img [src]="queryImageUrl" alt="Imagen utilizada en la búsqueda" />
+        </div>
 
-          <div class="visual-results__query-content">
-            <strong>
-              {{ totalResults }}
-              {{
-                totalResults === 1
-                  ? 'prenda similar'
-                  : 'prendas similares'
-              }}
-            </strong>
+        <div class="visual-results__query-content">
+          <strong>
+            {{ totalResults }}
+            {{
+            totalResults === 1
+            ? 'prenda similar'
+            : 'prendas similares'
+            }}
+          </strong>
 
-            <button
-              type="button"
-              class="visual-results__new-search"
-              (click)="goBack()"
-            >
-              Buscar otra imagen
-            </button>
-          </div>
-        </section>
+          <button type="button" class="visual-results__new-search" (click)="goBack()">
+            Buscar otra imagen
+          </button>
+        </div>
+      </section>
 
-        @if (products.length === 0) {
-          <app-ui-empty-state
-            title="No encontramos prendas similares"
-            description="Prueba con otra fotografía más clara o con la prenda más cerca."
-            icon="camera-outline"
-            variant="neutral"
-            actionLabel="Buscar otra imagen"
-            [compact]="true"
-            (actionClick)="goBack()"
-          />
-        } @else {
-          <section class="visual-results__products">
-            <h2 class="visual-results__section-title">
-              Productos similares
-            </h2>
+      @if (products.length === 0) {
+      <app-ui-empty-state title="No encontramos prendas similares"
+        description="Prueba con otra fotografía más clara o con la prenda más cerca." icon="camera-outline"
+        variant="neutral" actionLabel="Buscar otra imagen" [compact]="true" (actionClick)="goBack()" />
+      } @else {
+      <section class="visual-results__products">
+        <h2 class="visual-results__section-title">
+          Productos similares
+        </h2>
 
-            <div class="visual-results__grid">
-              @for (
-                product of products;
-                track product.productoId;
-                let first = $first
-              ) {
-                <app-ui-product-card
-                  [productId]="product.productoId"
-                  [name]="product.nombre"
-                  [price]="product.precio"
-                  [imageUrl]="product.imagenUrl"
-                  [category]="product.categoria"
-                  [stock]="product.stock"
-                  [similarityPercentage]="
+        <div class="visual-results__grid">
+          @for (
+          product of products;
+          track product.productoId;
+          let first = $first;
+          let index = $index
+          ) {
+          <app-ui-product-card [productId]="product.productoId" [name]="product.nombre" [price]="product.precio"
+            [imageUrl]="product.imagenUrl" [category]="product.categoria" [stock]="product.stock"
+            [similarityPercentage]="
                     product.similitudPorcentaje
-                  "
-                  [priorityImage]="first"
-                  (productClick)="openProduct($event)"
-                />
-              }
-            </div>
-          </section>
+                  " [priorityImage]="first" (productClick)="
+                    openProduct(
+                      product,
+                      index + 1
+                    )
+                  " />
+          }
+        </div>
+      </section>
 
-          <div class="visual-results__action">
-            <app-ui-button
-              variant="outline"
-              size="medium"
-              (click)="goBack()"
-            >
-              <ion-icon
-                name="camera-outline"
-                aria-hidden="true"
-              ></ion-icon>
+      <div class="visual-results__action">
+        <app-ui-button variant="outline" size="medium" (click)="goBack()">
+          <ion-icon name="camera-outline" aria-hidden="true"></ion-icon>
 
-              Buscar otra imagen
-            </app-ui-button>
-          </div>
-        }
+          Buscar otra imagen
+        </app-ui-button>
+      </div>
+      }
       }
     </div>
   </main>

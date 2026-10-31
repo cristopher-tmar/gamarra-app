@@ -9,12 +9,20 @@ import {
   IonContent,
   IonIcon,
 } from '@ionic/angular';
-import { addIcons } from 'ionicons';
+import {
+  addIcons,
+} from 'ionicons';
 import {
   arrowBackOutline,
   cameraOutline,
 } from 'ionicons/icons';
 
+import {
+  BehaviorEventType,
+} from '@features/behavior-events/models/behavior-event.models';
+import {
+  BehaviorEventsService,
+} from '@features/behavior-events/services/behavior-events';
 import {
   VisualSearchProduct,
   VisualSearchState,
@@ -33,9 +41,13 @@ import {
 } from '@shared/components/ui-product-card/ui-product-card.component';
 
 @Component({
-  selector: 'app-visual-search-results',
-  templateUrl: './visual-search-results.page.html',
-  styleUrls: ['./visual-search-results.page.scss'],
+  selector:
+    'app-visual-search-results',
+  templateUrl:
+    './visual-search-results.page.html',
+  styleUrls: [
+    './visual-search-results.page.scss',
+  ],
   imports: [
     IonContent,
     IonIcon,
@@ -45,14 +57,16 @@ import {
   ],
 })
 export class VisualSearchResultsPage
-  implements OnInit
-{
+  implements OnInit {
   state?: VisualSearchState;
 
   constructor(
     private readonly visualSearchService:
       VisualSearchService,
-    private readonly router: Router,
+    private readonly behaviorEventsService:
+      BehaviorEventsService,
+    private readonly router:
+      Router,
   ) {
     addIcons({
       arrowBackOutline,
@@ -62,19 +76,29 @@ export class VisualSearchResultsPage
 
   ngOnInit(): void {
     this.state =
-      this.visualSearchService.getState();
+      this.visualSearchService
+        .getState();
   }
 
-  get products(): VisualSearchProduct[] {
-    return this.state?.response.productos ?? [];
+  get products():
+    VisualSearchProduct[] {
+    return (
+      this.state?.response
+        .productos ?? []
+    );
   }
 
   get totalResults(): number {
-    return this.state?.response.total ?? 0;
+    return (
+      this.state?.response.total ??
+      0
+    );
   }
 
-  get queryImageUrl(): string | undefined {
-    return this.state?.queryImageUrl;
+  get queryImageUrl():
+    string | undefined {
+    return this.state
+      ?.queryImageUrl;
   }
 
   goBack(): void {
@@ -84,11 +108,46 @@ export class VisualSearchResultsPage
   }
 
   openProduct(
-    productId: number,
+    product: VisualSearchProduct,
+    position: number,
   ): void {
+    this.behaviorEventsService.register({
+      tipo:
+        BehaviorEventType
+          .RESULTADO_SELECCIONADO,
+      productoId:
+        product.productoId,
+      metadata: {
+        origen:
+          'resultados_busqueda_visual',
+        posicionResultado:
+          position,
+        totalResultados:
+          this.totalResults,
+        categoria:
+          product.categoria,
+        precio:
+          product.precio,
+        stock:
+          product.stock,
+        imagenId:
+          product.imagenId,
+        distancia:
+          product.distancia,
+        similitud:
+          product.similitud,
+        similitudPorcentaje:
+          product.similitudPorcentaje,
+        modelo:
+          this.state?.response
+            .consulta.modelo ??
+          null,
+      },
+    });
+
     void this.router.navigate([
       '/catalogo',
-      productId,
+      product.productoId,
     ]);
   }
 }

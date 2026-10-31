@@ -1,4 +1,7 @@
 import {
+  Location,
+} from '@angular/common';
+import {
   ChangeDetectorRef,
   Component,
   OnInit,
@@ -11,8 +14,12 @@ import {
   IonContent,
   IonIcon,
 } from '@ionic/angular';
-import { finalize } from 'rxjs';
-import { addIcons } from 'ionicons';
+import {
+  finalize,
+} from 'rxjs';
+import {
+  addIcons,
+} from 'ionicons';
 import {
   arrowBackOutline,
   checkmarkCircleOutline,
@@ -21,6 +28,12 @@ import {
   storefrontOutline,
 } from 'ionicons/icons';
 
+import {
+  BehaviorEventType,
+} from '@features/behavior-events/models/behavior-event.models';
+import {
+  BehaviorEventsService,
+} from '@features/behavior-events/services/behavior-events';
 import {
   ProductDetail,
 } from '@features/catalog/models/catalog.models';
@@ -36,12 +49,14 @@ import {
 import {
   UiSkeletonComponent,
 } from '@shared/components/ui-skeleton/ui-skeleton.component';
-import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-product-detail',
-  templateUrl: './product-detail.page.html',
-  styleUrls: ['./product-detail.page.scss'],
+  templateUrl:
+    './product-detail.page.html',
+  styleUrls: [
+    './product-detail.page.scss',
+  ],
   imports: [
     IonContent,
     IonIcon,
@@ -50,7 +65,8 @@ import { Location } from '@angular/common';
     UiSkeletonComponent,
   ],
 })
-export class ProductDetailPage implements OnInit {
+export class ProductDetailPage
+  implements OnInit {
   product?: ProductDetail;
 
   loading = true;
@@ -58,12 +74,22 @@ export class ProductDetailPage implements OnInit {
 
   selectedImageUrl?: string;
 
+  private registeredViewProductId?:
+    number;
+
   constructor(
-    private readonly route: ActivatedRoute,
-    private readonly router: Router,
-    private readonly catalogService: CatalogService,
-    private readonly changeDetectorRef: ChangeDetectorRef,
-    private readonly location: Location,
+    private readonly route:
+      ActivatedRoute,
+    private readonly router:
+      Router,
+    private readonly catalogService:
+      CatalogService,
+    private readonly behaviorEventsService:
+      BehaviorEventsService,
+    private readonly changeDetectorRef:
+      ChangeDetectorRef,
+    private readonly location:
+      Location,
   ) {
     addIcons({
       arrowBackOutline,
@@ -92,7 +118,8 @@ export class ProductDetailPage implements OnInit {
   }
 
   get sizes(): string[] {
-    const sizes = this.attributes['tallas'];
+    const sizes =
+      this.attributes['tallas'];
 
     return Array.isArray(sizes)
       ? sizes.map(String)
@@ -112,7 +139,10 @@ export class ProductDetailPage implements OnInit {
     const phone =
       this.product?.tienda.telefono;
 
-    if (!phone || !this.product) {
+    if (
+      !phone ||
+      !this.product
+    ) {
       return null;
     }
 
@@ -148,21 +178,31 @@ export class ProductDetailPage implements OnInit {
     this.hasError = false;
 
     this.catalogService
-      .getProductDetail(this.productId)
+      .getProductDetail(
+        this.productId,
+      )
       .pipe(
         finalize(() => {
           this.loading = false;
+
           this.changeDetectorRef
             .markForCheck();
         }),
       )
       .subscribe({
         next: (response) => {
-          this.product = response.producto;
+          this.product =
+            response.producto;
 
           this.selectedImageUrl =
-            response.producto.imagenPrincipal?.url ??
-            response.producto.imagenes[0]?.url;
+            response.producto
+              .imagenPrincipal?.url ??
+            response.producto
+              .imagenes[0]?.url;
+
+          this.registerProductView(
+            response.producto,
+          );
         },
         error: () => {
           this.product = undefined;
@@ -176,14 +216,17 @@ export class ProductDetailPage implements OnInit {
   selectImage(
     imageUrl: string,
   ): void {
-    this.selectedImageUrl = imageUrl;
+    this.selectedImageUrl =
+      imageUrl;
   }
 
   getAttribute(
     attributeName: string,
   ): string {
     const value =
-      this.attributes[attributeName];
+      this.attributes[
+        attributeName
+      ];
 
     if (
       value === null ||
@@ -201,4 +244,37 @@ export class ProductDetailPage implements OnInit {
     this.location.back();
   }
 
+  private registerProductView(
+    product: ProductDetail,
+  ): void {
+    if (
+      this.registeredViewProductId ===
+      product.id
+    ) {
+      return;
+    }
+
+    this.registeredViewProductId =
+      product.id;
+
+    this.behaviorEventsService.register({
+      tipo:
+        BehaviorEventType
+          .PRODUCTO_VISTO,
+      productoId: product.id,
+      metadata: {
+        origen: 'detalle_producto',
+        categoria:
+          product.categoria,
+        tiendaId:
+          product.tienda.id,
+        tiendaCodigo:
+          product.tienda.codigo,
+        disponible:
+          product.disponible,
+        precio:
+          product.precio,
+      },
+    });
+  }
 }

@@ -13,6 +13,12 @@ import {
   environment,
 } from '@environments/environment';
 import {
+  BehaviorEventType,
+} from '@features/behavior-events/models/behavior-event.models';
+import {
+  BehaviorEventsService,
+} from '@features/behavior-events/services/behavior-events';
+import {
   CatalogProduct,
 } from '@features/catalog/models/catalog.models';
 import {
@@ -46,6 +52,8 @@ export class FavoritesService {
   constructor(
     private readonly http:
       HttpClient,
+    private readonly behaviorEventsService:
+      BehaviorEventsService,
   ) {}
 
   load(): void {
@@ -139,16 +147,18 @@ export class FavoritesService {
       .subscribe({
         next: () => {
           if (
-            this.isFavorite(product.id)
+            !this.isFavorite(product.id)
           ) {
-            return;
+            this.favoritesSignal.update(
+              (favorites) => [
+                product,
+                ...favorites,
+              ],
+            );
           }
 
-          this.favoritesSignal.update(
-            (favorites) => [
-              product,
-              ...favorites,
-            ],
+          this.registerFavoriteAdded(
+            product,
           );
         },
       });
@@ -164,6 +174,14 @@ export class FavoritesService {
     ) {
       return;
     }
+
+    const product =
+      this.favoritesSignal()
+        .find(
+          (favoriteProduct) =>
+            favoriteProduct.id ===
+            productId,
+        );
 
     this.pendingProductIds.add(
       productId,
@@ -185,10 +203,15 @@ export class FavoritesService {
           this.favoritesSignal.update(
             (favorites) =>
               favorites.filter(
-                (product) =>
-                  product.id !==
+                (favoriteProduct) =>
+                  favoriteProduct.id !==
                   productId,
               ),
+          );
+
+          this.registerFavoriteRemoved(
+            productId,
+            product,
           );
         },
       });
@@ -196,5 +219,56 @@ export class FavoritesService {
 
   clear(): void {
     this.favoritesSignal.set([]);
+  }
+
+  private registerFavoriteAdded(
+    product: CatalogProduct,
+  ): void {
+    this.behaviorEventsService.register({
+      tipo:
+        BehaviorEventType
+          .FAVORITO_AGREGADO,
+      productoId: product.id,
+      metadata: {
+        origen: 'favoritos',
+        categoria:
+          product.categoria,
+        tiendaId:
+          product.tienda.id,
+        tiendaCodigo:
+          product.tienda.codigo,
+        precio:
+          product.precio,
+        disponible:
+          product.disponible,
+      },
+    });
+  }
+
+  private registerFavoriteRemoved(
+    productId: number,
+    product?: CatalogProduct,
+  ): void {
+    this.behaviorEventsService.register({
+      tipo:
+        BehaviorEventType
+          .FAVORITO_ELIMINADO,
+      productoId: productId,
+      metadata: {
+        origen: 'favoritos',
+        categoria:
+          product?.categoria ??
+          null,
+        tiendaId:
+          product?.tienda.id ??
+          null,
+        tiendaCodigo:
+          product?.tienda.codigo ??
+          null,
+        precio:
+          product?.precio ??
+          null,
+      },
+    });
   }
 }

@@ -15,8 +15,11 @@ import {
 
 @Component({
   selector: 'app-ui-search-bar',
-  templateUrl: './ui-search-bar.component.html',
-  styleUrls: ['./ui-search-bar.component.scss'],
+  templateUrl:
+    './ui-search-bar.component.html',
+  styleUrls: [
+    './ui-search-bar.component.scss',
+  ],
   imports: [
     IonIcon,
   ],
@@ -42,13 +45,16 @@ export class UiSearchBarComponent {
   showCamera = false;
 
   @Output()
-  valueChange = new EventEmitter<string>();
+  valueChange =
+    new EventEmitter<string>();
 
   @Output()
-  search = new EventEmitter<string>();
+  searchSubmit =
+    new EventEmitter<string>();
 
   @Output()
-  cameraClick = new EventEmitter<void>();
+  cameraClick =
+    new EventEmitter<void>();
 
   constructor() {
     addIcons({
@@ -58,22 +64,31 @@ export class UiSearchBarComponent {
     });
   }
 
-  handleInput(event: Event): void {
+  handleInput(
+    event: Event,
+  ): void {
     const input =
       event.target as HTMLInputElement;
 
     this.value = input.value;
-    this.valueChange.emit(this.value);
+
+    this.valueChange.emit(
+      this.value,
+    );
   }
 
-  handleSubmit(event: Event): void {
+  handleSubmit(
+    event: SubmitEvent,
+  ): void {
     event.preventDefault();
 
     if (this.disabled) {
       return;
     }
 
-    this.search.emit(this.value.trim());
+    this.searchSubmit.emit(
+      this.value.trim(),
+    );
   }
 
   clearSearch(): void {
@@ -82,8 +97,10 @@ export class UiSearchBarComponent {
     }
 
     this.value = '';
+
     this.valueChange.emit('');
-    this.search.emit('');
+
+    this.searchSubmit.emit('');
   }
 
   openCamera(): void {

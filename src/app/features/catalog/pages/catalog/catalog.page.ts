@@ -56,7 +56,12 @@ import {
 import {
   UiSkeletonComponent,
 } from '@shared/components/ui-skeleton/ui-skeleton.component';
-
+import {
+  BehaviorEventType,
+} from '@features/behavior-events/models/behavior-event.models';
+import {
+  BehaviorEventsService,
+} from '@features/behavior-events/services/behavior-events';
 @Component({
   selector: 'app-catalog',
   templateUrl: './catalog.page.html',
@@ -106,6 +111,8 @@ export class CatalogPage
       Router,
     private readonly changeDetectorRef:
       ChangeDetectorRef,
+    private readonly behaviorEventsService:
+      BehaviorEventsService,
   ) {
     addIcons({
       cameraOutline,
@@ -169,6 +176,26 @@ export class CatalogPage
     value: string,
   ): void {
     this.searchTerm = value;
+
+    const searchTerm =
+      value.trim();
+
+    if (searchTerm) {
+      this.behaviorEventsService.register({
+        tipo:
+          BehaviorEventType
+            .BUSQUEDA_TEXTO,
+        terminoBusqueda:
+          searchTerm,
+        metadata: {
+          origen: 'catalogo',
+          categoria:
+            this.selectedCategory ??
+            null,
+        },
+      });
+    }
+
     this.loadProducts();
   }
 
