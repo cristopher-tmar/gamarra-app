@@ -240,6 +240,7 @@
         [attr.target]="whatsappUrl ? '_blank' : null"
         [attr.aria-disabled]="!whatsappUrl"
         rel="noopener noreferrer"
+        (click)="contactByWhatsapp()"
       >
         <ion-icon
           name="logo-whatsapp"

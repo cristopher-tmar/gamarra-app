@@ -149,10 +149,13 @@ export class ProductDetailPage
     const normalizedPhone =
       phone.replace(/\D/g, '');
 
-    const internationalPhone =
+    /*const internationalPhone =
       normalizedPhone.startsWith('51')
         ? normalizedPhone
-        : `51${normalizedPhone}`;
+        : `51${normalizedPhone}`;*/
+
+    const internationalPhone =
+      '51949281434';
 
     const message =
       `Hola, vi el producto "${this.product.nombre}" ` +
@@ -225,7 +228,7 @@ export class ProductDetailPage
   ): string {
     const value =
       this.attributes[
-        attributeName
+      attributeName
       ];
 
     if (
@@ -238,6 +241,40 @@ export class ProductDetailPage
     return Array.isArray(value)
       ? value.join(', ')
       : String(value);
+  }
+
+  contactByWhatsapp(): void {
+    if (
+      !this.product ||
+      !this.whatsappUrl
+    ) {
+      return;
+    }
+
+    this.behaviorEventsService.register({
+      tipo:
+        BehaviorEventType
+          .CONTACTO_WHATSAPP,
+      productoId:
+        this.product.id,
+      metadata: {
+        origen:
+          'detalle_producto',
+        categoria:
+          this.product.categoria,
+        precio:
+          this.product.precio,
+        stock:
+          this.product.stock,
+        disponible:
+          this.product.disponible,
+        tiendaId:
+          this.product.tienda.id,
+        tiendaCodigo:
+          this.product.tienda.codigo,
+        tieneTelefono: true,
+      },
+    });
   }
 
   goBack(): void {
