@@ -11,14 +11,14 @@
 .prediction-dashboard__container {
   width: min(1180px, 100%);
   margin: 0 auto;
-  padding: 24px 20px 48px;
+  padding: 24px 20px 110px;
 }
 
 .prediction-dashboard__header {
   display: flex;
   align-items: flex-start;
   gap: 16px;
-  margin-bottom: 28px;
+  margin-bottom: 24px;
 }
 
 .prediction-dashboard__back {
@@ -36,6 +36,10 @@
 
 .prediction-dashboard__back ion-icon {
   font-size: 21px;
+}
+
+.prediction-dashboard__heading {
+  flex: 1;
 }
 
 .prediction-dashboard__eyebrow {
@@ -62,6 +66,46 @@
   line-height: 1.5;
 }
 
+.prediction-dashboard__refresh {
+  display: flex;
+  min-height: 42px;
+  align-items: center;
+  gap: 8px;
+  padding: 0 16px;
+  border: 1px solid #dedfe3;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #242424;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.prediction-dashboard__refresh:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+
+.dashboard-period {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.dashboard-period__button {
+  padding: 9px 15px;
+  border: 1px solid #dedfe3;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #5f5f5f;
+  cursor: pointer;
+}
+
+.dashboard-period__button--active {
+  border-color: #171717;
+  background: #171717;
+  color: #ffffff;
+}
+
 .dashboard-summary {
   display: grid;
   grid-template-columns:
@@ -72,9 +116,9 @@
 
 .summary-card {
   display: flex;
+  min-height: 112px;
   align-items: center;
   gap: 14px;
-  min-height: 112px;
   padding: 20px;
   border: 1px solid #e5e6e8;
   border-radius: 20px;
@@ -182,6 +226,117 @@
   text-align: center;
 }
 
+.dashboard-status {
+  display: grid;
+  min-height: 260px;
+  place-items: center;
+  border: 1px solid #e5e6e8;
+  border-radius: 20px;
+  background: #ffffff;
+  color: #666666;
+  text-align: center;
+}
+
+.dashboard-status--error {
+  color: #a12929;
+}
+
+.dashboard-status button {
+  margin-top: 12px;
+  padding: 10px 16px;
+  border: 0;
+  border-radius: 10px;
+  background: #171717;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.dashboard-ranking,
+.category-ranking {
+  display: grid;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.ranking-item {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 14px;
+  padding: 14px;
+  border: 1px solid #ececef;
+  border-radius: 14px;
+  background: #ffffff;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.ranking-item:hover {
+  border-color: #b9addf;
+  background: #faf9ff;
+}
+
+.ranking-item__position,
+.category-item__position {
+  display: grid;
+  width: 32px;
+  height: 32px;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 10px;
+  background: #f0ecff;
+  color: #6747d9;
+  font-weight: 800;
+}
+
+.ranking-item__content,
+.category-item__content {
+  display: grid;
+  flex: 1;
+  gap: 4px;
+}
+
+.ranking-item__content small,
+.category-item__content span {
+  color: #777777;
+  font-size: 13px;
+}
+
+.ranking-item__result,
+.category-item__score {
+  display: grid;
+  justify-items: end;
+  gap: 3px;
+}
+
+.ranking-item__result small,
+.category-item__score span {
+  color: #6747d9;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.category-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px;
+  border-bottom: 1px solid #eeeeef;
+}
+
+.dashboard-model {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 20px;
+  padding: 16px;
+  border-radius: 14px;
+  background: #ece8fb;
+  color: #4b3698;
+  font-size: 13px;
+}
+
 @media (max-width: 900px) {
   .dashboard-summary {
     grid-template-columns:
@@ -191,11 +346,37 @@
 
 @media (max-width: 640px) {
   .prediction-dashboard__container {
-    padding: 20px 16px 40px;
+    padding: 20px 16px 110px;
+  }
+
+  .prediction-dashboard__header {
+    flex-wrap: wrap;
+  }
+
+  .prediction-dashboard__refresh {
+    width: 100%;
+    justify-content: center;
+    margin-left: 58px;
   }
 
   .dashboard-summary,
   .dashboard-highlight {
     grid-template-columns: 1fr;
+  }
+
+  .summary-card {
+    min-height: 94px;
+  }
+
+  .dashboard-panel {
+    padding: 18px;
+  }
+
+  .ranking-item__result {
+    min-width: 52px;
+  }
+
+  .dashboard-model {
+    flex-direction: column;
   }
 }

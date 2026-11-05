@@ -14,7 +14,7 @@
           ></ion-icon>
         </button>
 
-        <div>
+        <div class="prediction-dashboard__heading">
           <span class="prediction-dashboard__eyebrow">
             Gamarra App
           </span>
@@ -28,109 +28,295 @@
             interacciones de los usuarios.
           </p>
         </div>
+
+        <button
+          type="button"
+          class="prediction-dashboard__refresh"
+          aria-label="Actualizar predicciones"
+          [disabled]="loading"
+          (click)="loadPrediction()"
+        >
+          <ion-icon
+            name="refresh-outline"
+            aria-hidden="true"
+          ></ion-icon>
+
+          Actualizar
+        </button>
       </header>
 
-      <section class="dashboard-summary">
+      <section
+        class="dashboard-period"
+        aria-label="Periodo de análisis"
+      >
         @for (
-          card of summaryCards;
-          track card.label
+          days of [7, 30, 90];
+          track days
         ) {
-          <article class="summary-card">
-            <span class="summary-card__icon">
+          <button
+            type="button"
+            class="dashboard-period__button"
+            [class.dashboard-period__button--active]="
+              selectedDays === days
+            "
+            [disabled]="loading"
+            (click)="changePeriod(days)"
+          >
+            {{ days }} días
+          </button>
+        }
+      </section>
+
+      @if (loading && !prediction) {
+        <section class="dashboard-status">
+          Calculando tendencias...
+        </section>
+      } @else if (hasError && !prediction) {
+        <section class="dashboard-status dashboard-status--error">
+          <p>
+            No pudimos obtener el análisis predictivo.
+          </p>
+
+          <button
+            type="button"
+            (click)="loadPrediction()"
+          >
+            Volver a intentar
+          </button>
+        </section>
+      } @else if (prediction) {
+        <section class="dashboard-summary">
+          @for (
+            card of summaryCards;
+            track card.label
+          ) {
+            <article class="summary-card">
+              <span class="summary-card__icon">
+                <ion-icon
+                  [name]="card.icon"
+                  aria-hidden="true"
+                ></ion-icon>
+              </span>
+
+              <div>
+                <strong class="summary-card__value">
+                  {{ card.value }}
+                </strong>
+
+                <span class="summary-card__label">
+                  {{ card.label }}
+                </span>
+              </div>
+            </article>
+          }
+        </section>
+
+        <section class="dashboard-highlight">
+          <article class="highlight-card">
+            <span class="highlight-card__icon">
               <ion-icon
-                [name]="card.icon"
+                name="flame-outline"
                 aria-hidden="true"
               ></ion-icon>
             </span>
 
             <div>
-              <strong class="summary-card__value">
-                {{ card.value }}
+              <span class="highlight-card__label">
+                Producto con mayor intención
+              </span>
+
+              <strong class="highlight-card__value">
+                {{
+                  prediction.productoConMayorInteres
+                    ?.nombre ??
+                    'Sin información disponible'
+                }}
               </strong>
 
-              <span class="summary-card__label">
-                {{ card.label }}
+              <span class="highlight-card__detail">
+                Score:
+                {{
+                  prediction.productoConMayorInteres
+                    ?.score ?? 0
+                }}
               </span>
             </div>
           </article>
-        }
-      </section>
 
-      <section class="dashboard-highlight">
-        <article class="highlight-card">
-          <span class="highlight-card__icon">
-            <ion-icon
-              name="flame-outline"
-              aria-hidden="true"
-            ></ion-icon>
+          <article class="highlight-card">
+            <span class="highlight-card__icon">
+              <ion-icon
+                name="trending-up-outline"
+                aria-hidden="true"
+              ></ion-icon>
+            </span>
+
+            <div>
+              <span class="highlight-card__label">
+                Categoría con mayor interés
+              </span>
+
+              <strong class="highlight-card__value">
+                {{
+                  prediction.categoriaConMayorInteres
+                    ?.categoria ??
+                    'Sin información disponible'
+                }}
+              </strong>
+
+              <span class="highlight-card__detail">
+                Tendencia:
+                {{
+                  prediction.categoriaConMayorInteres
+                    ?.tendencia ??
+                    'SIN CALCULAR'
+                }}
+              </span>
+            </div>
+          </article>
+        </section>
+
+        <section class="dashboard-panel">
+          <div class="dashboard-panel__header">
+            <div>
+              <h2>
+                Productos con mayor interés
+              </h2>
+
+              <p>
+                Ranking basado en señales de intención.
+              </p>
+            </div>
+          </div>
+
+          @if (
+            prediction.productosConMayorInteres
+              .length === 0
+          ) {
+            <div class="dashboard-empty">
+              Todavía no existen interacciones
+              relacionadas con productos.
+            </div>
+          } @else {
+            <div class="dashboard-ranking">
+              @for (
+                product of
+                  prediction.productosConMayorInteres;
+                track product.productoId
+              ) {
+                <button
+                  type="button"
+                  class="ranking-item"
+                  (click)="
+                    openProduct(
+                      product.productoId
+                    )
+                  "
+                >
+                  <span class="ranking-item__position">
+                    {{ product.posicion }}
+                  </span>
+
+                  <span class="ranking-item__content">
+                    <strong>
+                      {{ product.nombre }}
+                    </strong>
+
+                    <small>
+                      {{ product.categoria }}
+                      ·
+                      {{ product.totalInteracciones }}
+                      interacciones
+                    </small>
+                  </span>
+
+                  <span class="ranking-item__result">
+                    <strong>
+                      {{ product.score }}
+                    </strong>
+
+                    <small>
+                      {{ product.tendencia }}
+                    </small>
+                  </span>
+                </button>
+              }
+            </div>
+          }
+        </section>
+
+        <section class="dashboard-panel">
+          <div class="dashboard-panel__header">
+            <div>
+              <h2>Categorías destacadas</h2>
+
+              <p>
+                Interés acumulado durante los últimos
+                {{ selectedDays }} días.
+              </p>
+            </div>
+          </div>
+
+          @if (
+            prediction.categoriasConMayorInteres
+              .length === 0
+          ) {
+            <div class="dashboard-empty">
+              Todavía no existen categorías para
+              analizar.
+            </div>
+          } @else {
+            <div class="category-ranking">
+              @for (
+                category of
+                  prediction.categoriasConMayorInteres;
+                track category.categoria;
+                let index = $index
+              ) {
+                <article class="category-item">
+                  <span class="category-item__position">
+                    {{ index + 1 }}
+                  </span>
+
+                  <div class="category-item__content">
+                    <strong>
+                      {{ category.categoria }}
+                    </strong>
+
+                    <span>
+                      {{ category.totalProductos }}
+                      productos ·
+                      {{ category.totalInteracciones }}
+                      interacciones
+                    </span>
+                  </div>
+
+                  <div class="category-item__score">
+                    <strong>
+                      {{ category.score }}
+                    </strong>
+
+                    <span>
+                      {{ category.tendencia }}
+                    </span>
+                  </div>
+                </article>
+              }
+            </div>
+          }
+        </section>
+
+        <footer class="dashboard-model">
+          <strong>
+            {{ prediction.modelo.nombre }}
+          </strong>
+
+          <span>
+            Periodo analizado:
+            {{ prediction.periodo.dias }} días
           </span>
-
-          <div>
-            <span class="highlight-card__label">
-              Producto con mayor intención
-            </span>
-
-            <strong class="highlight-card__value">
-              Sin información disponible
-            </strong>
-
-            <span class="highlight-card__detail">
-              Score: 0
-            </span>
-          </div>
-        </article>
-
-        <article class="highlight-card">
-          <span class="highlight-card__icon">
-            <ion-icon
-              name="trending-up-outline"
-              aria-hidden="true"
-            ></ion-icon>
-          </span>
-
-          <div>
-            <span class="highlight-card__label">
-              Categoría con mayor interés
-            </span>
-
-            <strong class="highlight-card__value">
-              Sin información disponible
-            </strong>
-
-            <span class="highlight-card__detail">
-              Tendencia: sin calcular
-            </span>
-          </div>
-        </article>
-      </section>
-
-      <section class="dashboard-panel">
-        <div class="dashboard-panel__header">
-          <div>
-            <h2>Productos con mayor interés</h2>
-            <p>Ranking basado en señales de intención.</p>
-          </div>
-        </div>
-
-        <div class="dashboard-empty">
-          El ranking se mostrará al conectar el servicio
-          de predicciones.
-        </div>
-      </section>
-
-      <section class="dashboard-panel">
-        <div class="dashboard-panel__header">
-          <div>
-            <h2>Categorías destacadas</h2>
-            <p>Interés acumulado durante el periodo.</p>
-          </div>
-        </div>
-
-        <div class="dashboard-empty">
-          Las categorías se mostrarán al conectar el
-          endpoint predictivo.
-        </div>
-      </section>
+        </footer>
+      }
     </div>
   </main>
 </ion-content>
