@@ -78,6 +78,17 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'dashboard-predictivo',
+        canActivate: [authGuard],
+        loadComponent: () =>
+          import(
+            './features/dashboard/pages/prediction-dashboard/prediction-dashboard.page'
+          ).then(
+            (module) =>
+              module.PredictionDashboardPage,
+          ),
+      },
+      {
         path: '',
         redirectTo: 'catalogo',
         pathMatch: 'full',

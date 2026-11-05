@@ -1,0 +1,136 @@
+<ion-content [fullscreen]="true">
+  <main class="prediction-dashboard">
+    <div class="prediction-dashboard__container">
+      <header class="prediction-dashboard__header">
+        <button
+          type="button"
+          class="prediction-dashboard__back"
+          aria-label="Volver al catálogo"
+          (click)="goBack()"
+        >
+          <ion-icon
+            name="arrow-back-outline"
+            aria-hidden="true"
+          ></ion-icon>
+        </button>
+
+        <div>
+          <span class="prediction-dashboard__eyebrow">
+            Gamarra App
+          </span>
+
+          <h1 class="prediction-dashboard__title">
+            Análisis predictivo
+          </h1>
+
+          <p class="prediction-dashboard__description">
+            Tendencias de interés calculadas con las
+            interacciones de los usuarios.
+          </p>
+        </div>
+      </header>
+
+      <section class="dashboard-summary">
+        @for (
+          card of summaryCards;
+          track card.label
+        ) {
+          <article class="summary-card">
+            <span class="summary-card__icon">
+              <ion-icon
+                [name]="card.icon"
+                aria-hidden="true"
+              ></ion-icon>
+            </span>
+
+            <div>
+              <strong class="summary-card__value">
+                {{ card.value }}
+              </strong>
+
+              <span class="summary-card__label">
+                {{ card.label }}
+              </span>
+            </div>
+          </article>
+        }
+      </section>
+
+      <section class="dashboard-highlight">
+        <article class="highlight-card">
+          <span class="highlight-card__icon">
+            <ion-icon
+              name="flame-outline"
+              aria-hidden="true"
+            ></ion-icon>
+          </span>
+
+          <div>
+            <span class="highlight-card__label">
+              Producto con mayor intención
+            </span>
+
+            <strong class="highlight-card__value">
+              Sin información disponible
+            </strong>
+
+            <span class="highlight-card__detail">
+              Score: 0
+            </span>
+          </div>
+        </article>
+
+        <article class="highlight-card">
+          <span class="highlight-card__icon">
+            <ion-icon
+              name="trending-up-outline"
+              aria-hidden="true"
+            ></ion-icon>
+          </span>
+
+          <div>
+            <span class="highlight-card__label">
+              Categoría con mayor interés
+            </span>
+
+            <strong class="highlight-card__value">
+              Sin información disponible
+            </strong>
+
+            <span class="highlight-card__detail">
+              Tendencia: sin calcular
+            </span>
+          </div>
+        </article>
+      </section>
+
+      <section class="dashboard-panel">
+        <div class="dashboard-panel__header">
+          <div>
+            <h2>Productos con mayor interés</h2>
+            <p>Ranking basado en señales de intención.</p>
+          </div>
+        </div>
+
+        <div class="dashboard-empty">
+          El ranking se mostrará al conectar el servicio
+          de predicciones.
+        </div>
+      </section>
+
+      <section class="dashboard-panel">
+        <div class="dashboard-panel__header">
+          <div>
+            <h2>Categorías destacadas</h2>
+            <p>Interés acumulado durante el periodo.</p>
+          </div>
+        </div>
+
+        <div class="dashboard-empty">
+          Las categorías se mostrarán al conectar el
+          endpoint predictivo.
+        </div>
+      </section>
+    </div>
+  </main>
+</ion-content>
