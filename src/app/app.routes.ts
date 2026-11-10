@@ -1,6 +1,10 @@
-import { Routes } from '@angular/router';
+import {
+  Routes,
+} from '@angular/router';
 
-import { authGuard } from './features/auth/guards/auth.guard';
+import {
+  authGuard,
+} from './features/auth/guards/auth.guard';
 
 export const routes: Routes = [
   {
@@ -9,7 +13,8 @@ export const routes: Routes = [
       import(
         './layouts/public-layout/public-layout.component'
       ).then(
-        (module) => module.PublicLayoutComponent
+        (module) =>
+          module.PublicLayoutComponent,
       ),
     children: [
       {
@@ -18,7 +23,8 @@ export const routes: Routes = [
           import(
             './features/auth/pages/login/login.page'
           ).then(
-            (module) => module.LoginPage
+            (module) =>
+              module.LoginPage,
           ),
       },
       {
@@ -27,7 +33,8 @@ export const routes: Routes = [
           import(
             './features/catalog/pages/catalog/catalog.page'
           ).then(
-            (module) => module.CatalogPage
+            (module) =>
+              module.CatalogPage,
           ),
       },
       {
@@ -36,7 +43,8 @@ export const routes: Routes = [
           import(
             './features/catalog/pages/product-detail/product-detail.page'
           ).then(
-            (module) => module.ProductDetailPage
+            (module) =>
+              module.ProductDetailPage,
           ),
       },
       {
@@ -45,7 +53,8 @@ export const routes: Routes = [
           import(
             './features/visual-search/pages/visual-search/visual-search.page'
           ).then(
-            (module) => module.VisualSearchPage
+            (module) =>
+              module.VisualSearchPage,
           ),
       },
       {
@@ -54,32 +63,41 @@ export const routes: Routes = [
           import(
             './features/visual-search/pages/visual-search-results/visual-search-results.page'
           ).then(
-            (module) => module.VisualSearchResultsPage
+            (module) =>
+              module.VisualSearchResultsPage,
           ),
       },
       {
         path: 'favoritos',
-        canActivate: [authGuard],
+        canActivate: [
+          authGuard,
+        ],
         loadComponent: () =>
           import(
             './features/favorites/pages/favorites/favorites.page'
           ).then(
-            (module) => module.FavoritesPage
+            (module) =>
+              module.FavoritesPage,
           ),
       },
       {
         path: 'mi-cuenta',
-        canActivate: [authGuard],
+        canActivate: [
+          authGuard,
+        ],
         loadComponent: () =>
           import(
             './features/account/pages/account/account.page'
           ).then(
-            (module) => module.AccountPage
+            (module) =>
+              module.AccountPage,
           ),
       },
       {
         path: 'dashboard-predictivo',
-        canActivate: [authGuard],
+        canActivate: [
+          authGuard,
+        ],
         loadComponent: () =>
           import(
             './features/dashboard/pages/prediction-dashboard/prediction-dashboard.page'
@@ -91,6 +109,86 @@ export const routes: Routes = [
       {
         path: '',
         redirectTo: 'catalogo',
+        pathMatch: 'full',
+      },
+    ],
+  },
+  {
+    path: 'vendedor',
+    canActivate: [
+      authGuard,
+    ],
+    loadComponent: () =>
+      import(
+        './layouts/seller-layout/seller-layout.component'
+      ).then(
+        (module) =>
+          module.SellerLayoutComponent,
+      ),
+    children: [
+      {
+        path: 'inicio',
+        loadComponent: () =>
+          import(
+            './features/seller/pages/home/seller-home.page'
+          ).then(
+            (module) =>
+              module.SellerHomePage,
+          ),
+      },
+      {
+        path: 'productos',
+        loadComponent: () =>
+          import(
+            './features/seller/pages/products/seller-products.page'
+          ).then(
+            (module) =>
+              module.SellerProductsPage,
+          ),
+      },
+      {
+        path: 'productos/nuevo',
+        loadComponent: () =>
+          import(
+            './features/seller/pages/product-form/seller-product-form.page'
+          ).then(
+            (module) =>
+              module.SellerProductFormPage,
+          ),
+      },
+      {
+        path: 'productos/:productoId/editar',
+        loadComponent: () =>
+          import(
+            './features/seller/pages/product-form/seller-product-form.page'
+          ).then(
+            (module) =>
+              module.SellerProductFormPage,
+          ),
+      },
+      {
+        path: 'dashboard',
+        loadComponent: () =>
+          import(
+            './features/seller/pages/dashboard/seller-dashboard.page'
+          ).then(
+            (module) =>
+              module.SellerDashboardPage,
+          ),
+      },
+      {
+        path: 'consentimiento',
+        loadComponent: () =>
+          import(
+            './features/seller/pages/consent/seller-consent.page'
+          ).then(
+            (module) =>
+              module.SellerConsentPage,
+          ),
+      },
+      {
+        path: '',
+        redirectTo: 'inicio',
         pathMatch: 'full',
       },
     ],

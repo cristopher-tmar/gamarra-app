@@ -1,0 +1,181 @@
+<ion-content [fullscreen]="true">
+  <main class="seller-products">
+    <div class="seller-products__container">
+      <header class="seller-products__header">
+        <div>
+          <span class="seller-products__eyebrow">
+            Gestión de inventario
+          </span>
+
+          <h1>Mis productos</h1>
+
+          <p>
+            Administra los productos publicados por tu
+            tienda y controla su disponibilidad.
+          </p>
+        </div>
+
+        <button type="button" class="seller-products__create" (click)="createProduct()">
+          <ion-icon name="add-outline" aria-hidden="true"></ion-icon>
+
+          Nuevo producto
+        </button>
+      </header>
+
+      <section class="seller-product-summary">
+        <article class="seller-summary-card seller-summary-card--primary">
+          <div>
+            <strong>
+              {{ products.length }}
+            </strong>
+
+            <span>Productos registrados</span>
+          </div>
+        </article>
+
+        <article class="seller-summary-card seller-summary-card--success">
+          <div>
+            <strong>
+              {{ activeProducts }}
+            </strong>
+
+            <span>Productos activos</span>
+          </div>
+        </article>
+
+        <article class="seller-summary-card seller-summary-card--warning">
+          <div>
+            <strong>
+              {{ lowStockProducts }}
+            </strong>
+
+            <span>Con stock bajo</span>
+          </div>
+        </article>
+
+        <article class="seller-summary-card seller-summary-card--danger">
+          <div>
+            <strong>
+              {{ outOfStockProducts }}
+            </strong>
+
+            <span>Productos agotados</span>
+          </div>
+        </article>
+      </section>
+
+      <section class="seller-product-panel">
+        <div class="seller-product-toolbar">
+          <label class="seller-product-search">
+            <ion-icon name="search-outline" aria-hidden="true"></ion-icon>
+
+            <input type="search" [(ngModel)]="searchTerm" placeholder="Buscar por nombre, código o categoría"
+              aria-label="Buscar productos" />
+          </label>
+
+          <div class="seller-status-filters">
+            @for (
+            option of statusOptions;
+            track option.value
+            ) {
+            <button type="button" [class.seller-status-filters__button--active]="
+                  selectedStatus === option.value
+                " class="seller-status-filters__button" (click)="
+                  selectedStatus = option.value
+                ">
+              {{ option.label }}
+            </button>
+            }
+          </div>
+        </div>
+
+        <div class="seller-products-table">
+          <div class="seller-products-table__header">
+            <span>Producto</span>
+            <span>Precio</span>
+            <span>Stock</span>
+            <span>Interés</span>
+            <span>Estado</span>
+            <span>Acciones</span>
+          </div>
+
+          @for (
+          product of filteredProducts;
+          track product.id
+          ) {
+          <article class="seller-product-row">
+            <div class="seller-product-row__product">
+              <div class="seller-product-row__image">
+                <img [src]="product.imageUrl" [alt]="product.nombre" onerror="this.style.display='none'" />
+
+                <span>
+                  {{ product.categoria.charAt(0) }}
+                </span>
+              </div>
+
+              <div>
+                <strong>
+                  {{ product.nombre }}
+                </strong>
+
+                <span>
+                  {{ product.codigo }}
+                  ·
+                  {{ product.categoria }}
+                </span>
+              </div>
+            </div>
+
+            <strong class="seller-product-row__price">
+              S/ {{ product.precio.toFixed(2) }}
+            </strong>
+
+            <span class="seller-product-row__stock">
+              {{ product.stock }} unidades
+            </span>
+
+            <div class="seller-product-row__interest">
+              <strong>
+                {{ product.views }}
+              </strong>
+
+              <span>
+                vistas ·
+                {{ product.contacts }}
+                contactos
+              </span>
+            </div>
+
+            <span class="seller-product-status" [class.seller-product-status--active]="
+                  product.status === 'ACTIVO'
+                " [class.seller-product-status--warning]="
+                  product.status === 'STOCK_BAJO'
+                " [class.seller-product-status--danger]="
+                  product.status === 'AGOTADO'
+                ">
+              {{ statusLabel(product.status) }}
+            </span>
+
+            <div class="seller-product-row__actions">
+              <button type="button" aria-label="Editar producto" (click)="editProduct(product.id)">
+                <ion-icon name="create-outline" aria-hidden="true"></ion-icon>
+
+                Editar
+              </button>
+
+              <button type="button" class="seller-product-row__more" aria-label="Más opciones">
+                <ion-icon name="ellipsis-horizontal-outline" aria-hidden="true"></ion-icon>
+              </button>
+            </div>
+          </article>
+          } @empty {
+          <div class="seller-products__empty">
+            No encontramos productos con los filtros
+            seleccionados.
+          </div>
+          }
+        </div>
+      </section>
+    </div>
+  </main>
+</ion-content>

@@ -1,0 +1,237 @@
+<ion-content [fullscreen]="true">
+  <main class="seller-consent">
+    <div class="seller-consent__container">
+      <header class="seller-consent__header">
+        <span class="seller-consent__eyebrow">
+          Privacidad y transparencia
+        </span>
+
+        <h1>Consentimiento de datos</h1>
+
+        <p>
+          Administra las autorizaciones para el uso de
+          imágenes y datos comerciales dentro de
+          Gamarra App.
+        </p>
+      </header>
+
+      @if (saved) {
+        <section class="seller-consent__success">
+          <ion-icon
+            name="checkmark-circle-outline"
+            aria-hidden="true"
+          ></ion-icon>
+
+          <div>
+            <strong>
+              Consentimiento actualizado
+            </strong>
+
+            <span>
+              Tus preferencias fueron guardadas
+              correctamente.
+            </span>
+          </div>
+        </section>
+      }
+
+      <section class="seller-consent__summary">
+        <span class="seller-consent__shield">
+          <ion-icon
+            name="shield-checkmark-outline"
+            aria-hidden="true"
+          ></ion-icon>
+        </span>
+
+        <div>
+          <strong>
+            Uso responsable de imágenes y datos
+          </strong>
+
+          <p>
+            Las fotografías se utilizan para generar
+            representaciones visuales y mejorar la
+            búsqueda de productos similares. Los datos
+            comerciales se utilizan para calcular
+            tendencias y recomendaciones.
+          </p>
+        </div>
+      </section>
+
+      <section class="seller-consent__options">
+        <article class="consent-option">
+          <span class="consent-option__icon">
+            <ion-icon
+              name="images-outline"
+              aria-hidden="true"
+            ></ion-icon>
+          </span>
+
+          <div class="consent-option__content">
+            <div>
+              <strong>
+                Procesamiento de imágenes
+              </strong>
+
+              <span class="consent-option__required">
+                Obligatorio
+              </span>
+            </div>
+
+            <p>
+              Autoriza el procesamiento de fotografías
+              para generar embeddings y habilitar la
+              búsqueda visual de productos similares.
+            </p>
+          </div>
+
+          <label class="consent-switch">
+            <input
+              type="checkbox"
+              [(ngModel)]="imageProcessingConsent"
+              aria-label="Autorizar procesamiento de imágenes"
+            />
+
+            <span></span>
+          </label>
+        </article>
+
+        <article class="consent-option">
+          <span class="consent-option__icon">
+            <ion-icon
+              name="document-text-outline"
+              aria-hidden="true"
+            ></ion-icon>
+          </span>
+
+          <div class="consent-option__content">
+            <div>
+              <strong>
+                Análisis comercial
+              </strong>
+
+              <span class="consent-option__required">
+                Obligatorio
+              </span>
+            </div>
+
+            <p>
+              Permite analizar visualizaciones,
+              favoritos, búsquedas y contactos para
+              estimar el interés por productos y
+              categorías.
+            </p>
+          </div>
+
+          <label class="consent-switch">
+            <input
+              type="checkbox"
+              [(ngModel)]="analyticsConsent"
+              aria-label="Autorizar análisis comercial"
+            />
+
+            <span></span>
+          </label>
+        </article>
+
+        <article class="consent-option">
+          <span class="consent-option__icon">
+            <ion-icon
+              name="information-circle-outline"
+              aria-hidden="true"
+            ></ion-icon>
+          </span>
+
+          <div class="consent-option__content">
+            <div>
+              <strong>
+                Uso académico y mejora del sistema
+              </strong>
+
+              <span class="consent-option__optional">
+                Opcional
+              </span>
+            </div>
+
+            <p>
+              Autoriza el uso de información anonimizada
+              para evaluar el rendimiento de los modelos
+              y documentar resultados académicos.
+            </p>
+          </div>
+
+          <label class="consent-switch">
+            <input
+              type="checkbox"
+              [(ngModel)]="academicUseConsent"
+              aria-label="Autorizar uso académico"
+            />
+
+            <span></span>
+          </label>
+        </article>
+      </section>
+
+      <section class="seller-consent__information">
+        <h2>Información del consentimiento</h2>
+
+        <dl>
+          <div>
+            <dt>Versión</dt>
+            <dd>1.0</dd>
+          </div>
+
+          <div>
+            <dt>Fecha de aceptación</dt>
+            <dd>09 de noviembre de 2026</dd>
+          </div>
+
+          <div>
+            <dt>Responsable</dt>
+            <dd>Gamarra App</dd>
+          </div>
+
+          <div>
+            <dt>Estado</dt>
+            <dd>
+              {{
+                allRequiredAccepted
+                  ? 'Activo'
+                  : 'Pendiente'
+              }}
+            </dd>
+          </div>
+        </dl>
+      </section>
+
+      <footer class="seller-consent__footer">
+        <p>
+          Puedes modificar estas preferencias cuando lo
+          necesites. Si retiras una autorización
+          obligatoria, las funciones relacionadas
+          dejarán de estar disponibles.
+        </p>
+
+        <button
+          type="button"
+          [disabled]="
+            !allRequiredAccepted ||
+            saving
+          "
+          (click)="saveConsent()"
+        >
+          <ion-icon
+            name="save-outline"
+            aria-hidden="true"
+          ></ion-icon>
+
+          {{
+            saving
+              ? 'Guardando...'
+              : 'Guardar preferencias'
+          }}
+        </button>
+      </footer>
+    </div>
+  </main>
+</ion-content>

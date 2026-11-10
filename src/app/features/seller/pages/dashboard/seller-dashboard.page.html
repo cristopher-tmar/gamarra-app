@@ -1,0 +1,383 @@
+<ion-content [fullscreen]="true">
+  <main class="seller-dashboard">
+    <div class="seller-dashboard__container">
+      <header class="seller-dashboard__header">
+        <div>
+          <span class="seller-dashboard__eyebrow">
+            Inteligencia comercial
+          </span>
+
+          <h1>Análisis predictivo</h1>
+
+          <p>
+            Identifica productos con mayor intención
+            comercial y anticipa necesidades de
+            inventario.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="seller-dashboard__refresh"
+          [disabled]="loading"
+          (click)="loadPrediction()"
+        >
+          <ion-icon
+            name="refresh-outline"
+            aria-hidden="true"
+          ></ion-icon>
+
+          Actualizar
+        </button>
+      </header>
+
+      <section class="seller-dashboard__period">
+        @for (
+          days of [7, 30, 90];
+          track days
+        ) {
+          <button
+            type="button"
+            [class.seller-dashboard__period-button--active]="
+              selectedDays === days
+            "
+            class="seller-dashboard__period-button"
+            [disabled]="loading"
+            (click)="changePeriod(days)"
+          >
+            {{ days }} días
+          </button>
+        }
+      </section>
+
+      @if (loading && !prediction) {
+        <section class="seller-dashboard__status">
+          Calculando tendencias...
+        </section>
+      } @else if (hasError && !prediction) {
+        <section
+          class="seller-dashboard__status seller-dashboard__status--error"
+        >
+          <p>
+            No pudimos obtener el análisis.
+          </p>
+
+          <button
+            type="button"
+            (click)="loadPrediction()"
+          >
+            Volver a intentar
+          </button>
+        </section>
+      } @else if (prediction) {
+        <section class="seller-dashboard__summary">
+          <article class="seller-summary">
+            <span>Interacciones</span>
+
+            <strong>
+              {{
+                prediction.resumen
+                  .totalEventos
+              }}
+            </strong>
+
+            <small>
+              Eventos analizados
+            </small>
+          </article>
+
+          <article class="seller-summary">
+            <span>Productos</span>
+
+            <strong>
+              {{
+                prediction.resumen
+                  .productosAnalizados
+              }}
+            </strong>
+
+            <small>
+              Con señales de interés
+            </small>
+          </article>
+
+          <article class="seller-summary">
+            <span>Score comercial</span>
+
+            <strong>
+              {{
+                prediction.resumen
+                  .scoreTotal
+              }}
+            </strong>
+
+            <small>
+              Intención acumulada
+            </small>
+          </article>
+
+          <article class="seller-summary">
+            <span>Contactos WhatsApp</span>
+
+            <strong>
+              {{
+                prediction
+                  .distribucionEventos[
+                    'CONTACTO_WHATSAPP'
+                  ] ?? 0
+              }}
+            </strong>
+
+            <small>
+              Intenciones de contacto
+            </small>
+          </article>
+        </section>
+
+        <section class="seller-dashboard__highlights">
+          <article class="seller-highlight">
+            <span class="seller-highlight__label">
+              Producto con mayor intención
+            </span>
+
+            <strong>
+              {{
+                prediction
+                  .productoConMayorInteres
+                  ?.nombre ??
+                  'Sin información'
+              }}
+            </strong>
+
+            <div class="seller-highlight__result">
+              <span>
+                Score
+              </span>
+
+              <strong>
+                {{
+                  prediction
+                    .productoConMayorInteres
+                    ?.score ?? 0
+                }}
+              </strong>
+            </div>
+          </article>
+
+          <article class="seller-highlight">
+            <span class="seller-highlight__label">
+              Categoría con mayor demanda
+            </span>
+
+            <strong>
+              {{
+                prediction
+                  .categoriaConMayorInteres
+                  ?.categoria ??
+                  'Sin información'
+              }}
+            </strong>
+
+            <div class="seller-highlight__result">
+              <span>
+                Tendencia
+              </span>
+
+              <strong>
+                {{
+                  prediction
+                    .categoriaConMayorInteres
+                    ?.tendencia ??
+                    'SIN CALCULAR'
+                }}
+              </strong>
+            </div>
+          </article>
+
+          <article class="seller-highlight seller-highlight--season">
+            <span class="seller-highlight__label">
+              Temporada actual
+            </span>
+
+            <strong>
+              {{ calendarContext.season }}
+            </strong>
+
+            <div class="seller-highlight__result">
+              <span>
+                Proyección
+              </span>
+
+              <strong>
+                {{ calendarContext.projection }}
+              </strong>
+            </div>
+          </article>
+        </section>
+
+        <section class="seller-recommendation">
+          <span class="seller-recommendation__icon">
+            <ion-icon
+              name="flame-outline"
+              aria-hidden="true"
+            ></ion-icon>
+          </span>
+
+          <div>
+            <span>
+              Recomendación comercial
+            </span>
+
+            <h2>
+              Reforzar el stock de
+              {{
+                prediction
+                  .categoriaConMayorInteres
+                  ?.categoria ??
+                  'productos destacados'
+              }}
+            </h2>
+
+            <p>
+              La categoría presenta la mayor acumulación
+              de señales de interés durante los últimos
+              {{ selectedDays }} días. Prioriza productos
+              con stock menor a 10 unidades.
+            </p>
+          </div>
+
+          
+        </section>
+
+        <section class="seller-dashboard__grid">
+          <article class="seller-panel">
+            <div class="seller-panel__header">
+              <div>
+                <h2>Productos con mayor interés</h2>
+
+                <p>
+                  Ranking calculado mediante señales de
+                  comportamiento.
+                </p>
+              </div>
+            </div>
+
+            <div class="seller-ranking">
+              @for (
+                product of
+                  prediction
+                    .productosConMayorInteres;
+                track product.productoId
+              ) {
+                <button
+                  type="button"
+                  class="seller-ranking__item"
+                  (click)="
+                    openProduct(
+                      product.productoId
+                    )
+                  "
+                >
+                  <span class="seller-ranking__position">
+                    {{ product.posicion }}
+                  </span>
+
+                  <span class="seller-ranking__content">
+                    <strong>
+                      {{ product.nombre }}
+                    </strong>
+
+                    <small>
+                      {{ product.categoria }}
+                      ·
+                      {{ product.totalInteracciones }}
+                      interacciones
+                    </small>
+                  </span>
+
+                  <span class="seller-ranking__score">
+                    <strong>
+                      {{ product.score }}
+                    </strong>
+
+                    <small>
+                      {{ product.tendencia }}
+                    </small>
+                  </span>
+                </button>
+              }
+            </div>
+          </article>
+
+          <article class="seller-panel">
+            <div class="seller-panel__header">
+              <div>
+                <h2>Rendimiento del modelo</h2>
+
+                <p>
+                  Resultados obtenidos durante la
+                  evaluación experimental.
+                </p>
+              </div>
+            </div>
+
+            <div class="seller-model-metrics">
+              @for (
+                metric of modelMetrics;
+                track metric.label
+              ) {
+                <article class="seller-model-metric">
+                  <span>
+                    {{ metric.label }}
+                  </span>
+
+                  <strong>
+                    {{ metric.value }}
+                  </strong>
+
+                  <small>
+                    {{ metric.detail }}
+                  </small>
+                </article>
+              }
+            </div>
+
+            <div class="seller-model-information">
+              <ion-icon
+                name="bar-chart-outline"
+                aria-hidden="true"
+              ></ion-icon>
+
+              <div>
+                <strong>
+                  Modelo XGBoost optimizado
+                </strong>
+
+                <p>
+                  Métricas experimentales obtenidas con
+                  tratamiento de valores atípicos
+                  mediante rango intercuartílico.
+                </p>
+              </div>
+            </div>
+
+            <div class="seller-campaign">
+              <ion-icon
+                name="calendar-outline"
+                aria-hidden="true"
+              ></ion-icon>
+
+              <div>
+                <span>Próxima campaña</span>
+
+                <strong>
+                  {{ calendarContext.campaign }}
+                </strong>
+              </div>
+            </div>
+          </article>
+        </section>
+      }
+    </div>
+  </main>
+</ion-content>

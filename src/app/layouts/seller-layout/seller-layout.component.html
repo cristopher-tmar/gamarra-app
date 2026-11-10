@@ -1,0 +1,96 @@
+<div class="seller-layout">
+    <aside class="seller-sidebar" [class.seller-sidebar--open]="menuOpen">
+        <div class="seller-sidebar__brand">
+            <span class="seller-sidebar__logo">
+                G
+            </span>
+
+            <div>
+                <strong>Gamarra App</strong>
+                <span>Panel vendedor</span>
+            </div>
+        </div>
+
+        <div class="seller-store">
+            <span class="seller-store__avatar">
+                TB
+            </span>
+
+            <div>
+                <strong>Topitop Boutique</strong>
+                <span>Galería El Dorado</span>
+            </div>
+        </div>
+
+        <nav class="seller-navigation">
+            <a routerLink="/vendedor/inicio" routerLinkActive="seller-navigation__link--active"
+                class="seller-navigation__link" (click)="closeMenu()">
+                <ion-icon name="home-outline" aria-hidden="true"></ion-icon>
+
+                Inicio
+            </a>
+
+            <a routerLink="/vendedor/productos" routerLinkActive="seller-navigation__link--active"
+                class="seller-navigation__link" (click)="closeMenu()">
+                <ion-icon name="grid-outline" aria-hidden="true"></ion-icon>
+
+                Mis productos
+            </a>
+
+            <a routerLink="/vendedor/dashboard" routerLinkActive="seller-navigation__link--active"
+                class="seller-navigation__link" (click)="closeMenu()">
+                <ion-icon name="bar-chart-outline" aria-hidden="true"></ion-icon>
+
+                Análisis predictivo
+            </a>
+
+            <a routerLink="/vendedor/alertas" routerLinkActive="seller-navigation__link--active"
+                class="seller-navigation__link" (click)="closeMenu()">
+                <ion-icon name="alert-circle-outline" aria-hidden="true"></ion-icon>
+
+                Alertas
+            </a>
+
+            <a routerLink="/vendedor/consentimiento" routerLinkActive="seller-navigation__link--active"
+                class="seller-navigation__link" (click)="closeMenu()">
+                <ion-icon name="shield-checkmark-outline" aria-hidden="true"></ion-icon>
+
+                Consentimiento
+            </a>
+        </nav>
+
+        <div class="seller-sidebar__footer">
+            <button type="button" class="seller-sidebar__customer-button" (click)="goToCustomerApp()">
+                <ion-icon name="log-out-outline" aria-hidden="true"></ion-icon>
+
+                Ver app cliente
+            </button>
+        </div>
+    </aside>
+
+    @if (menuOpen) {
+    <button type="button" class="seller-layout__backdrop" aria-label="Cerrar menú" (click)="closeMenu()"></button>
+    }
+
+    <section class="seller-layout__main">
+        <header class="seller-topbar">
+            <button type="button" class="seller-topbar__menu" aria-label="Abrir menú" (click)="toggleMenu()">
+                <ion-icon name="menu-outline" aria-hidden="true"></ion-icon>
+            </button>
+
+            <span class="seller-topbar__title">
+                Panel del vendedor
+            </span>
+
+            <button type="button" class="seller-topbar__profile" aria-label="Perfil del vendedor">
+                <ion-icon name="person-circle-outline" aria-hidden="true"></ion-icon>
+
+                <span>Carlos Mendoza</span>
+            </button>
+        </header>
+
+        <main class="seller-layout__content">
+            <ion-router-outlet></ion-router-outlet>
+        </main>
+    </section>
+</div>

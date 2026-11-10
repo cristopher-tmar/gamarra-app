@@ -1,0 +1,379 @@
+<ion-content [fullscreen]="true">
+  <main class="product-form-page">
+    <div class="product-form-page__container">
+      <header class="product-form-page__header">
+        <button
+          type="button"
+          class="product-form-page__back"
+          aria-label="Volver a productos"
+          (click)="cancel()"
+        >
+          <ion-icon
+            name="arrow-back-outline"
+            aria-hidden="true"
+          ></ion-icon>
+        </button>
+
+        <div>
+          <span class="product-form-page__eyebrow">
+            Gestión de catálogo
+          </span>
+
+          <h1>{{ pageTitle }}</h1>
+
+          <p>
+            Completa la información que verá el cliente
+            dentro del catálogo.
+          </p>
+        </div>
+      </header>
+
+      @if (saved) {
+        <div class="product-form-success">
+          <ion-icon
+            name="checkmark-circle-outline"
+            aria-hidden="true"
+          ></ion-icon>
+
+          Producto guardado correctamente
+        </div>
+      }
+
+      <form
+        class="product-form"
+        [formGroup]="productForm"
+        (ngSubmit)="saveProduct()"
+      >
+        <div class="product-form__column">
+          <section class="form-card">
+            <div class="form-card__heading">
+              <span class="form-card__number">
+                1
+              </span>
+
+              <div>
+                <h2>Fotografía del producto</h2>
+
+                <p>
+                  Usa una imagen clara y con fondo neutro.
+                </p>
+              </div>
+            </div>
+
+            <input
+              #imageInput
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              hidden
+              (change)="handleImageSelection($event)"
+            />
+
+            @if (imagePreviewUrl) {
+              <div class="product-image-preview">
+                <img
+                  [src]="imagePreviewUrl"
+                  alt="Vista previa del producto"
+                />
+
+                <button
+                  type="button"
+                  aria-label="Eliminar imagen"
+                  (click)="removeImage(imageInput)"
+                >
+                  <ion-icon
+                    name="trash-outline"
+                    aria-hidden="true"
+                  ></ion-icon>
+                </button>
+              </div>
+
+              <button
+                type="button"
+                class="product-image-change"
+                (click)="selectImage(imageInput)"
+              >
+                Cambiar fotografía
+              </button>
+            } @else {
+              <button
+                type="button"
+                class="product-image-upload"
+                (click)="selectImage(imageInput)"
+              >
+                <span class="product-image-upload__icon">
+                  <ion-icon
+                    name="cloud-upload-outline"
+                    aria-hidden="true"
+                  ></ion-icon>
+                </span>
+
+                <strong>
+                  Seleccionar fotografía
+                </strong>
+
+                <span>
+                  JPG, PNG o WebP, máximo 10 MB
+                </span>
+              </button>
+            }
+          </section>
+
+          <section class="form-card">
+            <div class="form-card__heading">
+              <span class="form-card__number">
+                2
+              </span>
+
+              <div>
+                <h2>Información principal</h2>
+
+                <p>
+                  Datos visibles en el catálogo.
+                </p>
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <label class="form-field form-field--full">
+                <span>Nombre del producto</span>
+
+                <input
+                  type="text"
+                  formControlName="nombre"
+                  placeholder="Ej. Polo oversize marrón"
+                />
+              </label>
+
+              <label class="form-field">
+                <span>Código</span>
+
+                <input
+                  type="text"
+                  formControlName="codigo"
+                  placeholder="Ej. POL-001"
+                />
+              </label>
+
+              <label class="form-field">
+                <span>Categoría</span>
+
+                <select formControlName="categoria">
+                  @for (
+                    category of categories;
+                    track category
+                  ) {
+                    <option [value]="category">
+                      {{ category }}
+                    </option>
+                  }
+                </select>
+              </label>
+
+              <label class="form-field">
+                <span>Precio de venta</span>
+
+                <div class="form-field__prefix">
+                  <span>S/</span>
+
+                  <input
+                    type="number"
+                    formControlName="precio"
+                    min="1"
+                    step="0.10"
+                  />
+                </div>
+              </label>
+
+              <label class="form-field">
+                <span>Stock disponible</span>
+
+                <input
+                  type="number"
+                  formControlName="stock"
+                  min="0"
+                />
+              </label>
+
+              <label class="form-field form-field--full">
+                <span>Descripción</span>
+
+                <textarea
+                  formControlName="descripcion"
+                  rows="4"
+                  placeholder="Describe el estilo, acabado y características principales"
+                ></textarea>
+              </label>
+            </div>
+          </section>
+        </div>
+
+        <div class="product-form__column">
+          <section class="form-card">
+            <div class="form-card__heading">
+              <span class="form-card__number">
+                3
+              </span>
+
+              <div>
+                <h2>Características</h2>
+
+                <p>
+                  Ayudan a mejorar la búsqueda.
+                </p>
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <label class="form-field">
+                <span>Marca</span>
+
+                <input
+                  type="text"
+                  formControlName="marca"
+                  placeholder="Ej. Topitop"
+                />
+              </label>
+
+              <label class="form-field">
+                <span>Material</span>
+
+                <input
+                  type="text"
+                  formControlName="material"
+                  placeholder="Ej. Algodón"
+                />
+              </label>
+
+              <label class="form-field form-field--full">
+                <span>Tallas disponibles</span>
+
+                <input
+                  type="text"
+                  formControlName="tallas"
+                  placeholder="S, M, L, XL"
+                />
+
+                <small>
+                  Separa cada talla con una coma.
+                </small>
+              </label>
+
+              <label class="form-field form-field--full">
+                <span>Colores disponibles</span>
+
+                <input
+                  type="text"
+                  formControlName="colores"
+                  placeholder="Marrón, Beige, Negro"
+                />
+              </label>
+            </div>
+
+            <label class="form-switch">
+              <input
+                type="checkbox"
+                formControlName="activo"
+              />
+
+              <span class="form-switch__control"></span>
+
+              <span>
+                <strong>Producto activo</strong>
+
+                <small>
+                  El producto se mostrará en el catálogo.
+                </small>
+              </span>
+            </label>
+          </section>
+
+          <section class="form-card form-card--consent">
+            <div class="form-card__heading">
+              <span
+                class="form-card__number form-card__number--shield"
+              >
+                <ion-icon
+                  name="shield-checkmark-outline"
+                  aria-hidden="true"
+                ></ion-icon>
+              </span>
+
+              <div>
+                <h2>Consentimiento para IA</h2>
+
+                <p>
+                  Necesario para procesar la imagen.
+                </p>
+              </div>
+            </div>
+
+            <div class="consent-information">
+              <ion-icon
+                name="information-circle-outline"
+                aria-hidden="true"
+              ></ion-icon>
+
+              <p>
+                La fotografía podrá ser procesada para
+                generar representaciones visuales y
+                mejorar la búsqueda de productos
+                similares.
+              </p>
+            </div>
+
+            <label class="consent-checkbox">
+              <input
+                type="checkbox"
+                formControlName="consentimientoIa"
+              />
+
+              <span>
+                Autorizo el procesamiento de la imagen
+                para búsqueda visual y fines analíticos.
+              </span>
+            </label>
+
+            @if (
+              productForm.controls
+                .consentimientoIa.touched &&
+              productForm.controls
+                .consentimientoIa.invalid
+            ) {
+              <p class="form-error">
+                Debes aceptar el consentimiento para
+                continuar.
+              </p>
+            }
+          </section>
+
+          <section class="form-actions">
+            <button
+              type="button"
+              class="form-actions__cancel"
+              (click)="cancel()"
+            >
+              Cancelar
+            </button>
+
+            <button
+              type="submit"
+              class="form-actions__save"
+              [disabled]="saving"
+            >
+              <ion-icon
+                name="save-outline"
+                aria-hidden="true"
+              ></ion-icon>
+
+              {{
+                saving
+                  ? 'Guardando...'
+                  : submitLabel
+              }}
+            </button>
+          </section>
+        </div>
+      </form>
+    </div>
+  </main>
+</ion-content>

@@ -1,0 +1,262 @@
+<ion-content [fullscreen]="true">
+    <main class="seller-home">
+        <div class="seller-home__container">
+            <header class="seller-home__header">
+                <div>
+                    <span class="seller-home__eyebrow">
+                        Panel del vendedor
+                    </span>
+
+                    <h1>Resumen de la tienda</h1>
+                </div>
+
+                <button type="button" class="seller-home__create" (click)="createProduct()">
+                    <ion-icon name="add-outline" aria-hidden="true"></ion-icon>
+
+                    Nuevo producto
+                </button>
+            </header>
+
+            <section class="seller-home__metrics">
+                @for (
+                metric of metrics;
+                track metric.label
+                ) {
+                <article class="seller-metric" [class.seller-metric--primary]="
+              metric.variant === 'primary'
+            " [class.seller-metric--success]="
+              metric.variant === 'success'
+            " [class.seller-metric--warning]="
+              metric.variant === 'warning'
+            ">
+                    <div class="seller-metric__header">
+                        <span>
+                            {{ metric.label }}
+                        </span>
+
+                        <ion-icon [name]="metric.icon" aria-hidden="true"></ion-icon>
+                    </div>
+
+                    <strong>
+                        {{ metric.value }}
+                    </strong>
+
+                    <small>
+                        {{ metric.detail }}
+                    </small>
+                </article>
+                }
+            </section>
+
+            <section class="seller-home__main-grid">
+                <article class="seller-demand-card">
+                    <div class="seller-demand-card__heading">
+                        <div>
+                            <span>Tendencia principal</span>
+
+                            <h2>Demanda creciente en Polos</h2>
+                        </div>
+
+                        <span class="seller-demand-card__badge">
+                            Alta
+                        </span>
+                    </div>
+
+                    <div class="seller-demand-card__result">
+                        <span class="seller-demand-card__trend-icon">
+                            <ion-icon name="trending-up-outline" aria-hidden="true"></ion-icon>
+                        </span>
+
+                        <div>
+                            <strong>+24%</strong>
+
+                            <span>
+                                interés estimado para los próximos
+                                7 días
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="seller-demand-card__recommendation">
+                        <strong>Recomendación</strong>
+
+                        <p>
+                            Prioriza la reposición de polos oversize
+                            en colores marrón y beige.
+                        </p>
+                    </div>
+
+                    <button type="button" (click)="goToDashboard()">
+                        Ver análisis completo
+
+                        <ion-icon name="arrow-forward-outline" aria-hidden="true"></ion-icon>
+                    </button>
+                </article>
+
+                <article class="seller-quick-card">
+                    <div class="seller-section-heading">
+                        <div>
+                            <h2>Accesos rápidos</h2>
+
+                            <p>
+                                Gestiona las tareas principales.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="seller-quick-actions">
+                        <button type="button" (click)="goToProducts()">
+                            <span>
+                                <ion-icon name="grid-outline" aria-hidden="true"></ion-icon>
+                            </span>
+
+                            <div>
+                                <strong>Mis productos</strong>
+
+                                <small>
+                                    Editar catálogo e inventario
+                                </small>
+                            </div>
+
+                            <ion-icon name="arrow-forward-outline" aria-hidden="true"></ion-icon>
+                        </button>
+
+                        <button type="button" (click)="goToDashboard()">
+                            <span>
+                                <ion-icon name="bar-chart-outline" aria-hidden="true"></ion-icon>
+                            </span>
+
+                            <div>
+                                <strong>Análisis predictivo</strong>
+
+                                <small>
+                                    Consultar tendencias y scores
+                                </small>
+                            </div>
+
+                            <ion-icon name="arrow-forward-outline" aria-hidden="true"></ion-icon>
+                        </button>
+
+                        <!-- <button type="button" (click)="goToAlerts()">
+                            <span>
+                                <ion-icon name="alert-circle-outline" aria-hidden="true"></ion-icon>
+                            </span>
+
+                            <div>
+                                <strong>Alertas de inventario</strong>
+
+                                <small>
+                                    Revisar stock y reposición
+                                </small>
+                            </div>
+
+                            <ion-icon name="arrow-forward-outline" aria-hidden="true"></ion-icon>
+                        </button> -->
+                    </div>
+                </article>
+            </section>
+
+            <section class="seller-home__bottom-grid">
+                <article class="seller-panel">
+                    <div class="seller-section-heading">
+                        <div>
+                            <h2>Productos con mayor interés</h2>
+
+                            <p>
+                                Señales acumuladas durante los últimos
+                                30 días.
+                            </p>
+                        </div>
+
+                        <button type="button" (click)="goToDashboard()">
+                            Ver todos
+                        </button>
+                    </div>
+
+                    <div class="seller-top-products">
+                        @for (
+                        product of topProducts;
+                        track product.productId
+                        ) {
+                        <button type="button" class="seller-top-product" (click)="
+                  openProduct(
+                    product.productId
+                  )
+                ">
+                            <span class="seller-top-product__position">
+                                {{ product.position }}
+                            </span>
+
+                            <img [src]="product.imageUrl" [alt]="product.name" />
+
+                            <span class="seller-top-product__content">
+                                <strong>
+                                    {{ product.name }}
+                                </strong>
+
+                                <small>
+                                    {{ product.category }}
+                                    ·
+                                    {{ product.interactions }}
+                                    interacciones
+                                </small>
+                            </span>
+
+                            <span class="seller-top-product__score">
+                                <strong>
+                                    {{ product.score }}
+                                </strong>
+
+                                <small>Score</small>
+                            </span>
+                        </button>
+                        }
+                    </div>
+                </article>
+
+                <!-- <article class="seller-panel">
+                    <div class="seller-section-heading">
+                        <div>
+                            <h2>Alertas recientes</h2>
+
+                            <p>
+                                Recomendaciones para tu inventario.
+                            </p>
+                        </div>
+
+                        <button type="button" (click)="goToAlerts()">
+                            Ver todas
+                        </button>
+                    </div>
+
+                    <div class="seller-alerts">
+                        @for (
+                        alert of alerts;
+                        track alert.productName
+                        ) {
+                        <article class="seller-alert">
+                            <span class="seller-alert__level" [class.seller-alert__level--urgent]="
+                    alert.level === 'URGENTE'
+                  " [class.seller-alert__level--restock]="
+                    alert.level === 'REPONER'
+                  ">
+                                {{ alert.level }}
+                            </span>
+
+                            <div>
+                                <strong>
+                                    {{ alert.productName }}
+                                </strong>
+
+                                <p>
+                                    {{ alert.message }}
+                                </p>
+                            </div>
+                        </article>
+                        }
+                    </div>
+                </article> -->
+            </section>
+        </div>
+    </main>
+</ion-content>
