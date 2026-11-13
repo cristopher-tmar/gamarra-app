@@ -1,4 +1,7 @@
+import { resolveApiUrl } from './api-url';
+
 export const environment = {
   production: true,
-  apiUrl: 'http://localhost:3000/api',
+  // Reemplazar por la URL pública (https) del API al desplegar.
+  apiUrl: resolveApiUrl(),
 };
