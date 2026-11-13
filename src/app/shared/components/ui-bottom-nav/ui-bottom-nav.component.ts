@@ -1,6 +1,7 @@
 import {
   ChangeDetectorRef,
   Component,
+  input,
 } from '@angular/core';
 import {
   NavigationEnd,
@@ -18,6 +19,38 @@ import {
   personOutline,
 } from 'ionicons/icons';
 
+export interface UiBottomNavItem {
+  label: string;
+  icon: string;
+  route: string;
+  /** Marca el ítem activo solo con la ruta exacta. */
+  exact?: boolean;
+}
+
+const DEFAULT_ITEMS: UiBottomNavItem[] = [
+  {
+    label: 'Inicio',
+    icon: 'home-outline',
+    route: '/catalogo',
+    exact: true,
+  },
+  {
+    label: 'Buscar',
+    icon: 'camera-outline',
+    route: '/busqueda-visual',
+  },
+  {
+    label: 'Favoritos',
+    icon: 'heart-outline',
+    route: '/favoritos',
+  },
+  {
+    label: 'Mi cuenta',
+    icon: 'person-outline',
+    route: '/mi-cuenta',
+  },
+];
+
 @Component({
   selector: 'app-ui-bottom-nav',
   templateUrl: './ui-bottom-nav.component.html',
@@ -29,6 +62,12 @@ import {
   ],
 })
 export class UiBottomNavComponent {
+  readonly items =
+    input<UiBottomNavItem[]>(DEFAULT_ITEMS);
+
+  readonly ariaLabel =
+    input('Navegación principal');
+
   visible = true;
 
   constructor(

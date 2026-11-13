@@ -4,6 +4,14 @@
   overflow: hidden;
 }
 
+/*
+ * Reserva el alto de la barra de navegación inferior
+ * (app-ui-bottom-nav) para que no tape el contenido.
+ */
+.seller-layout__content ion-router-outlet {
+  bottom: calc(65px + max(0.375rem, env(safe-area-inset-bottom)));
+}
+
 @media (max-width: 900px) {
   .seller-sidebar {
     transform: translateX(-100%);

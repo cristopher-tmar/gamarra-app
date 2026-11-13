@@ -28,6 +28,10 @@ import {
 import {
   AuthService,
 } from '@features/auth/services/auth';
+import {
+  UiBottomNavComponent,
+  UiBottomNavItem,
+} from '@shared/components/ui-bottom-nav/ui-bottom-nav.component';
 
 @Component({
   selector: 'app-seller-layout',
@@ -41,10 +45,40 @@ import {
     IonRouterOutlet,
     RouterLink,
     RouterLinkActive,
+    UiBottomNavComponent,
   ],
 })
 export class SellerLayoutComponent {
   menuOpen = false;
+
+  readonly navigationItems:
+    UiBottomNavItem[] = [
+      {
+        label: 'Inicio',
+        icon: 'home-outline',
+        route: '/vendedor/inicio',
+      },
+      {
+        label: 'Productos',
+        icon: 'grid-outline',
+        route: '/vendedor/productos',
+      },
+      {
+        label: 'Análisis',
+        icon: 'bar-chart-outline',
+        route: '/vendedor/dashboard',
+      },
+      {
+        label: 'Privacidad',
+        icon: 'shield-checkmark-outline',
+        route: '/vendedor/consentimiento',
+      },
+      {
+        label: 'Mi cuenta',
+        icon: 'person-circle-outline',
+        route: '/mi-cuenta',
+      },
+    ];
 
   readonly userName = computed(() => {
     const user = this.authService.user();
