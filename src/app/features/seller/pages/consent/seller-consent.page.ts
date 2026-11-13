@@ -105,7 +105,8 @@ export class SellerConsentPage {
       this.saved = true;
 
       void this.uiToast.success(
-        'Preferencias guardadas (modo demo)',
+        // MODO DEMO: 'Preferencias guardadas (modo demo)',
+        'Preferencias guardadas correctamente',
       );
     } catch {
       void this.uiToast.error(

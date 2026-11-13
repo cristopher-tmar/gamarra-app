@@ -230,7 +230,8 @@ export class SellerProductsPage {
       );
 
       void this.uiToast.success(
-        'Producto eliminado (modo demo)',
+        // MODO DEMO: 'Producto eliminado (modo demo)',
+        'Producto eliminado correctamente',
       );
     } catch {
       void this.uiToast.error(

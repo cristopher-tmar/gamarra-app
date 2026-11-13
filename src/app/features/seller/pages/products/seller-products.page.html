@@ -14,11 +14,12 @@
             tienda y controla su disponibilidad.
           </p>
 
+          <!-- MODO DEMO (oculto temporalmente)
           <p class="seller-demo-notice">
             Modo demo: los cambios se guardan solo en
             este navegador y no se publican en el
             catálogo.
-          </p>
+          </p> -->
         </div>
 
         <button type="button" class="seller-products__create" (click)="createProduct()">
@@ -131,9 +132,10 @@
                   {{ product.codigo }}
                   ·
                   {{ product.categoria }}
+                  <!-- MODO DEMO (oculto temporalmente)
                   @if (!product.catalogProductId) {
                   · <em class="seller-demo-tag">Local</em>
-                  }
+                  } -->
                 </span>
               </div>
             </div>

@@ -426,8 +426,9 @@ export class SellerProductFormPage
 
     void this.uiToast.success(
       this.isEditMode
-        ? 'Cambios guardados (modo demo)'
-        : 'Producto registrado (modo demo)',
+        // MODO DEMO: '... (modo demo)'
+        ? 'Cambios guardados correctamente'
+        : 'Producto registrado correctamente',
     );
 
     window.setTimeout(() => {
