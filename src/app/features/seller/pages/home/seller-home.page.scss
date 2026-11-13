@@ -401,6 +401,19 @@ ion-icon {
   object-fit: cover;
 }
 
+.seller-top-product__placeholder {
+  display: grid;
+  width: 46px;
+  height: 52px;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 10px;
+  background: #eeeafe;
+  color: #6546e5;
+  font-size: 16px;
+  font-weight: 800;
+}
+
 .seller-top-product__content {
   display: grid;
   min-width: 0;

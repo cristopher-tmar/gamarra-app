@@ -1,5 +1,6 @@
 import {
   Component,
+  signal,
 } from '@angular/core';
 import {
   Router,
@@ -8,6 +9,14 @@ import {
   IonContent,
   IonIcon,
 } from '@ionic/angular';
+import {
+  catchError,
+  forkJoin,
+  map,
+  Observable,
+  of,
+  switchMap,
+} from 'rxjs';
 import {
   addIcons,
 } from 'ionicons';
@@ -24,11 +33,29 @@ import {
 } from 'ionicons/icons';
 
 import {
+  CatalogService,
+} from '@features/catalog/services/catalog';
+import {
+  ProductPrediction,
+} from '@features/dashboard/models/prediction.models';
+import {
+  PredictionsService,
+} from '@features/dashboard/services/predictions';
+import {
   getSellerProductStatus,
 } from '@features/seller/models/seller-product.models';
 import {
   SellerDemoStoreService,
 } from '@features/seller/services/seller-demo-store';
+import {
+  UiEmptyStateComponent,
+} from '@shared/components/ui-empty-state/ui-empty-state.component';
+import {
+  UiErrorStateComponent,
+} from '@shared/components/ui-error-state/ui-error-state.component';
+import {
+  UiSkeletonComponent,
+} from '@shared/components/ui-skeleton/ui-skeleton.component';
 
 interface SellerMetric {
   label: string;
@@ -41,6 +68,20 @@ interface SellerMetric {
     | 'warning'
     | 'neutral';
 }
+
+interface TopProduct {
+  position: number;
+  productId: number;
+  name: string;
+  category: string;
+  score: number;
+  interactions: number;
+  imageUrl: string | null;
+}
+
+/** Periodo usado para el ranking de Inicio. */
+const TOP_PRODUCTS_DAYS = 30;
+const TOP_PRODUCTS_LIMIT = 3;
 
 interface SellerAlert {
   productName: string;
@@ -61,6 +102,9 @@ interface SellerAlert {
   imports: [
     IonContent,
     IonIcon,
+    UiEmptyStateComponent,
+    UiErrorStateComponent,
+    UiSkeletonComponent,
   ],
 })
 export class SellerHomePage {
@@ -148,47 +192,27 @@ export class SellerHomePage {
       });
   }
 
-  readonly topProducts = [
-    {
-      position: 1,
-      productId: 9,
-      name:
-        'Polo Topitop oversize marrón',
-      category: 'Polos',
-      score: 32,
-      interactions: 149,
-      imageUrl:
-        'https://qegspgcihjbzgbvgsumz.supabase.co/storage/v1/object/public/productos/9/6c73bfcc-50da-4c6c-8aae-5eb2f902fa65.webp',
-    },
-    {
-      position: 2,
-      productId: 1,
-      name:
-        'Polo Basement cuello camisero beige',
-      category: 'Polos',
-      score: 24,
-      interactions: 110,
-      imageUrl:
-        'https://qegspgcihjbzgbvgsumz.supabase.co/storage/v1/object/public/productos/1/f287117b-1c8e-46ad-beef-0b8b953a9214.webp',
-    },
-    {
-      position: 3,
-      productId: 3,
-      name:
-        'Polera Denimlab marrón',
-      category: 'Poleras',
-      score: 17,
-      interactions: 83,
-      imageUrl:
-        'https://qegspgcihjbzgbvgsumz.supabase.co/storage/v1/object/public/productos/3/83d6f6e4-b729-4dac-a323-8ec25eb77fc2.webp',
-    },
-  ];
+  /**
+   * Ranking real: proviene del API de predicciones.
+   */
+  readonly topProducts =
+    signal<TopProduct[]>([]);
+
+  readonly topProductsLoading =
+    signal(true);
+
+  readonly topProductsError =
+    signal(false);
 
   constructor(
     private readonly router:
       Router,
     private readonly demoStore:
       SellerDemoStoreService,
+    private readonly predictionsService:
+      PredictionsService,
+    private readonly catalogService:
+      CatalogService,
   ) {
     addIcons({
       addOutline,
@@ -201,6 +225,43 @@ export class SellerHomePage {
       logoWhatsapp,
       trendingUpOutline,
     });
+  }
+
+  ionViewWillEnter(): void {
+    this.loadTopProducts();
+  }
+
+  loadTopProducts(): void {
+    this.topProductsLoading.set(true);
+    this.topProductsError.set(false);
+
+    this.predictionsService
+      .getSummary(TOP_PRODUCTS_DAYS)
+      .pipe(
+        map((response) =>
+          response.productosConMayorInteres
+            .slice(0, TOP_PRODUCTS_LIMIT),
+        ),
+        switchMap((products) =>
+          products.length
+            ? forkJoin(
+              products.map((product) =>
+                this.toTopProduct(product),
+              ),
+            )
+            : of([]),
+        ),
+      )
+      .subscribe({
+        next: (products) => {
+          this.topProducts.set(products);
+          this.topProductsLoading.set(false);
+        },
+        error: () => {
+          this.topProductsError.set(true);
+          this.topProductsLoading.set(false);
+        },
+      });
   }
 
   goToProducts(): void {
@@ -241,5 +302,37 @@ export class SellerHomePage {
       '/catalogo',
       productId,
     ]);
+  }
+
+  /**
+   * El ranking no incluye imágenes; se obtienen
+   * del detalle del catálogo. Si falla, se muestra
+   * la inicial de la categoría.
+   */
+  private toTopProduct(
+    product: ProductPrediction,
+  ): Observable<TopProduct> {
+    const base: TopProduct = {
+      position: product.posicion,
+      productId: product.productoId,
+      name: product.nombre,
+      category: product.categoria,
+      score: product.score,
+      interactions:
+        product.totalInteracciones,
+      imageUrl: null,
+    };
+
+    return this.catalogService
+      .getProductDetail(product.productoId)
+      .pipe(
+        map((response) => ({
+          ...base,
+          imageUrl:
+            response.producto.imagenPrincipal
+              ?.url ?? null,
+        })),
+        catchError(() => of(base)),
+      );
   }
 }

@@ -174,8 +174,17 @@
                     </div>
 
                     <div class="seller-top-products">
+                        @if (topProductsLoading() && !topProducts().length) {
+                        @for (item of [1, 2, 3]; track item) {
+                        <app-ui-skeleton variant="rectangle" height="74px" />
+                        }
+                        } @else if (topProductsError() && !topProducts().length) {
+                        <app-ui-error-state title="No pudimos cargar el ranking"
+                            description="Verifica tu conexión e inténtalo nuevamente." compact
+                            [loading]="topProductsLoading()" (retry)="loadTopProducts()" />
+                        } @else {
                         @for (
-                        product of topProducts;
+                        product of topProducts();
                         track product.productId
                         ) {
                         <button type="button" class="seller-top-product" (click)="
@@ -187,7 +196,13 @@
                                 {{ product.position }}
                             </span>
 
+                            @if (product.imageUrl) {
                             <img [src]="product.imageUrl" [alt]="product.name" />
+                            } @else {
+                            <span class="seller-top-product__placeholder" aria-hidden="true">
+                                {{ product.category.charAt(0) }}
+                            </span>
+                            }
 
                             <span class="seller-top-product__content">
                                 <strong>
@@ -210,6 +225,11 @@
                                 <small>Score</small>
                             </span>
                         </button>
+                        } @empty {
+                        <app-ui-empty-state title="Aún no hay suficiente actividad"
+                            description="El ranking aparecerá cuando los clientes interactúen con los productos."
+                            icon="bar-chart-outline" compact />
+                        }
                         }
                     </div>
                 </article>
