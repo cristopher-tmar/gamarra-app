@@ -25,6 +25,11 @@
             Completa la información que verá el cliente
             dentro del catálogo.
           </p>
+
+          <p class="seller-demo-notice">
+            Modo demo: el producto se guarda solo en
+            este navegador y no se envía al servidor.
+          </p>
         </div>
       </header>
 
@@ -35,7 +40,7 @@
             aria-hidden="true"
           ></ion-icon>
 
-          Producto guardado correctamente
+          Producto guardado localmente (modo demo)
         </div>
       }
 
@@ -98,6 +103,7 @@
               <button
                 type="button"
                 class="product-image-upload"
+                [disabled]="processingImage"
                 (click)="selectImage(imageInput)"
               >
                 <span class="product-image-upload__icon">
@@ -108,7 +114,11 @@
                 </span>
 
                 <strong>
-                  Seleccionar fotografía
+                  {{
+                    processingImage
+                      ? 'Procesando imagen...'
+                      : 'Seleccionar fotografía'
+                  }}
                 </strong>
 
                 <span>
@@ -142,6 +152,9 @@
                   formControlName="nombre"
                   placeholder="Ej. Polo oversize marrón"
                 />
+                @if (fieldError('nombre'); as error) {
+                  <p class="form-error">{{ error }}</p>
+                }
               </label>
 
               <label class="form-field">
@@ -152,6 +165,9 @@
                   formControlName="codigo"
                   placeholder="Ej. POL-001"
                 />
+                @if (fieldError('codigo'); as error) {
+                  <p class="form-error">{{ error }}</p>
+                }
               </label>
 
               <label class="form-field">
@@ -182,6 +198,9 @@
                     step="0.10"
                   />
                 </div>
+                @if (fieldError('precio'); as error) {
+                  <p class="form-error">{{ error }}</p>
+                }
               </label>
 
               <label class="form-field">
@@ -192,6 +211,9 @@
                   formControlName="stock"
                   min="0"
                 />
+                @if (fieldError('stock'); as error) {
+                  <p class="form-error">{{ error }}</p>
+                }
               </label>
 
               <label class="form-field form-field--full">
@@ -358,7 +380,7 @@
             <button
               type="submit"
               class="form-actions__save"
-              [disabled]="saving"
+              [disabled]="saving || processingImage"
             >
               <ion-icon
                 name="save-outline"

@@ -1,5 +1,6 @@
 import {
   Component,
+  computed,
 } from '@angular/core';
 import {
   Router,
@@ -24,6 +25,10 @@ import {
   shieldCheckmarkOutline,
 } from 'ionicons/icons';
 
+import {
+  AuthService,
+} from '@features/auth/services/auth';
+
 @Component({
   selector: 'app-seller-layout',
   templateUrl:
@@ -41,9 +46,19 @@ import {
 export class SellerLayoutComponent {
   menuOpen = false;
 
+  readonly userName = computed(() => {
+    const user = this.authService.user();
+
+    return user
+      ? `${user.nombres} ${user.apellidos}`.trim()
+      : 'Vendedor';
+  });
+
   constructor(
     private readonly router:
       Router,
+    private readonly authService:
+      AuthService,
   ) {
     addIcons({
       alertCircleOutline,
@@ -63,6 +78,12 @@ export class SellerLayoutComponent {
 
   closeMenu(): void {
     this.menuOpen = false;
+  }
+
+  goToAccount(): void {
+    void this.router.navigate([
+      '/mi-cuenta',
+    ]);
   }
 
   goToCustomerApp(): void {

@@ -27,6 +27,12 @@ import {
 } from 'ionicons/icons';
 
 import {
+  getHomeUrlForRole,
+} from '@features/auth/guards/role.guard';
+import {
+  UserRole,
+} from '@features/auth/models/auth.models';
+import {
   AuthService,
 } from '@features/auth/services/auth';
 import {
@@ -170,7 +176,9 @@ export class LoginPage {
           );
 
           const returnUrl =
-            this.getSafeReturnUrl();
+            this.getSafeReturnUrl(
+              response.usuario.rol,
+            );
 
           void this.router.navigateByUrl(
             returnUrl,
@@ -196,7 +204,9 @@ export class LoginPage {
     );
   }
 
-  private getSafeReturnUrl(): string {
+  private getSafeReturnUrl(
+    role: UserRole,
+  ): string {
     const returnUrl =
       this.activatedRoute.snapshot
         .queryParamMap
@@ -209,6 +219,13 @@ export class LoginPage {
       return returnUrl;
     }
 
-    return '/mi-cuenta';
+    if (
+      role === 'COMERCIANTE' &&
+      returnUrl?.startsWith('/vendedor/')
+    ) {
+      return returnUrl;
+    }
+
+    return getHomeUrlForRole(role);
   }
 }

@@ -1,6 +1,7 @@
 import {
   ChangeDetectorRef,
   Component,
+  computed,
 } from '@angular/core';
 import { Router } from '@angular/router';
 import {
@@ -10,6 +11,7 @@ import {
 import { finalize } from 'rxjs';
 import { addIcons } from 'ionicons';
 import {
+  gridOutline,
   helpCircleOutline,
   logInOutline,
   logOutOutline,
@@ -19,6 +21,7 @@ import {
   settingsOutline,
 } from 'ionicons/icons';
 
+import { getHomeUrlForRole } from '@features/auth/guards/role.guard';
 import { AuthService } from '@features/auth/services/auth';
 import { UiToastService } from '@shared/services/ui-toast';
 
@@ -40,6 +43,27 @@ export class AccountPage {
 
   loggingOut = false;
 
+  readonly panelAccess = computed(() => {
+    switch (this.user()?.rol) {
+      case 'COMERCIANTE':
+        return {
+          title: 'Ir a mi panel de vendedor',
+          description:
+            'Gestiona tus productos y tu tienda',
+        };
+
+      case 'ADMINISTRADOR':
+        return {
+          title: 'Ir al panel de administración',
+          description:
+            'Consulta el análisis predictivo',
+        };
+
+      default:
+        return null;
+    }
+  });
+
   constructor(
     private readonly authService: AuthService,
     private readonly router: Router,
@@ -48,6 +72,7 @@ export class AccountPage {
       ChangeDetectorRef,
   ) {
     addIcons({
+      gridOutline,
       helpCircleOutline,
       logInOutline,
       logOutOutline,
@@ -77,6 +102,12 @@ export class AccountPage {
   ): void {
     void this.uiToast.info(
       `${feature} estará disponible próximamente`,
+    );
+  }
+
+  goToPanel(): void {
+    void this.router.navigateByUrl(
+      getHomeUrlForRole(this.user()?.rol),
     );
   }
 

@@ -387,3 +387,33 @@ ion-alert.gamarra-confirm .alert-button .alert-button-inner {
   justify-content: center !important;
   text-align: center !important;
 }
+/*
+ * Indicadores del MODO DEMO del panel del vendedor.
+ * Señalan los datos que solo existen en el navegador.
+ */
+.seller-demo-notice {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  margin-top: 10px;
+  padding: 6px 10px;
+  border: 1px dashed #e0a43a;
+  border-radius: 8px;
+  background: #fff8ea;
+  color: #8a5a06;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.seller-demo-tag {
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: #fff3dc;
+  color: #b97008;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 800;
+  text-transform: uppercase;
+}

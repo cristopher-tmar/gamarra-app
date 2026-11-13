@@ -44,13 +44,6 @@
                 Análisis predictivo
             </a>
 
-            <a routerLink="/vendedor/alertas" routerLinkActive="seller-navigation__link--active"
-                class="seller-navigation__link" (click)="closeMenu()">
-                <ion-icon name="alert-circle-outline" aria-hidden="true"></ion-icon>
-
-                Alertas
-            </a>
-
             <a routerLink="/vendedor/consentimiento" routerLinkActive="seller-navigation__link--active"
                 class="seller-navigation__link" (click)="closeMenu()">
                 <ion-icon name="shield-checkmark-outline" aria-hidden="true"></ion-icon>
@@ -80,12 +73,16 @@
 
             <span class="seller-topbar__title">
                 Panel del vendedor
+
+                <em class="seller-demo-tag" title="Los datos de productos y consentimiento se guardan solo en este navegador">
+                    Modo demo
+                </em>
             </span>
 
-            <button type="button" class="seller-topbar__profile" aria-label="Perfil del vendedor">
+            <button type="button" class="seller-topbar__profile" aria-label="Perfil del vendedor" (click)="goToAccount()">
                 <ion-icon name="person-circle-outline" aria-hidden="true"></ion-icon>
 
-                <span>Carlos Mendoza</span>
+                <span>{{ userName() }}</span>
             </button>
         </header>
 

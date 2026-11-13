@@ -23,6 +23,13 @@ import {
   trendingUpOutline,
 } from 'ionicons/icons';
 
+import {
+  getSellerProductStatus,
+} from '@features/seller/models/seller-product.models';
+import {
+  SellerDemoStoreService,
+} from '@features/seller/services/seller-demo-store';
+
 interface SellerMetric {
   label: string;
   value: string;
@@ -57,13 +64,29 @@ interface SellerAlert {
   ],
 })
 export class SellerHomePage {
-  readonly metrics:
-    SellerMetric[] = [
+  /**
+   * Las métricas de inventario se calculan con los
+   * productos del modo demo. Vistas y contactos son
+   * cifras de referencia de la demostración.
+   */
+  get metrics(): SellerMetric[] {
+    const products =
+      this.demoStore.products();
+
+    const counts =
+      this.demoStore.statusCounts();
+
+    const pendingAlerts =
+      counts.STOCK_BAJO + counts.AGOTADO;
+
+    return [
       {
         label: 'Productos activos',
-        value: '3',
+        value: String(
+          counts.ACTIVO + counts.STOCK_BAJO,
+        ),
         detail:
-          '5 productos registrados',
+          `${products.length} productos registrados`,
         icon: 'cube-outline',
         variant: 'primary',
       },
@@ -85,38 +108,45 @@ export class SellerHomePage {
       },
       {
         label: 'Alertas pendientes',
-        value: '3',
+        value: String(pendingAlerts),
         detail:
-          '1 requiere atención urgente',
+          counts.AGOTADO > 0
+            ? `${counts.AGOTADO} requiere${counts.AGOTADO > 1 ? 'n' : ''} atención urgente`
+            : 'Sin productos agotados',
         icon: 'alert-circle-outline',
         variant: 'warning',
       },
     ];
+  }
 
-  readonly alerts:
-    SellerAlert[] = [
-      {
-        productName:
-          'Polera Denimlab marrón',
-        message:
-          'Quedan 2 unidades. La demanda estimada supera el stock actual.',
-        level: 'URGENTE',
-      },
-      {
-        productName:
-          'Polo Basement cuello camisero',
-        message:
-          'Quedan 5 unidades. Se recomienda programar reposición.',
-        level: 'REPONER',
-      },
-      {
-        productName:
-          'Polo La Martina rosado',
-        message:
-          'El interés aumentó 22% durante los últimos 7 días.',
-        level: 'OBSERVAR',
-      },
-    ];
+  get alerts(): SellerAlert[] {
+    return this.demoStore
+      .products()
+      .flatMap((product): SellerAlert[] => {
+        const status =
+          getSellerProductStatus(product);
+
+        if (status === 'AGOTADO') {
+          return [{
+            productName: product.nombre,
+            message:
+              'Producto agotado. Repón stock para seguir vendiendo.',
+            level: 'URGENTE',
+          }];
+        }
+
+        if (status === 'STOCK_BAJO') {
+          return [{
+            productName: product.nombre,
+            message:
+              `Quedan ${product.stock} unidades. Se recomienda programar reposición.`,
+            level: 'REPONER',
+          }];
+        }
+
+        return [];
+      });
+  }
 
   readonly topProducts = [
     {
@@ -157,6 +187,8 @@ export class SellerHomePage {
   constructor(
     private readonly router:
       Router,
+    private readonly demoStore:
+      SellerDemoStoreService,
   ) {
     addIcons({
       addOutline,
@@ -190,9 +222,16 @@ export class SellerHomePage {
   }
 
   goToAlerts(): void {
-    void this.router.navigate([
-      '/vendedor/alertas',
-    ]);
+    void this.router.navigate(
+      [
+        '/vendedor/productos',
+      ],
+      {
+        queryParams: {
+          estado: 'STOCK_BAJO',
+        },
+      },
+    );
   }
 
   openProduct(

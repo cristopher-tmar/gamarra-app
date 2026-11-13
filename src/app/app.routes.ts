@@ -5,6 +5,9 @@ import {
 import {
   authGuard,
 } from './features/auth/guards/auth.guard';
+import {
+  roleGuard,
+} from './features/auth/guards/role.guard';
 
 export const routes: Routes = [
   {
@@ -97,6 +100,7 @@ export const routes: Routes = [
         path: 'dashboard-predictivo',
         canActivate: [
           authGuard,
+          roleGuard('ADMINISTRADOR'),
         ],
         loadComponent: () =>
           import(
@@ -117,6 +121,7 @@ export const routes: Routes = [
     path: 'vendedor',
     canActivate: [
       authGuard,
+      roleGuard('COMERCIANTE'),
     ],
     loadComponent: () =>
       import(

@@ -1,4 +1,5 @@
 import {
+  ChangeDetectorRef,
   Component,
   OnInit,
 } from '@angular/core';
@@ -30,6 +31,32 @@ import {
   trashOutline,
 } from 'ionicons/icons';
 
+import {
+  SellerProductInput,
+} from '@features/seller/models/seller-product.models';
+import {
+  SellerDemoStoreService,
+} from '@features/seller/services/seller-demo-store';
+import {
+  UiToastService,
+} from '@shared/services/ui-toast';
+
+const MAX_IMAGE_SIZE_BYTES =
+  10 * 1024 * 1024;
+
+const ALLOWED_IMAGE_TYPES = [
+  'image/jpeg',
+  'image/png',
+  'image/webp',
+];
+
+/**
+ * Lado máximo de la imagen guardada en la demo.
+ * Se reduce para no exceder la cuota de
+ * localStorage.
+ */
+const STORED_IMAGE_MAX_SIDE = 640;
+
 @Component({
   selector:
     'app-seller-product-form',
@@ -50,6 +77,7 @@ export class SellerProductFormPage
 
   saving = false;
   saved = false;
+  processingImage = false;
 
   readonly categories = [
     'Polos',
@@ -68,6 +96,8 @@ export class SellerProductFormPage
           nonNullable: true,
           validators: [
             Validators.required,
+            Validators.minLength(3),
+            Validators.maxLength(120),
           ],
         },
       ),
@@ -77,6 +107,7 @@ export class SellerProductFormPage
           nonNullable: true,
           validators: [
             Validators.required,
+            Validators.maxLength(30),
           ],
         },
       ),
@@ -112,6 +143,7 @@ export class SellerProductFormPage
           validators: [
             Validators.required,
             Validators.min(0),
+            Validators.pattern(/^\d+$/),
           ],
         },
       ),
@@ -162,6 +194,12 @@ export class SellerProductFormPage
       ActivatedRoute,
     private readonly router:
       Router,
+    private readonly demoStore:
+      SellerDemoStoreService,
+    private readonly uiToast:
+      UiToastService,
+    private readonly changeDetectorRef:
+      ChangeDetectorRef,
   ) {
     addIcons({
       arrowBackOutline,
@@ -177,7 +215,7 @@ export class SellerProductFormPage
 
   ngOnInit(): void {
     if (this.isEditMode) {
-      this.loadMockProduct();
+      this.loadProduct();
     }
   }
 
@@ -219,9 +257,55 @@ export class SellerProductFormPage
     input.click();
   }
 
-  handleImageSelection(
+  fieldError(
+    field:
+      | 'nombre'
+      | 'codigo'
+      | 'precio'
+      | 'stock',
+  ): string | undefined {
+    const control =
+      this.productForm.controls[field];
+
+    if (
+      !control.touched ||
+      control.valid
+    ) {
+      return undefined;
+    }
+
+    if (control.hasError('required')) {
+      return 'Este campo es obligatorio';
+    }
+
+    if (control.hasError('duplicate')) {
+      return 'Ya tienes un producto con este código';
+    }
+
+    if (control.hasError('minlength')) {
+      return 'Ingresa al menos 3 caracteres';
+    }
+
+    if (control.hasError('maxlength')) {
+      return 'El texto es demasiado largo';
+    }
+
+    if (control.hasError('min')) {
+      return field === 'precio'
+        ? 'El precio debe ser mayor o igual a S/ 1'
+        : 'El stock no puede ser negativo';
+    }
+
+    if (control.hasError('pattern')) {
+      return 'Ingresa un número entero';
+    }
+
+    return 'Valor no válido';
+  }
+
+  async handleImageSelection(
     event: Event,
-  ): void {
+  ): Promise<void> {
     const input =
       event.target as HTMLInputElement;
 
@@ -232,36 +316,77 @@ export class SellerProductFormPage
       return;
     }
 
-    if (this.imagePreviewUrl) {
-      URL.revokeObjectURL(
-        this.imagePreviewUrl,
+    if (
+      !ALLOWED_IMAGE_TYPES.includes(file.type)
+    ) {
+      void this.uiToast.error(
+        'Selecciona una imagen JPG, PNG o WebP',
       );
+      input.value = '';
+      return;
     }
 
-    this.imagePreviewUrl =
-      URL.createObjectURL(file);
+    if (file.size > MAX_IMAGE_SIZE_BYTES) {
+      void this.uiToast.error(
+        'La imagen supera el máximo de 10 MB',
+      );
+      input.value = '';
+      return;
+    }
+
+    this.processingImage = true;
+
+    try {
+      this.imagePreviewUrl =
+        await resizeImageToDataUrl(file);
+    } catch {
+      void this.uiToast.error(
+        'No pudimos procesar la imagen',
+      );
+    } finally {
+      this.processingImage = false;
+      input.value = '';
+      this.changeDetectorRef.markForCheck();
+    }
   }
 
   removeImage(
     input: HTMLInputElement,
   ): void {
-    if (this.imagePreviewUrl) {
-      URL.revokeObjectURL(
-        this.imagePreviewUrl,
-      );
-    }
-
     this.imagePreviewUrl = undefined;
     input.value = '';
   }
 
   saveProduct(): void {
     if (
-      this.productForm.invalid ||
-      this.saving
+      this.saving ||
+      this.processingImage
     ) {
+      return;
+    }
+
+    const codigoControl =
+      this.productForm.controls.codigo;
+
+    if (
+      codigoControl.value.trim() &&
+      this.demoStore.isCodeTaken(
+        codigoControl.value,
+        this.productId,
+      )
+    ) {
+      codigoControl.setErrors({
+        duplicate: true,
+      });
+    }
+
+    if (this.productForm.invalid) {
       this.productForm
         .markAllAsTouched();
+
+      void this.uiToast.warning(
+        'Revisa los campos marcados antes de guardar',
+      );
 
       return;
     }
@@ -269,16 +394,47 @@ export class SellerProductFormPage
     this.saving = true;
     this.saved = false;
 
-    window.setTimeout(() => {
-      this.saving = false;
-      this.saved = true;
+    const input: SellerProductInput = {
+      ...this.productForm.getRawValue(),
+      imageUrl:
+        this.imagePreviewUrl ?? null,
+    };
 
-      window.setTimeout(() => {
-        void this.router.navigate([
-          '/vendedor/productos',
-        ]);
-      }, 900);
-    }, 700);
+    try {
+      if (this.productId !== null) {
+        this.demoStore.updateProduct(
+          this.productId,
+          input,
+        );
+      } else {
+        this.demoStore.createProduct(input);
+      }
+    } catch (error) {
+      this.saving = false;
+
+      void this.uiToast.error(
+        isQuotaError(error)
+          ? 'No hay espacio en el almacenamiento local. Usa una imagen más liviana.'
+          : 'No pudimos guardar el producto',
+      );
+
+      return;
+    }
+
+    this.saving = false;
+    this.saved = true;
+
+    void this.uiToast.success(
+      this.isEditMode
+        ? 'Cambios guardados (modo demo)'
+        : 'Producto registrado (modo demo)',
+    );
+
+    window.setTimeout(() => {
+      void this.router.navigate([
+        '/vendedor/productos',
+      ]);
+    }, 900);
   }
 
   cancel(): void {
@@ -287,26 +443,109 @@ export class SellerProductFormPage
     ]);
   }
 
-  private loadMockProduct(): void {
+  private loadProduct(): void {
+    const product =
+      this.productId !== null
+        ? this.demoStore.getProduct(
+          this.productId,
+        )
+        : undefined;
+
+    if (!product) {
+      void this.uiToast.warning(
+        'El producto no existe o fue eliminado',
+      );
+
+      void this.router.navigate([
+        '/vendedor/productos',
+      ]);
+
+      return;
+    }
+
     this.productForm.patchValue({
-      nombre:
-        'Polo Topitop oversize marrón',
-      codigo: 'TOP-001',
-      categoria: 'Polos',
-      descripcion:
-        'Polo oversize de algodón, diseño urbano y acabado suave.',
-      precio: 79.9,
-      stock: 14,
-      marca: 'Topitop',
-      material: 'Algodón',
-      tallas: 'S, M, L, XL',
-      colores:
-        'Marrón, Beige',
-      activo: true,
-      consentimientoIa: true,
+      nombre: product.nombre,
+      codigo: product.codigo,
+      categoria: product.categoria,
+      descripcion: product.descripcion,
+      precio: product.precio,
+      stock: product.stock,
+      marca: product.marca,
+      material: product.material,
+      tallas: product.tallas,
+      colores: product.colores,
+      activo: product.activo,
+      consentimientoIa:
+        product.consentimientoIa,
     });
 
     this.imagePreviewUrl =
-      'https://qegspgcihjbzgbvgsumz.supabase.co/storage/v1/object/public/productos/9/6c73bfcc-50da-4c6c-8aae-5eb2f902fa65.webp';
+      product.imageUrl ?? undefined;
   }
+}
+
+function isQuotaError(
+  error: unknown,
+): boolean {
+  return (
+    error instanceof DOMException &&
+    (error.name === 'QuotaExceededError' ||
+      error.name === 'NS_ERROR_DOM_QUOTA_REACHED')
+  );
+}
+
+function resizeImageToDataUrl(
+  file: File,
+): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const objectUrl =
+      URL.createObjectURL(file);
+
+    const image = new Image();
+
+    image.onload = () => {
+      const scale = Math.min(
+        1,
+        STORED_IMAGE_MAX_SIDE /
+          Math.max(image.width, image.height),
+      );
+
+      const canvas =
+        document.createElement('canvas');
+
+      canvas.width =
+        Math.round(image.width * scale);
+      canvas.height =
+        Math.round(image.height * scale);
+
+      const context =
+        canvas.getContext('2d');
+
+      URL.revokeObjectURL(objectUrl);
+
+      if (!context) {
+        reject(new Error('Canvas no disponible'));
+        return;
+      }
+
+      context.drawImage(
+        image,
+        0,
+        0,
+        canvas.width,
+        canvas.height,
+      );
+
+      resolve(
+        canvas.toDataURL('image/jpeg', 0.82),
+      );
+    };
+
+    image.onerror = () => {
+      URL.revokeObjectURL(objectUrl);
+      reject(new Error('Imagen no válida'));
+    };
+
+    image.src = objectUrl;
+  });
 }

@@ -13,6 +13,12 @@
             Administra los productos publicados por tu
             tienda y controla su disponibilidad.
           </p>
+
+          <p class="seller-demo-notice">
+            Modo demo: los cambios se guardan solo en
+            este navegador y no se publican en el
+            catálogo.
+          </p>
         </div>
 
         <button type="button" class="seller-products__create" (click)="createProduct()">
@@ -103,10 +109,13 @@
           product of filteredProducts;
           track product.id
           ) {
+          @let status = getStatus(product);
           <article class="seller-product-row">
             <div class="seller-product-row__product">
               <div class="seller-product-row__image">
+                @if (product.imageUrl) {
                 <img [src]="product.imageUrl" [alt]="product.nombre" onerror="this.style.display='none'" />
+                }
 
                 <span>
                   {{ product.categoria.charAt(0) }}
@@ -122,6 +131,9 @@
                   {{ product.codigo }}
                   ·
                   {{ product.categoria }}
+                  @if (!product.catalogProductId) {
+                  · <em class="seller-demo-tag">Local</em>
+                  }
                 </span>
               </div>
             </div>
@@ -147,13 +159,13 @@
             </div>
 
             <span class="seller-product-status" [class.seller-product-status--active]="
-                  product.status === 'ACTIVO'
+                  status === 'ACTIVO'
                 " [class.seller-product-status--warning]="
-                  product.status === 'STOCK_BAJO'
+                  status === 'STOCK_BAJO'
                 " [class.seller-product-status--danger]="
-                  product.status === 'AGOTADO'
+                  status === 'AGOTADO'
                 ">
-              {{ statusLabel(product.status) }}
+              {{ statusLabel(status) }}
             </span>
 
             <div class="seller-product-row__actions">
@@ -163,15 +175,20 @@
                 Editar
               </button>
 
-              <button type="button" class="seller-product-row__more" aria-label="Más opciones">
-                <ion-icon name="ellipsis-horizontal-outline" aria-hidden="true"></ion-icon>
+              <button type="button" class="seller-product-row__more" aria-label="Eliminar producto"
+                title="Eliminar producto" (click)="deleteProduct(product)">
+                <ion-icon name="trash-outline" aria-hidden="true"></ion-icon>
               </button>
             </div>
           </article>
           } @empty {
           <div class="seller-products__empty">
+            @if (products.length) {
             No encontramos productos con los filtros
             seleccionados.
+            } @else {
+            Aún no tienes productos registrados.
+            }
           </div>
           }
         </div>

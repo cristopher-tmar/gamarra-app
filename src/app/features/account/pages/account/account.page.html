@@ -59,6 +59,29 @@
         }
       </section>
 
+      @if (panelAccess(); as panel) {
+      <section class="account-section">
+        <h2 class="account-section__title">
+          Gestión
+        </h2>
+
+        <div class="account-options">
+          <button type="button" class="account-options__item" (click)="goToPanel()">
+            <span class="account-options__icon">
+              <ion-icon name="grid-outline" aria-hidden="true"></ion-icon>
+            </span>
+
+            <span class="account-options__content">
+              <strong>{{ panel.title }}</strong>
+              <small>
+                {{ panel.description }}
+              </small>
+            </span>
+          </button>
+        </div>
+      </section>
+      }
+
       <section class="account-section">
         <h2 class="account-section__title">
           Preferencias

@@ -20,6 +20,13 @@ import {
   shieldCheckmarkOutline,
 } from 'ionicons/icons';
 
+import {
+  SellerDemoStoreService,
+} from '@features/seller/services/seller-demo-store';
+import {
+  UiToastService,
+} from '@shared/services/ui-toast';
+
 @Component({
   selector: 'app-seller-consent',
   templateUrl:
@@ -34,14 +41,29 @@ import {
   ],
 })
 export class SellerConsentPage {
-  imageProcessingConsent = true;
-  analyticsConsent = true;
-  academicUseConsent = true;
+  imageProcessingConsent: boolean;
+  analyticsConsent: boolean;
+  academicUseConsent: boolean;
 
   saving = false;
   saved = false;
 
-  constructor() {
+  constructor(
+    private readonly demoStore:
+      SellerDemoStoreService,
+    private readonly uiToast:
+      UiToastService,
+  ) {
+    const consent =
+      this.demoStore.consent();
+
+    this.imageProcessingConsent =
+      consent.imageProcessingConsent;
+    this.analyticsConsent =
+      consent.analyticsConsent;
+    this.academicUseConsent =
+      consent.academicUseConsent;
+
     addIcons({
       checkmarkCircleOutline,
       documentTextOutline,
@@ -70,9 +92,37 @@ export class SellerConsentPage {
     this.saving = true;
     this.saved = false;
 
-    window.setTimeout(() => {
-      this.saving = false;
+    try {
+      this.demoStore.saveConsent({
+        imageProcessingConsent:
+          this.imageProcessingConsent,
+        analyticsConsent:
+          this.analyticsConsent,
+        academicUseConsent:
+          this.academicUseConsent,
+      });
+
       this.saved = true;
-    }, 700);
+
+      void this.uiToast.success(
+        'Preferencias guardadas (modo demo)',
+      );
+    } catch {
+      void this.uiToast.error(
+        'No pudimos guardar tus preferencias',
+      );
+    } finally {
+      this.saving = false;
+    }
+  }
+
+  get lastUpdated(): string | null {
+    const date =
+      this.demoStore.consent()
+        .fechaModificacion;
+
+    return date
+      ? new Date(date).toLocaleString('es-PE')
+      : null;
   }
 }
