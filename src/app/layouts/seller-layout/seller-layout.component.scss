@@ -9,6 +9,8 @@
  * (app-ui-bottom-nav) para que no tape el contenido.
  */
 .seller-layout__content ion-router-outlet {
+  /* Respeta la barra de estado del dispositivo (Android/iOS). */
+  top: env(safe-area-inset-top);
   bottom: calc(65px + max(0.375rem, env(safe-area-inset-bottom)));
 }
 
